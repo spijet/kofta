@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Devices</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Devname</th>
+      <th>City</th>
+      <th>Contact</th>
+      <th>Group</th>
+      <th>Address</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @devices.each do |device| %>
+      <tr>
+        <td><%= device.devname %></td>
+        <td><%= device.city %></td>
+        <td><%= device.contact %></td>
+        <td><%= device.group %></td>
+        <td><%= device.address %></td>
+        <td><%= link_to 'Show', device, class: "button" %></td>
+        <td><%= link_to 'Edit', edit_device_path(device), class: "button" %></td>
+        <td><%= link_to 'Destroy', device, method: :delete, data: { confirm: 'Are you sure?' }, class: "button" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Device', new_device_path, class: "button" %>

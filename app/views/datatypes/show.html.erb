@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @datatype.name %>
+</p>
+
+<p>
+  <strong>Oid:</strong>
+  <%= @datatype.oid %>
+</p>
+
+<p>
+  <strong>Excludes:</strong>
+  <%= @datatype.excludes %>
+</p>
+
+<p>
+  <strong>Table:</strong>
+  <%= @datatype.table %>
+</p>
+
+<p>
+  <strong>Index oid:</strong>
+  <%= @datatype.index_oid %>
+</p>
+
+<%= link_to 'Edit', edit_datatype_path(@datatype) %> |
+<%= link_to 'Back', datatypes_path %>
