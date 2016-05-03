@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160503063528) do
+ActiveRecord::Schema.define(version: 20160503080423) do
 
   create_table "datatypes", force: :cascade do |t|
     t.string   "name"
@@ -21,6 +21,11 @@ ActiveRecord::Schema.define(version: 20160503063528) do
     t.string   "index_oid"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "datatypes_devices", id: false, force: :cascade do |t|
+    t.integer "device_id",   null: false
+    t.integer "datatype_id", null: false
   end
 
   create_table "devices", force: :cascade do |t|

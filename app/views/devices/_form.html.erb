@@ -31,6 +31,14 @@
     <%= f.label :address %><br>
     <%= f.text_field :address %>
   </div>
+  <div class="field">
+      <% @datatypes.each do |datatype| %>
+          <li>
+            <%= check_box_tag 'datatype_ids[]', datatype.id, @device.datatypes.exists?(datatype.id) -%>
+            <%= h datatype.name -%>
+          </li>
+      <% end %>
+  </div>
   <div class="actions">
     <%= f.submit class: "button" %>
     <%= link_to "Get Device info", "#", class: "button", id: "getinfo" %>

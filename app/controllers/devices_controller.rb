@@ -15,16 +15,19 @@ class DevicesController < ApplicationController
   # GET /devices/new
   def new
     @device = Device.new
+    @datatypes = Datatype.all
   end
 
   # GET /devices/1/edit
   def edit
+    @datatypes = Datatype.all
   end
 
   # POST /devices
   # POST /devices.json
   def create
     @device = Device.new(device_params)
+    @device.datatypes = Datatype.find(params[:datatype_ids])
 
     respond_to do |format|
       if @device.save
@@ -40,6 +43,7 @@ class DevicesController < ApplicationController
   # PATCH/PUT /devices/1
   # PATCH/PUT /devices/1.json
   def update
+    @device.datatypes = Datatype.find(params[:datatype_ids])
     respond_to do |format|
       if @device.update(device_params)
         format.html { redirect_to @device, notice: 'Device was successfully updated.' }

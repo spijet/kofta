@@ -24,6 +24,14 @@
   <strong>Address:</strong>
   <%= @device.address %>
 </p>
+<p>
+    <strong>Data Sources:</strong>
+        <% @device.datatypes.each do |datatype| %>
+            <span class="tag">
+                <%= datatype.name %>
+            </span>
+        <% end %>
+</p>
 
-<%= link_to 'Edit', edit_device_path(@device) %> |
-<%= link_to 'Back', devices_path %>
+<%= link_to 'Edit', edit_device_path(@device), class: "button" %> |
+<%= link_to 'Back', devices_path, class: "button" %>
