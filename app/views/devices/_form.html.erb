@@ -1,3 +1,5 @@
+<div class="container">
+
 <%= form_for(@device) do |f| %>
   <% if @device.errors.any? %>
     <div id="error_explanation">
@@ -11,36 +13,45 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :devname %><br>
-    <%= f.text_field :devname %>
-  </div>
-  <div class="field">
-    <%= f.label :city %><br>
-    <%= f.text_field :city %>
-  </div>
-  <div class="field">
-    <%= f.label :contact %><br>
-    <%= f.text_field :contact %>
-  </div>
-  <div class="field">
-    <%= f.label :group %><br>
-    <%= f.text_field :group %>
-  </div>
-  <div class="field">
-    <%= f.label :address %><br>
-    <%= f.text_field :address %>
-  </div>
-  <div class="field">
-      <% @datatypes.each do |datatype| %>
-          <li>
-            <%= check_box_tag 'datatype_ids[]', datatype.id, @device.datatypes.exists?(datatype.id) -%>
-            <%= h datatype.name -%>
-          </li>
-      <% end %>
-  </div>
-  <div class="actions">
-    <%= f.submit class: "button" %>
-    <%= link_to "Get Device info", "#", class: "button", id: "getinfo" %>
+  <div class="columns">
+      <div class="column notification">
+          <%= f.label :devname, class: "label" %>
+          <p class="control">
+              <%= f.text_field :devname, class: "input" %>
+          </p>
+          <%= f.label :city, class: "label" %>
+          <p class="control">
+              <%= f.text_field :city, class: "input" %>
+          </p>
+          <%= f.label :contact, class: "label" %>
+          <p class="control">
+              <%= f.text_field :contact, class: "input" %>
+          </p>
+          <%= f.label :group, class: "label" %>
+          <p class="control">
+              <%= f.text_field :group, class: "input" %>
+          </p>
+          <%= f.label :address, class: "label" %>
+          <p class="control">
+              <%= f.text_field :address, class: "input" %>
+          </p>
+          <div class="actions">
+              <%= f.submit class: "button" %>
+              <%= link_to "Get Device info", "#", class: "button is-warning", id: "getinfo" %>
+          </div>
+      </div>
+      <div class="column notification">
+          <%= f.label "Used data sources", class: "label" %>
+          <p class="control">
+              <% @datatypes.each do |datatype| %>
+                  <label class="checkbox">
+                      <%= check_box_tag 'datatype_ids[]', datatype.id, @device.datatypes.exists?(datatype.id) -%>
+                      <%= h datatype.name -%>
+                      <p>
+                  </label>
+              <% end %>
+          </p>
+      </div>
   </div>
 <% end %>
+</div>

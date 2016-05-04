@@ -28,6 +28,9 @@ ActiveRecord::Schema.define(version: 20160503080423) do
     t.integer "datatype_id", null: false
   end
 
+  add_index "datatypes_devices", ["datatype_id", "device_id"], name: "index_datatypes_devices_on_datatype_id_and_device_id"
+  add_index "datatypes_devices", ["device_id", "datatype_id"], name: "index_datatypes_devices_on_device_id_and_datatype_id"
+
   create_table "devices", force: :cascade do |t|
     t.string   "devname"
     t.string   "city"

@@ -1,4 +1,16 @@
-<h1>New Device</h1>
+<header class="header">
+  <div class="container">
+    <!-- Left side -->
+    <div class="header-left">
+      <a class="header-item" href="#">
+        KOFTA
+      </a>
+      <%= link_to 'Devices', devices_path, class: "header-tab" %>
+      <%= link_to 'New Device', new_device_path, class: "header-tab is-active" %>
+      <%= link_to 'Data Sources', datatypes_path, class: "header-tab" %>
+    </div>
+  </div>
+</header>
 
 <%= render 'form' %>
 

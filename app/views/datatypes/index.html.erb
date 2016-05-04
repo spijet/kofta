@@ -1,8 +1,19 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Datatypes</h1>
+<header class="header">
+  <div class="container">
+    <!-- Left side -->
+    <div class="header-left">
+      <a class="header-item" href="#">
+        KOFTA
+      </a>
+      <%= link_to 'Devices', devices_path, class: "header-tab" %>
+      <%= link_to 'Data Sources', datatypes_path, class: "header-tab is-active" %>
+    </div>
+  </div>
+</header>
 
-<table>
+<table class="table is-striped">
   <thead>
     <tr>
       <th>Name</th>
@@ -22,9 +33,9 @@
         <td><%= datatype.excludes %></td>
         <td><%= datatype.table %></td>
         <td><%= datatype.index_oid %></td>
-        <td><%= link_to 'Show', datatype %></td>
-        <td><%= link_to 'Edit', edit_datatype_path(datatype) %></td>
-        <td><%= link_to 'Destroy', datatype, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Show', datatype, class: "button" %></td>
+        <td><%= link_to 'Edit', edit_datatype_path(datatype), class: "button is-warning" %></td>
+        <td><%= link_to 'Destroy', datatype, method: :delete, data: { confirm: 'Are you sure?' }, class: "button is-danger" %></td>
       </tr>
     <% end %>
   </tbody>
@@ -32,4 +43,4 @@
 
 <br>
 
-<%= link_to 'New Datatype', new_datatype_path %>
+<%= link_to 'New Datatype', new_datatype_path, class: "button is-primary" %>

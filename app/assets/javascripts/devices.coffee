@@ -9,12 +9,24 @@ jQuery ->
   getinfo = $('#getinfo')
 
   getinfo.click ->
+    getinfo.removeClass('is-loading is-warning is-danger is-success')
+    getinfo.addClass('is-warning is-loading')
+    host.addClass('is-warning')
+    $('#snmp_error').remove()
     $.ajax '/snmpquerier/getinfo',
-      host: host.val()
       type: 'POST'
       dataType: 'json'
+      data: "host": host.val()
       error: (jqXHR, textStatus, errorThrown) ->
-        alert("AJAX Error: #{textStatus}")
+        getinfo.removeClass('is-loading is-warning is-danger is-success')
+        getinfo.addClass('is-danger')
+        host.removeClass('is-danger is-warning')
+        host.addClass('is-danger')
+        host.after("<span class=\"help is-danger\" id=\"snmp_error\">#{jqXHR.responseText}</span>")
       success: (data, textStatus, jqXHR) ->
+        getinfo.removeClass('is-loading is-warning is-danger is-success')
+        getinfo.addClass('is-success')
+        host.removeClass('is-danger is-warning')
+        host.addClass('is-success')
         name.val(data.devname)
         cont.val(data.contact)

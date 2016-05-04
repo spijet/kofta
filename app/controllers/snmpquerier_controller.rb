@@ -6,5 +6,7 @@ class SnmpquerierController < ApplicationController
     info[:contact] = manager.get_value("1.3.6.1.2.1.1.4.0")
     manager.close
     render json: info.to_json
+    rescue => e
+      render plain: e.to_s.capitalize + "!", status: 422
   end
 end
