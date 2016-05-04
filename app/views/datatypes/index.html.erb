@@ -18,10 +18,8 @@
     <tr>
       <th>Name</th>
       <th>OID</th>
-      <th>Excludes</th>
       <th>SNMP Metric Type</th>
       <th>Is table?</th>
-      <th>Indexing OID</th>
       <th colspan="3">Actions</th>
     </tr>
   </thead>
@@ -31,11 +29,9 @@
       <tr>
         <td><%= datatype.name %></td>
         <td><%= datatype.oid %></td>
-        <td><%= datatype.excludes %></td>
         <td><%= datatype.metric_type %></td>
         <td><%= datatype.table %></td>
-        <td><%= datatype.index_oid %></td>
-        <td><%= link_to 'Show', datatype, class: "button" %></td>
+        <td><%= link_to 'Show', datatype, class: "button show-item", item: datatype.id %></td>
         <td><%= link_to 'Edit', edit_datatype_path(datatype), class: "button is-warning" %></td>
         <td><%= link_to 'Destroy', datatype, method: :delete, data: { confirm: 'Are you sure?' }, class: "button is-danger" %></td>
       </tr>
@@ -46,3 +42,32 @@
 <br>
 
 <%= link_to 'New Datatype', new_datatype_path, class: "button is-primary" %>
+
+<div class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-container">
+    <div class="modal-content">
+        <div class="card is-fullwidth">
+            <header class="card-header">
+                <p class="card-header-title">
+                    Metric Name
+                </p>
+            </header>
+            <div class="card-content">
+                <div class="content">
+                    <p><strong>OID:</strong><span id="metric_oid">lalalal</span></p>
+                    <p><strong>Exclude regex:</strong><span id="metric_excludes">lalalal</span></p>
+                    <p><strong>SNMP Metric Type:</strong><span id="metric_type">lalalal</span></p>
+                    <p><strong>Is table?</strong><span id="metric_table">lalalal</span></p>
+                    <p><strong>Indexer OID:</strong><span id="metric_index">lalalal</span></p>
+                </div>
+            </div>
+            <footer class="card-footer">
+                <a class="card-footer-item item-edit">Edit</a>
+                <%= link_to 'Delete', '#', method: :delete, data: { confirm: 'Are you sure?' }, class: "card-footer-item item-delete" %>
+            </footer>
+        </div>
+    </div>
+  </div>
+  <button class="modal-close"></button>
+</div>

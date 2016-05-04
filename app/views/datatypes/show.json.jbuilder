@@ -1,1 +1,1 @@
-json.extract! @datatype, :id, :name, :oid, :excludes, :table, :index_oid, :created_at, :updated_at
+json.extract! @datatype, :id, :name, :oid, :excludes, :metric_type, :table, :index_oid, :created_at, :updated_at
