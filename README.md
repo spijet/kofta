@@ -21,5 +21,7 @@ Eventually it'll use:
 * `git clone <repo_URL> <app_dir>`;
 * `cd <app_dir>`;
 * `bundle install`;
+* To initialize database: `rake db:setup`;
+   This will init the DB with basic stuff (like, basic set of metrics that can be used to query devices)
 * If you want to test/develop it: `rails server`;
 * If you want to see how it'll look/behave in real-er world: `RAILS_ENV=production rails server`.
