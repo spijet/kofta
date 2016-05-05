@@ -8,7 +8,7 @@ This is an attempt to create an SNMP stats collector for various network devices
 I grew tired of Cacti, I hate Zabbix, and I think that Collectd could do its job
 better. I also hate non-BULK SNMPWALKs.
 
-Enter **KOFTA**: This piece of Rails code was born with a single purpose: To
+Enter **KOFTA** — the piece of Rails code that was born with a single purpose: To
 replace Collectd and to feed InfluxDB with data, with style.
 
 ## License
