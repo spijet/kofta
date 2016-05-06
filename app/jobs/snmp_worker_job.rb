@@ -26,17 +26,21 @@ class SnmpWorkerJob < ActiveJob::Base
 
   # Performs a BULKWALK across given object tree.
   # Much faster than simple SNMP Walk, so here it is.
-  # Returns a hash of {oid: value}, which then gets merged
+  # Returns a hash of {oid_last_number: value}, which then gets merged
   #  with indexer OID hash (which is also generated here).
   def bulkwalk(object)
     root = extract_oid(object)
+    # The only way we could get >1024 records in SNMP table
+    # is by walking something in ifTable, so if we do,
+    # we set maxrows equal to ifTable size.
+    maxrows = get_table_size(object)
     last, oid, results = false, root.dup, {}
     root = root.split('.').map{|chr|chr.to_i}
     while not last
-      vbs = @snmp.get_bulk(0, 1024, oid).each_varbind do |vb|
+      vbs = @snmp.get_bulk(0, maxrows, oid).each_varbind do |vb|
         oid = vb.oid
         (last = true; break) if not oid[0..root.size-1] == root
-        results[vb.oid.to_s] = vb.value.asn1_type =~ /STRING/ ? vb.value.to_s : vb.value.to_i
+        results[vb.oid.last] = vb.value.asn1_type =~ /STRING/ ? vb.value.to_s : vb.value.to_i
       end
     end
     results
@@ -58,5 +62,12 @@ class SnmpWorkerJob < ActiveJob::Base
     indexList.each do |index|
       indexes[index] = bulkwalk(index)
     end
+  end
+
+  # This one could be rewritten in the future,
+  # for now it's awfully simple.
+  # +1 is here just in case, I'll remove it if it's unneeded.
+  def get_table_size(object)
+    object =~ /IF-MIB::if/ ? @snmp.get_value('IF-MIB::ifNumber.0') + 1 : 1024
   end
 end
