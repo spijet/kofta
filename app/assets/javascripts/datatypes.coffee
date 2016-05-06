@@ -24,10 +24,16 @@ jQuery ->
       success: (data, textStatus, jqXHR) ->
         modal_header.text(data.name)
         modal_oid.text(data.oid)
-        modal_excl.text(data.excludes)
         modal_type.text(data.metric_type)
         modal_table.text(data.table)
-        modal_index.text(data.index_oid)
+        if data.table is true
+          modal_index.text(data.index_oid)
+          modal_excl.text(data.excludes)
+          modal_index.parent().show()
+          modal_excl.parent().show()
+        else
+          modal_index.parent().hide()
+          modal_excl.parent().hide()
         $('.item-edit').attr('href', "/datatypes/#{modal_item}/edit")
         $('.item-delete').attr('href', "/datatypes/#{modal_item}")
         modal_window.addClass('is-active')
