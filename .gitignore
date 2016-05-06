@@ -15,3 +15,6 @@
 /log/*
 !/log/.keep
 /tmp
+
+# Also ignore precompiled assets, use `rake assets:precompile` instead
+/public/assets/*
