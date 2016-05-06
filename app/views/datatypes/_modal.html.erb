@@ -1,0 +1,30 @@
+<div class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-container">
+    <div class="modal-content">
+        <div class="card is-fullwidth">
+            <header class="card-header">
+                <p class="card-header-title">
+                    Metric Name
+                </p>
+            </header>
+            <div class="card-content">
+                <div class="content">
+                    <table>
+                        <tr><td><strong>OID:</strong></td><td id="metric_oid">lalala</td></tr>
+                        <tr><td><strong>SNMP Metric Type:</strong></td><td id="metric_type">lalala</td></tr>
+                        <tr><td><strong>Is table?</strong></td><td id="metric_table">lalala</td></tr>
+                        <tr><td><strong>Indexer OID:</strong></td><td id="metric_index">lalala</td></tr>
+                        <tr><td><strong>Exclude regex:</strong></td><td id="metric_excludes">lalala</td></tr>
+                    </table>
+                </div>
+            </div>
+            <footer class="card-footer">
+                <a class="card-footer-item item-edit">Edit</a>
+                <%= link_to 'Delete', '#', method: :delete, data: { confirm: 'Are you sure?' }, class: "card-footer-item item-delete" %>
+            </footer>
+        </div>
+    </div>
+  </div>
+  <button class="modal-close"></button>
+</div>
