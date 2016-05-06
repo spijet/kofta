@@ -1,1 +1,1 @@
-json.extract! @device, :id, :devname, :city, :contact, :group, :address, :created_at, :updated_at
+json.extract! @device, :id, :devname, :city, :contact, :group, :address, :snmp_community, :query_interval, :created_at, :updated_at
