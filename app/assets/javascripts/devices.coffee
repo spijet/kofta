@@ -6,6 +6,7 @@ jQuery ->
   host = $('#device_address')
   name = $('#device_devname')
   cont = $('#device_contact')
+  city = $('#device_city')
   getinfo = $('#getinfo')
 
   getinfo.click ->
@@ -28,5 +29,6 @@ jQuery ->
         getinfo.addClass('is-success')
         host.removeClass('is-danger is-warning')
         host.addClass('is-success')
-        name.val(data.devname)
+        name.val(data.name)
         cont.val(data.contact)
+        city.val(data.location.split(',')[0])
