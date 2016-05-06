@@ -19,21 +19,29 @@
           <p class="control">
               <%= f.text_field :devname, class: "input" %>
           </p>
+          <%= f.label :address, class: "label" %>
+          <p class="control">
+              <%= f.text_field :address, class: "input" %>
+          </p>
+          <%= f.label :snmp_community, class: "label" %>
+          <p class="control">
+              <%= f.text_field :snmp_community, class: "input" %>
+          </p>
+          <%= f.label :query_interval, class: "label" %>
+          <p class="control">
+              <%= f.text_field :query_interval, class: "input" %>
+          </p>
           <%= f.label :city, class: "label" %>
           <p class="control">
               <%= f.text_field :city, class: "input" %>
-          </p>
-          <%= f.label :contact, class: "label" %>
-          <p class="control">
-              <%= f.text_field :contact, class: "input" %>
           </p>
           <%= f.label :group, class: "label" %>
           <p class="control">
               <%= f.text_field :group, class: "input" %>
           </p>
-          <%= f.label :address, class: "label" %>
+          <%= f.label :contact, class: "label" %>
           <p class="control">
-              <%= f.text_field :address, class: "input" %>
+              <%= f.text_field :contact, class: "input" %>
           </p>
           <div class="actions">
               <%= f.submit class: "button" %>
@@ -42,15 +50,15 @@
       </div>
       <div class="column notification">
           <%= f.label "Used data sources", class: "label" %>
-          <p class="control">
-              <% @datatypes.each do |datatype| %>
+          <% @datatypes.each do |datatype| %>
+              <p class="control">
                   <label class="checkbox">
                       <%= check_box_tag 'datatype_ids[]', datatype.id, @device.datatypes.exists?(datatype.id) -%>
                       <%= h datatype.name -%>
                       <p>
                   </label>
-              <% end %>
-          </p>
+                      </p>
+          <% end %>
       </div>
   </div>
 <% end %>
