@@ -38,5 +38,5 @@ jQuery ->
         $('.item-delete').attr('href', "/datatypes/#{modal_item}")
         modal_window.addClass('is-active')
 
-  $('.modal-close').click ->
+  $('.modal-close, .modal-background').click ->
     $('.modal').removeClass('is-active')
