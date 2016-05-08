@@ -30,7 +30,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Require SNMP Gem for SNMP functions
 gem 'snmp', '~> 1.2'
-gem 'snmp4em', '~> 1.1.2'
+
+# Sidekiq for queue management
+gem 'sidekiq', '>= 4.0.0'
 
 # We will use Bulma for SCSS styling.
 #  That may change in the future.

@@ -51,9 +51,9 @@ GEM
       execjs
     coffee-script-source (1.10.0)
     concurrent-ruby (1.0.2)
+    connection_pool (2.2.0)
     debug_inspector (0.0.2)
     erubis (2.7.0)
-    eventmachine (1.2.0.1)
     execjs (2.6.0)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
@@ -112,6 +112,7 @@ GEM
     rake (11.1.2)
     rdoc (4.2.2)
       json (~> 1.4)
+    redis (3.3.0)
     ref (2.0.0)
     sass (3.4.22)
     sass-rails (5.0.4)
@@ -123,10 +124,11 @@ GEM
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
+    sidekiq (4.1.2)
+      concurrent-ruby (~> 1.0)
+      connection_pool (~> 2.2, >= 2.2.0)
+      redis (~> 3.2, >= 3.2.1)
     snmp (1.2.0)
-    snmp4em (1.1.2)
-      eventmachine (>= 1.0.0)
-      snmp (>= 1.0.2)
     spring (1.7.1)
     sprockets (3.6.0)
       concurrent-ruby (~> 1.0)
@@ -167,8 +169,8 @@ DEPENDENCIES
   rails (= 4.2.6)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
+  sidekiq (>= 4.0.0)
   snmp (~> 1.2)
-  snmp4em (~> 1.1.2)
   spring
   sqlite3
   therubyracer
