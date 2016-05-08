@@ -10,6 +10,9 @@ class DevicesController < ApplicationController
   # GET /devices/1
   # GET /devices/1.json
   def show
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
+    end
   end
 
   # GET /devices/new

@@ -1,0 +1,34 @@
+<div class="card is-fullwidth">
+    <header class="card-header">
+        <p class="card-header-title">
+            <%= @device.city + '/' + @device.group + '/' + @device.devname %>
+        </p>
+    </header>
+    <div class="card-content">
+        <div class="content">
+            <table>
+                <tr><td><strong>Device name:</strong></td><td><%= @device.devname %></td></tr>
+                <tr><td><strong>Hostname (or IP):</strong></td><td><%= @device.address %></td></tr>
+                <tr><td><strong>SNMP Community:</strong></td><td><%= @device.snmp_community %></td></tr>
+                <tr><td><strong>SNMP Query Interval:</strong></td><td><%= @device.query_interval %> seconds</td></tr>
+                <tr><td><strong>City:</strong></td><td><%= @device.city %></td></tr>
+                <tr><td><strong>Group:</strong></td><td><%= @device.group %></td></tr>
+                <tr><td><strong>Contact:</strong></td><td><%= @device.contact %></td></tr>
+                <tr><td><strong>Data types:</strong></td>
+                    <td>
+                        <% @device.datatypes.each do |datatype| %>
+                            <span class="tag is-info">
+                                <%= datatype.name %>
+                            </span>
+                        <% end %>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <%= link_to 'Back', devices_path, class: "card-footer-item", id: 'modal_back' %>
+        <%= link_to 'Edit', edit_device_path(@device), class: "card-footer-item" %>
+        <%= link_to 'Delete', @device, method: :delete, data: { confirm: 'Are you sure?' }, class: "card-footer-item is-danger" %>
+    </footer>
+</div>

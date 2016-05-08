@@ -21,7 +21,6 @@
       <th>Device Name</th>
       <th>Address</th>
       <th>Contact</th>
-      <th>Data Sources</th>
       <th colspan="3">Actions</th>
     </tr>
   </thead>
@@ -34,14 +33,7 @@
         <td><%= device.devname %></td>
         <td><%= device.address %></td>
         <td><%= device.contact %></td>
-        <td>
-            <% device.datatypes.each do |datatype| %>
-                <span class="tag is-info">
-                    <%= datatype.name %>
-                </span>
-            <% end %>
-        </td>
-        <td><%= link_to 'Show', device, class: "button" %></td>
+        <td><%= link_to 'Show', device, class: "button show-item", item: device.id %></td>
         <td><%= link_to 'Edit', edit_device_path(device), class: "button is-warning" %></td>
         <td><%= link_to 'Destroy', device, method: :delete, data: { confirm: 'Are you sure?' }, class: "button is-danger" %></td>
       </tr>
@@ -52,3 +44,12 @@
 <br>
 
 <%= link_to 'New Device', new_device_path, class: "button is-primary" %>
+
+<div class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-container">
+    <div class="modal-content">
+    </div>
+  </div>
+  <button class="modal-close"></button>
+</div>

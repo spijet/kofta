@@ -1,37 +1,3 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Devname:</strong>
-  <%= @device.devname %>
-</p>
-
-<p>
-  <strong>City:</strong>
-  <%= @device.city %>
-</p>
-
-<p>
-  <strong>Contact:</strong>
-  <%= @device.contact %>
-</p>
-
-<p>
-  <strong>Group:</strong>
-  <%= @device.group %>
-</p>
-
-<p>
-  <strong>Address:</strong>
-  <%= @device.address %>
-</p>
-<p>
-    <strong>Data Sources:</strong>
-        <% @device.datatypes.each do |datatype| %>
-            <span class="tag">
-                <%= datatype.name %>
-            </span>
-        <% end %>
-</p>
-
-<%= link_to 'Edit', edit_device_path(@device), class: "button" %> |
-<%= link_to 'Back', devices_path, class: "button" %>
+<%= render 'card' %>
