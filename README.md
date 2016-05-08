@@ -15,14 +15,12 @@ replace Collectd and to feed InfluxDB with data, with style.
 This software is (not yet) released under the [MIT license](https://opensource.org/licenses/MIT).
 
 ## Magic used
-Eventually it'll use:
-
-* Ruby 2.3.x;
+* Ruby 2.2 is required (2.3.x is recommended, JRuby would be ideal, but isn't tested yet);
 * Rails 4.2.6 or newer;
 * Sidekiq 4+ (for spawning collectors);
-* Sqlite for the internal DB;
-* Redis for Sidekiq operations;
-* Net::SNMP for stat collection;
+* Redis (required for Sidekiq, 3.0.3 or newer is best);
+* Sqlite (for internal DB);
+* Net::SNMP gem for stat collection;
 * InfluxDB::Client for DB connections;
 
 ---
@@ -34,5 +32,7 @@ Eventually it'll use:
 * `bundle install`;
 * To initialize database: `rake db:setup`;
    This will init the DB with basic stuff (like, basic set of metrics that can be used to query devices)
+* Start Redis (use your OS/Distro's way of starting services for this);
+* Start Sidekiq with `bundle exec sidekiq`;
 * If you want to test/develop it: `rails server`;
 * If you want to see how it'll look/behave in real-er world: `RAILS_ENV=production rails server`.
