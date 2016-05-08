@@ -1,3 +1,7 @@
+# This module is a part of KOFTA SNMP Collector.
+# Gets called as a recurring task by Sidekiq or any other ActiveJob queue
+# engine. The only input argument needed is the Device object.
+# Device must have at least 1 metric assigned to it.
 class SnmpWorkerJob < ActiveJob::Base
   queue_as :default
   require 'snmp'
@@ -5,7 +9,7 @@ class SnmpWorkerJob < ActiveJob::Base
   def perform(device)
     # Get datasources to query from this device
     datasources = device.datatypes.to_a
-    @single_metrics = datasources.select { |metric| metric if not metric.table }
+    @single_metrics = datasources.select { |metric| metric unless metric.table }
     @table_metrics = datasources.select { |metric| metric if metric.table }
     # Fill in device-wide tags
     device_tags = {
@@ -35,11 +39,11 @@ class SnmpWorkerJob < ActiveJob::Base
     # we set maxrows equal to ifTable size.
     maxrows = get_table_size(object)
     last, oid, results = false, root.dup, {}
-    root = root.split('.').map{|chr|chr.to_i}
-    while not last
-      vbs = @snmp.get_bulk(0, maxrows, oid).each_varbind do |vb|
+    root = root.split('.').map(&:to_i)
+    while !last
+      @snmp.get_bulk(0, maxrows, oid).each_varbind do |vb|
         oid = vb.oid
-        (last = true; break) if not oid[0..root.size-1] == root
+        (last = true; break) unless oid[0..root.size - 1] == root
         results[vb.oid.last] = vb.value.asn1_type =~ /STRING/ ? vb.value.to_s : vb.value.to_i
       end
     end
@@ -54,12 +58,12 @@ class SnmpWorkerJob < ActiveJob::Base
   # Parses table metrics and gets list of unique index tables,
   #  fetches these tables from the device and returns a hash of hashes:
   # {indexTable: {oid: value,},}
-  def get_table_indexes(indexList)
+  def get_table_indexes(index_list)
     # Prepare indexes hash:
     indexes = {}
     # Extract list of indexes to work on,
     # and fill the hash:
-    indexList.each do |index|
+    index_list.each do |index|
       indexes[index] = bulkwalk(index)
     end
   end
