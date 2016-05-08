@@ -6,6 +6,27 @@ class SnmpWorkerJob < ActiveJob::Base
   queue_as :default
   require 'snmp'
 
+  # This is a definition of metric class.
+  # Will use it to store processed metric data before sending it to InfluxDB.
+  class Measurement
+    attr_accessor :name, :value, :tags, :timestamp
+    def initialize(name, value, tags, timestamp)
+      @name = name
+      @value = value
+      @tags = tags
+      @timestamp = timestamp
+    end
+  end
+
+  class MetricTable
+    attr_reader :type, :data, :index
+    def initialize(type, data, index)
+      @type = type
+      @data = data
+      @index = index
+    end
+  end
+
   def perform(device)
     # Get datasources to query from this device
     datasources = device.datatypes.to_a
@@ -19,13 +40,40 @@ class SnmpWorkerJob < ActiveJob::Base
       group: device.group
     }
     # Open SNMP Manager
+    p "Spawning SNMP manager - connecting to host #{device.address}."
     @snmp = SNMP::Manager.new(
       host: device.address,
       community: device.snmp_community
     )
 
     # Fill indexes first:
-    @indexes = get_table_indexes(@table_metrics.map{ |i| i.index_oid }.uniq)
+    p 'Filling index hash...'
+    index_list = @table_metrics.map(&:index_oid).uniq
+    @indexes = get_table_indexes(index_list)
+
+    # Pre-create metric array:
+    @metric_data = []
+
+    # Get all non-table metrics:
+    # (TODO: Try to get_bulk all non-table metrics in one query instead)
+    @single_metrics.each do |metric|
+      @metric_data.push Measurement.new(metric.metric_type, @snmp.get_value(metric.oid).to_i, device_tags, Time.now)
+    end
+
+    raw_tables = []
+    # Gather all table metrics for future processing:
+    @table_metrics.each do |metric|
+      raw_tables.push MetricTable.new(metric.metric_type, bulkwalk(metric.oid), metric.index_oid)
+    end
+
+    # Create metrics for freshly harvested tables:
+    raw_tables.each do |metric_table|
+      metric_table.data.each do |oid, data|
+        @metric_data.push Measurement.new(metric_table.type, data, device_tags.merge(instance: @indexes[metric_table.index][oid]), Time.now)
+      end
+    end
+
+    p @metric_data
   end
 
   # Performs a BULKWALK across given object tree.
@@ -59,6 +107,7 @@ class SnmpWorkerJob < ActiveJob::Base
   #  fetches these tables from the device and returns a hash of hashes:
   # {indexTable: {oid: value,},}
   def get_table_indexes(index_list)
+    p index_list
     # Prepare indexes hash:
     indexes = {}
     # Extract list of indexes to work on,
@@ -66,12 +115,13 @@ class SnmpWorkerJob < ActiveJob::Base
     index_list.each do |index|
       indexes[index] = bulkwalk(index)
     end
+    indexes
   end
 
   # This one could be rewritten in the future,
   # for now it's awfully simple.
   # +1 is here just in case, I'll remove it if it's unneeded.
   def get_table_size(object)
-    object =~ /IF-MIB::if/ ? @snmp.get_value('IF-MIB::ifNumber.0') + 1 : 1024
+    object =~ /IF-MIB::if/ ? @snmp.get_value('IF-MIB::ifNumber.0').to_i + 1 : 1024
   end
 end
