@@ -11,7 +11,7 @@ jQuery ->
   modal_type = $('#metric_type')
   modal_table = $('#metric_table')
   modal_index = $('#metric_index')
-  modal_close = $('.modal-close')
+  modal_close = $('.modal-close, .modal-background')
 
   $('.show-item').click (event) ->
     event.preventDefault()
@@ -38,5 +38,5 @@ jQuery ->
         $('.item-delete').attr('href', "/datatypes/#{modal_item}")
         modal_window.addClass('is-active')
 
-  $('.modal-close, .modal-background').click ->
+  modal_close.click ->
     $('.modal').removeClass('is-active')
