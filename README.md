@@ -11,6 +11,9 @@ better. I also hate non-BULK SNMPWALKs.
 Enter **KOFTA** — the piece of Rails code that was born with a single purpose: To
 replace Collectd and to feed InfluxDB with data, with style.
 
+## State
+As of 2016-May-09, the app is somewhat (dys)functional. InfluxDB connection and data sending is not implemented yet, as well as index Web UI (only Devices and Datatypes views are mostly done). Just a little bit more and it's ready.
+
 ## License
 This software is (not yet) released under the [MIT license](https://opensource.org/licenses/MIT).
 
