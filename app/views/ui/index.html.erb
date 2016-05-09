@@ -1,2 +1,21 @@
-<h1>Ui#index</h1>
-<p>Find me in app/views/ui/index.html.erb</p>
+<header class="header">
+  <div class="container">
+    <!-- Left side -->
+    <div class="header-left">
+      <%= link_to 'KOFTA', '/', class: "header-item is-active" %>
+      <%= link_to 'Devices', devices_path, class: "header-tab" %>
+      <%= link_to 'Data Sources', datatypes_path, class: "header-tab" %>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+    <div class="columns">
+        <div class="column is-one-third">
+            <%= render 'side_menu' %>
+        </div>
+        <div class="column">
+            Will add some stuff here later.
+        </div>
+    </div>
+</div>
