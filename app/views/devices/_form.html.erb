@@ -1,17 +1,20 @@
 <div class="container">
 
-<%= form_for(@device) do |f| %>
-  <% if @device.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@device.errors.count, "error") %> prohibited this device from being saved:</h2>
-
-      <ul>
-      <% @device.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+    <%= form_for(@device) do |f| %>
+        <% if @device.errors.any? %>
+            <article class="message is-danger">
+                <div class="message-header">
+                    <%= pluralize(@device.errors.count, "error") %> prohibited this device from being saved:
+                </div>
+                <div class="message-body">
+                    <ul>
+                        <% @device.errors.full_messages.each do |message| %>
+                            <li><%= message %></li>
+                        <% end %>
+                    </ul>
+                </div>
+            </article>
+        <% end %>
 
   <div class="columns">
       <div class="column notification">
