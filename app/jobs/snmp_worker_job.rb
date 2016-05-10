@@ -90,6 +90,10 @@ class SnmpWorkerJob < ActiveJob::Base
       influx_data.push point
     end
     p influx_data
+
+    p 'Posting data to influxdb...'
+    influx.write_points(data)
+    p 'Done!'
   end
 
   # Performs a BULKWALK across given object tree.
