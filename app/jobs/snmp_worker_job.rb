@@ -83,11 +83,11 @@ class SnmpWorkerJob < ActiveJob::Base
     # Post data to InfluxDB:
     influx_data = []
     @metric_data.each do |measurement|
-      influx_data.push {
-        values: { value: measurement.value },
-        tags: measurement.tags,
-        timestamp: measurement.timestamp
-      }
+      point = { values: { value: measurement.value },
+                tags: measurement.tags,
+                timestamp: measurement.timestamp
+              }
+      influx_data.push point
     end
     p influx_data
   end
