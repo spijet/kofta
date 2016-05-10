@@ -34,7 +34,7 @@ class SnmpWorkerJob < ActiveJob::Base
     @single_metrics = datasources.select { |metric| metric unless metric.table }
     @table_metrics = datasources.select { |metric| metric if metric.table }
     # Fill in device-wide tags
-    device_tags = {
+    @device_tags = {
       host: device.address,
       name: device.devname,
       city: device.city,
@@ -54,17 +54,30 @@ class SnmpWorkerJob < ActiveJob::Base
     }
 
     # Fill indexes first:
-    p 'Filling index hash...'
     index_list = @table_metrics.map(&:index_oid).uniq
     @indexes = get_table_indexes(index_list)
 
     # Pre-create metric array:
-    @metric_data = []
+    @metric_data = read_metric_data
+
+    # Post data to InfluxDB:
+    @metric_data.each do |measurement|
+      point = { values: { value: measurement.value },
+                tags: measurement.tags,
+                # InfluxDB demands time in nanoseconds, so we have to do this:
+                timestamp: (measurement.timestamp.to_f * 1_000_000_000).to_i
+              }
+      @influx.write_point(measurement.name, point)
+    end
+  end
+
+  def read_metric_data
+    metric_data = []
 
     # Get all non-table metrics:
     # (TODO: Try to get_bulk all non-table metrics in one query instead)
     @single_metrics.each do |metric|
-      @metric_data.push Measurement.new(metric.metric_type, @snmp.get_value(metric.oid).to_i, device_tags, Time.now)
+      metric_data.push Measurement.new(metric.metric_type, @snmp.get_value(metric.oid).to_i, device_tags, Time.now)
     end
 
     raw_tables = []
@@ -76,25 +89,10 @@ class SnmpWorkerJob < ActiveJob::Base
     # Create metrics for freshly harvested tables:
     raw_tables.each do |metric_table|
       metric_table.data.each do |oid, data|
-        @metric_data.push Measurement.new(metric_table.type, data, device_tags.merge(instance: @indexes[metric_table.index][oid]), Time.now.to_i)
+        metric_data.push Measurement.new(metric_table.type, data, device_tags.merge(instance: @indexes[metric_table.index][oid]), Time.now)
       end
     end
-
-    # Post data to InfluxDB:
-    influx_data = []
-    @metric_data.each do |measurement|
-      point = { series: measurement.name,
-                values: { value: measurement.value },
-                tags: measurement.tags,
-                timestamp: measurement.timestamp
-              }
-      influx_data.push point
-    end
-    p influx_data
-
-    p 'Posting data to influxdb...'
-    @influx.write_points(influx_data)
-    p 'Done!'
+    metric_data
   end
 
   # Performs a BULKWALK across given object tree.
