@@ -5,6 +5,7 @@
 class SnmpWorkerJob < ActiveJob::Base
   queue_as :default
   require 'snmp'
+  require 'influxdb'
 
   # This is a definition of metric class.
   # Will use it to store processed metric data before sending it to InfluxDB.
@@ -46,6 +47,12 @@ class SnmpWorkerJob < ActiveJob::Base
       community: device.snmp_community
     )
 
+    # Open InfluxDB connection:
+    @influx = InfluxDB::Client.new udp: {
+      host: ENV['INFLUXDB_HOST'],
+      port: ENV['INFLUXDB_PORT']
+    }
+
     # Fill indexes first:
     p 'Filling index hash...'
     index_list = @table_metrics.map(&:index_oid).uniq
@@ -73,7 +80,16 @@ class SnmpWorkerJob < ActiveJob::Base
       end
     end
 
-    p @metric_data
+    # Post data to InfluxDB:
+    influx_data = []
+    @metric_data.each do |measurement|
+      influx_data.push {
+        values: { value: measurement.value },
+        tags: measurement.tags,
+        timestamp: measurement.timestamp
+      }
+    end
+    p influx_data
   end
 
   # Performs a BULKWALK across given object tree.

@@ -22,14 +22,15 @@ gem 'turbolinks'
 gem 'jquery-turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
-# bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
 # Require SNMP Gem for SNMP functions
 gem 'snmp', '~> 1.2'
+
+# This gem provides InfluxDB connection and functions:
+gem 'influxdb'
 
 # Sidekiq for queue management
 gem 'sidekiq', '>= 4.0.0'
