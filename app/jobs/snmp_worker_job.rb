@@ -92,7 +92,7 @@ class SnmpWorkerJob < ActiveJob::Base
     p influx_data
 
     p 'Posting data to influxdb...'
-    influx.write_points(data)
+    @influx.write_points(data)
     p 'Done!'
   end
 
