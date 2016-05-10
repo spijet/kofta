@@ -76,14 +76,15 @@ class SnmpWorkerJob < ActiveJob::Base
     # Create metrics for freshly harvested tables:
     raw_tables.each do |metric_table|
       metric_table.data.each do |oid, data|
-        @metric_data.push Measurement.new(metric_table.type, data, device_tags.merge(instance: @indexes[metric_table.index][oid]), Time.now)
+        @metric_data.push Measurement.new(metric_table.type, data, device_tags.merge(instance: @indexes[metric_table.index][oid]), Time.now.to_i)
       end
     end
 
     # Post data to InfluxDB:
     influx_data = []
     @metric_data.each do |measurement|
-      point = { values: { value: measurement.value },
+      point = { name: measurement.name,
+                values: { value: measurement.value },
                 tags: measurement.tags,
                 timestamp: measurement.timestamp
               }
