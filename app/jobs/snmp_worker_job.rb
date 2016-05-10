@@ -20,11 +20,12 @@ class SnmpWorkerJob < ActiveJob::Base
   end
 
   class MetricTable
-    attr_reader :type, :data, :index
-    def initialize(type, data, index)
+    attr_reader :type, :data, :index, :excludes
+    def initialize(type, data, index, excludes)
       @type = type
       @data = data
       @index = index
+      @excludes = excludes
     end
   end
 
@@ -83,13 +84,18 @@ class SnmpWorkerJob < ActiveJob::Base
     raw_tables = []
     # Gather all table metrics for future processing:
     @table_metrics.each do |metric|
-      raw_tables.push MetricTable.new(metric.metric_type, bulkwalk(metric.oid), metric.index_oid)
+      raw_tables.push MetricTable.new(metric.metric_type, bulkwalk(metric.oid),
+                                      metric.index_oid, metric.excludes)
     end
 
     # Create metrics for freshly harvested tables:
     raw_tables.each do |metric_table|
       metric_table.data.each do |oid, data|
-        metric_data.push Measurement.new(metric_table.type, data, @device_tags.merge(instance: @indexes[metric_table.index][oid]), Time.now)
+        instance = @indexes[metric_table.index][oid]
+        metric_data.push Measurement.new(
+          metric_table.type, data, @device_tags. merge(instance: instance),
+          Time.now
+        ) unless instance =~ /#{metric_table.excludes}/
       end
     end
     metric_data
