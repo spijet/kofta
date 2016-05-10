@@ -36,13 +36,12 @@ class SnmpWorkerJob < ActiveJob::Base
     @table_metrics = datasources.select { |metric| metric if metric.table }
     # Fill in device-wide tags
     @device_tags = {
-      host: device.address,
-      name: device.devname,
+      hostname: device.address,
+      title: device.devname,
       city: device.city,
       group: device.group
     }
     # Open SNMP Manager
-    p "Spawning SNMP manager - connecting to host #{device.address}."
     @snmp = SNMP::Manager.new(
       host: device.address,
       community: device.snmp_community
@@ -93,7 +92,7 @@ class SnmpWorkerJob < ActiveJob::Base
       metric_table.data.each do |oid, data|
         instance = @indexes[metric_table.index][oid]
         metric_data.push Measurement.new(
-          metric_table.type, data, @device_tags. merge(instance: instance),
+          metric_table.type, data, @device_tags.merge(instance: instance),
           Time.now
         ) unless instance =~ /#{metric_table.excludes}/
       end
@@ -132,7 +131,6 @@ class SnmpWorkerJob < ActiveJob::Base
   #  fetches these tables from the device and returns a hash of hashes:
   # {indexTable: {oid: value,},}
   def get_table_indexes(index_list)
-    p index_list
     # Prepare indexes hash:
     indexes = {}
     # Extract list of indexes to work on,
