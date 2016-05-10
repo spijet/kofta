@@ -77,7 +77,7 @@ class SnmpWorkerJob < ActiveJob::Base
     # Get all non-table metrics:
     # (TODO: Try to get_bulk all non-table metrics in one query instead)
     @single_metrics.each do |metric|
-      metric_data.push Measurement.new(metric.metric_type, @snmp.get_value(metric.oid).to_i, device_tags, Time.now)
+      metric_data.push Measurement.new(metric.metric_type, @snmp.get_value(metric.oid).to_i, @device_tags, Time.now)
     end
 
     raw_tables = []
@@ -89,7 +89,7 @@ class SnmpWorkerJob < ActiveJob::Base
     # Create metrics for freshly harvested tables:
     raw_tables.each do |metric_table|
       metric_table.data.each do |oid, data|
-        metric_data.push Measurement.new(metric_table.type, data, device_tags.merge(instance: @indexes[metric_table.index][oid]), Time.now)
+        metric_data.push Measurement.new(metric_table.type, data, @device_tags.merge(instance: @indexes[metric_table.index][oid]), Time.now)
       end
     end
     metric_data
