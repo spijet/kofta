@@ -1,17 +1,3 @@
-<header class="header">
-  <div class="container">
-    <!-- Left side -->
-    <div class="header-left">
-      <a class="header-item" href="#">
-        KOFTA
-      </a>
-      <%= link_to 'Devices', devices_path, class: "header-tab" %>
-      <%= link_to 'Data Sources', datatypes_path, class: "header-tab" %>
-      <%= link_to 'New DS', new_datatype_path, class: "header-tab is-active" %>
-    </div>
-  </div>
-</header>
-
 <%= render 'form' %>
 
 <%= link_to 'Back', datatypes_path %>
