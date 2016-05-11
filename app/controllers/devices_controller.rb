@@ -37,6 +37,7 @@ class DevicesController < ApplicationController
         format.html { redirect_to @device, notice: 'Device was successfully created.' }
         format.json { render :show, status: :created, location: @device }
       else
+        @datatypes = Datatype.all
         format.html { render :new }
         format.json { render json: @device.errors, status: :unprocessable_entity }
       end
