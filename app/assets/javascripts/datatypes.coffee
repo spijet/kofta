@@ -5,38 +5,23 @@
 jQuery ->
 
   modal_window = $('.modal')
-  modal_header = $('.card-header-title')
-  modal_oid = $('#metric_oid')
-  modal_excl = $('#metric_excludes')
-  modal_type = $('#metric_type')
-  modal_table = $('#metric_table')
-  modal_index = $('#metric_index')
   modal_close = $('.modal-close, .modal-background')
 
   $('.show-item').click (event) ->
     event.preventDefault()
     modal_item = $(this).attr('item')
-    $.ajax "/datatypes/#{modal_item}.json",
+    $.ajax "/datatypes/#{modal_item}",
       type: 'GET'
-      dataType: 'json'
+      dataType: 'html'
       error: (jqXHR, textStatus, errorThrown) ->
         alert(jqXHR.responseText)
       success: (data, textStatus, jqXHR) ->
-        modal_header.text(data.name)
-        modal_oid.text(data.oid)
-        modal_type.text(data.metric_type)
-        modal_table.text(data.table)
-        if data.table is true
-          modal_index.text(data.index_oid)
-          modal_excl.text(data.excludes)
-          modal_index.parent().show()
-          modal_excl.parent().show()
-        else
-          modal_index.parent().hide()
-          modal_excl.parent().hide()
-        $('.item-edit').attr('href', "/datatypes/#{modal_item}/edit")
-        $('.item-delete').attr('href', "/datatypes/#{modal_item}")
+        $('.modal-content').html(data)
         modal_window.addClass('is-active')
 
   modal_close.click ->
-    $('.modal').removeClass('is-active')
+    modal_window.removeClass('is-active')
+
+  $('#modal_back').click (event) ->
+    event.preventDefault()
+    modal.removeClass('is-active')

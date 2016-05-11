@@ -10,6 +10,9 @@ class DatatypesController < ApplicationController
   # GET /datatypes/1
   # GET /datatypes/1.json
   def show
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
+    end
   end
 
   # GET /datatypes/new

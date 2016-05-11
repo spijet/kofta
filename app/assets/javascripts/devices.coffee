@@ -44,7 +44,6 @@ jQuery ->
       error: (jqXHR, textStatus, errorThrown) ->
         alert(jqXHR.responseText)
       success: (data, textStatus, jqXHR) ->
-        alert(data)
         $('.modal-content').html(data)
         modal_window.addClass('is-active')
 
