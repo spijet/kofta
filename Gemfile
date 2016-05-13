@@ -37,6 +37,9 @@ gem 'sidekiq', '>= 4.0.0'
 # if you require 'sinatra' you get the DSL extended to Object
 gem 'sinatra', :require => nil
 
+# Rufus scheduler for recurrent tasks.
+gem 'rufus-scheduler'
+
 # We will use Bulma for SCSS styling.
 #  That may change in the future.
 gem "bulma-rails", "~> 0.0.24"
