@@ -7,7 +7,7 @@ s = Rufus::Scheduler.singleton
 
 # Stupid recurrent task...
 #
-Device.all.each do |device| 
+Device.all.each do |device|
   s.every "#{device.query_interval}s" do
 
     Rails.logger.info "Hello, it's #{Time.now}"
