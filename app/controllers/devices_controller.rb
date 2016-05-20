@@ -32,15 +32,15 @@ class DevicesController < ApplicationController
     @device = Device.new(device_params)
     @device.datatypes = Datatype.find(params[:datatype_ids])
 
-    Rufus::Scheduler.singleton.every "#{@device.query_interval}s" do
-      Rails.logger.info "Hello, it's #{Time.now}"
-      Rails.logger.info "I'm gonna go and query #{@device.address}, if you don't mind."
-      Rails.logger.flush
-      SnmpWorkerJob.perform_later(@device)
-    end
-
     respond_to do |format|
       if @device.save
+        $query_scheduler.every( "#{@device.query_interval}s", tag: @device.id ) do
+          Rails.logger.info "Hello, it's #{Time.now}"
+          Rails.logger.info "I'm gonna go and query #{@device.address}, if you don't mind."
+          Rails.logger.flush
+          SnmpWorkerJob.perform_later(@device)
+        end
+
         format.html { redirect_to @device, notice: 'Device was successfully created.' }
         format.json { render :show, status: :created, location: @device }
       else
@@ -57,6 +57,19 @@ class DevicesController < ApplicationController
     @device.datatypes = Datatype.find(params[:datatype_ids])
     respond_to do |format|
       if @device.update(device_params)
+        $query_scheduler.jobs(tag: @device.id).each do |job|
+          Rails.logger.info "Updated device with ID: #{@device.id}."
+          Rails.logger.info "Killing query job with ID: #{job.id}."
+          job.unschedule
+          Rails.logger.info "Job killed, now off to rescheduling~"
+        end
+        $query_scheduler.every( "#{@device.query_interval}s", tag: @device.id ) do
+          Rails.logger.info "Hello, it's #{Time.now}"
+          Rails.logger.info "I'm gonna go and query #{@device.address}, if you don't mind."
+          Rails.logger.flush
+          SnmpWorkerJob.perform_later(@device)
+        end
+
         format.html { redirect_to @device, notice: 'Device was successfully updated.' }
         format.json { render :show, status: :ok, location: @device }
       else
@@ -69,6 +82,12 @@ class DevicesController < ApplicationController
   # DELETE /devices/1
   # DELETE /devices/1.json
   def destroy
+    $query_scheduler.jobs(tag: @device.id).each do |job|
+      Rails.logger.info "Destroyed device with ID: #{@device.id}."
+      Rails.logger.info "Killing query job with ID: #{job.id}."
+      job.unschedule
+      Rails.logger.info "Job killed, RIP~"
+    end
     @device.destroy
     respond_to do |format|
       format.html { redirect_to devices_url, notice: 'Device was successfully destroyed.' }
