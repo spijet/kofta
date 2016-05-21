@@ -12,10 +12,10 @@ Enter **KOFTA** — the piece of Rails code that was born with a single purpose:
 replace Collectd and to feed InfluxDB with data, with style.
 
 ## State
-As of 2016-May-12, the app is somewhat functional. InfluxDB connection and data sending is working, Web UI now has something that looks like a menu, Devices and Datatypes views are mostly done, repeating parts are moved to layout and shared partials. Dynamic query schedule is implemented using `rufus-scheduler`. Just a little bit more and it's ready.
+As of 2016-May-22, the app is somewhat functional. InfluxDB connection and data sending is working, Web UI now has something that looks like a menu, Devices and Datatypes views are mostly done, repeating parts are moved to layout and shared partials. Dynamic query schedule is implemented using `rufus-scheduler`. Also, now it doesn't trigger jobs when Rails console is started, jobs start only when Rails App server is up.
 
 ## TODO
-* Make Rufus behave and to run only one scheduling thread per app instance;
+* ~~Make Rufus behave and to run only one scheduling thread per app instance~~ Done in c34e097;
 * Make SNMP Querier tasks multithreaded (to make it faster for bigger tables and/or remote nodes);
 * Add some more metrics to `seeds.rb`;
 * Finish Web UI;
