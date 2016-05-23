@@ -4,6 +4,7 @@
 
 jQuery ->
   host = $('#device_address')
+  community = $('#device_snmp_community')
   name = $('#device_devname')
   cont = $('#device_contact')
   city = $('#device_city')
@@ -20,6 +21,7 @@ jQuery ->
       type: 'POST'
       dataType: 'json'
       data: "host": host.val()
+            "community": community.val()
       error: (jqXHR, textStatus, errorThrown) ->
         getinfo.removeClass('is-loading is-warning is-danger is-success')
         getinfo.addClass('is-danger')

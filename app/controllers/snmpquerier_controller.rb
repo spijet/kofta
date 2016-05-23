@@ -1,7 +1,7 @@
 class SnmpquerierController < ApplicationController
   def getinfo
     info = Hash.new
-    manager = SNMP::Manager.new(:host => params[:host])
+    manager = SNMP::Manager.new(host: params[:host], community: params[:community])
     info[:name] = manager.get_value("SNMPv2-MIB::sysName.0")
     info[:location] = manager.get_value("SNMPv2-MIB::sysLocation.0")
     info[:contact] = manager.get_value("SNMPv2-MIB::sysContact.0")
