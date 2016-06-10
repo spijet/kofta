@@ -145,6 +145,13 @@ class SnmpWorkerJob < ActiveJob::Base
   # for now it's awfully simple.
   # +1 is here just in case, I'll remove it if it's unneeded.
   def get_table_size(object)
-    object =~ /IF-MIB::if/ ? @snmp.get_value('IF-MIB::ifNumber.0').to_i + 1 : 1024
+    devmodel = @snmp.get_value('SNMPv2-MIB::sysDescr.0')
+    # Quick fix for Huawei NE40E, which ignores bulk queries if bulkrows value is too high.
+    # Possibly affects other Huawei devices as well.
+    if devmodel =~ /HUAWEI/
+      200
+    else
+      object =~ /IF-MIB::if/ ? @snmp.get_value('IF-MIB::ifNumber.0').to_i + 1 : 1024
+    end
   end
 end
