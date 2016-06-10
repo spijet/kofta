@@ -148,8 +148,11 @@ class SnmpWorkerJob < ActiveJob::Base
     devmodel = @snmp.get_value('SNMPv2-MIB::sysDescr.0')
     # Quick fix for Huawei NE40E, which ignores bulk queries if bulkrows value is too high.
     # Possibly affects other Huawei devices as well.
-    if devmodel =~ /HUAWEI/
-      200
+    case devmodel
+    when /HUAWEI/
+      100
+    when /DGS-3620/
+      20
     else
       object =~ /IF-MIB::if/ ? @snmp.get_value('IF-MIB::ifNumber.0').to_i + 1 : 1024
     end
