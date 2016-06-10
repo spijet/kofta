@@ -20,8 +20,7 @@ jQuery ->
     $.ajax '/snmpquerier/getinfo',
       type: 'POST'
       dataType: 'json'
-      data: "host": host.val()
-            "community": community.val()
+      data: {"host": host.val(); "community": community.val()}
       error: (jqXHR, textStatus, errorThrown) ->
         getinfo.removeClass('is-loading is-warning is-danger is-success')
         getinfo.addClass('is-danger')
