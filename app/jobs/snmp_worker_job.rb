@@ -41,11 +41,14 @@ class SnmpWorkerJob < ActiveJob::Base
       city: device.city,
       group: device.group
     }
-    # Open SNMP Manager
-    @snmp = SNMP::Manager.new(
+
+    # Create SNMP params hash
+    @snmp_params = {
       host: device.address,
       community: device.snmp_community
-    )
+    }
+    # Open SNMP Manager
+    @snmp = SNMP::Manager.new(@snmp_params)
 
     # Open InfluxDB connection:
     @influx = InfluxDB::Client.new udp: {
@@ -80,12 +83,19 @@ class SnmpWorkerJob < ActiveJob::Base
       metric_data.push Measurement.new(metric.metric_type, @snmp.get_value(metric.oid).to_i, @device_tags, Time.now)
     end
 
+    table_threads = []
     raw_tables = []
     # Gather all table metrics for future processing:
     @table_metrics.each do |metric|
-      raw_tables.push MetricTable.new(metric.metric_type, bulkwalk(metric.oid),
-                                      metric.index_oid, metric.excludes)
+      table_threads << Thread.new do
+        thread_snmp = SNMP::Manager.new(@snmp_params)
+        raw_tables.push MetricTable.new(metric.metric_type, bulkwalk(thread_snmp, metric.oid),
+                                        metric.index_oid, metric.excludes)
+      end
     end
+
+    # Wait for table threads to finish:
+    table_threads.each(&:join)
 
     # Create metrics for freshly harvested tables:
     raw_tables.each do |metric_table|
@@ -104,8 +114,8 @@ class SnmpWorkerJob < ActiveJob::Base
   # Much faster than simple SNMP Walk, so here it is.
   # Returns a hash of {oid_last_number: value}, which then gets merged
   #  with indexer OID hash (which is also generated here).
-  def bulkwalk(object)
-    root = extract_oid(object)
+  def bulkwalk(snmp,object)
+    root = extract_oid(snmp,object)
     # The only way we could get >1024 records in SNMP table
     # is by walking something in ifTable, so if we do,
     # we set maxrows equal to ifTable size.
@@ -113,7 +123,7 @@ class SnmpWorkerJob < ActiveJob::Base
     last, oid, results = false, root.dup, {}
     root = root.split('.').map(&:to_i)
     while !last
-      @snmp.get_bulk(0, maxrows, oid).each_varbind do |vb|
+      snmp.get_bulk(0, maxrows, oid).each_varbind do |vb|
         oid = vb.oid
         (last = true; break) unless oid[0..root.size - 1] == root
         results[vb.oid.last] = vb.value.asn1_type =~ /STRING/ ? vb.value.to_s : vb.value.to_i
@@ -123,8 +133,8 @@ class SnmpWorkerJob < ActiveJob::Base
   end
 
   # Returns numeric OID (as string) if symbolic is given.
-  def extract_oid(object)
-    @snmp.mib.oid(object).to_s
+  def extract_oid(snmp,object)
+    snmp.mib.oid(object).to_s
   end
 
   # Parses table metrics and gets list of unique index tables,
@@ -136,7 +146,7 @@ class SnmpWorkerJob < ActiveJob::Base
     # Extract list of indexes to work on,
     # and fill the hash:
     index_list.each do |index|
-      indexes[index] = bulkwalk(index)
+      indexes[index] = bulkwalk(@snmp,index)
     end
     indexes
   end
