@@ -18,6 +18,8 @@ As of 2016-May-22, the app is somewhat functional. InfluxDB connection and data 
 * ~~Make Rufus behave and to run only one scheduling thread per app instance~~ Done in c34e097;
 * **Make SNMP Querier tasks multithreaded (to make it faster for bigger tables and/or remote nodes)** -- doing it now;
 * Add some more metrics to `seeds.rb`;
+* Add non-SNMP performance metrics: device response time (ping) and device query time (query job duration)
+   These will probably be unconfigurable and unconditionally added to all devices in Kofta;
 * Finish Web UI;
 * Write some docs and provide an example visualizing setup (Grafana Dashboard JSON);
 * Add JRuby support for some multithreaded GC'ed quality time.
