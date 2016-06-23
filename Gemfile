@@ -29,6 +29,9 @@ gem 'snmp', '~> 1.2'
 # This gem provides InfluxDB connection and functions:
 gem 'influxdb'
 
+# Include Ping functions:
+gem 'net-ping'
+
 # Sidekiq for queue management
 gem 'sidekiq', '>= 4.0.0'
 # if you require 'sinatra' you get the DSL extended to Object

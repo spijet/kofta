@@ -50,6 +50,9 @@ class SnmpWorkerJob < ActiveJob::Base
     # Open SNMP Manager
     @snmp = SNMP::Manager.new(@snmp_params)
 
+    # Record starting time, for query_time metric:
+    start_time = Time.now
+
     # Open InfluxDB connection:
     @influx = InfluxDB::Client.new udp: {
       host: ENV['INFLUXDB_HOST'],
@@ -63,6 +66,13 @@ class SnmpWorkerJob < ActiveJob::Base
     # Pre-create metric array:
     @metric_data = read_metric_data
 
+    # Count querying time and push it as a metric point
+    query_time = Time.now.to_f - start_time.to_f
+    @metric_data.push Measurement.new('query_duration', query_time * 1000, @device_tags, Time.now)
+
+    # Same goes for response time (ping).
+    @metric_data.push Measurement.new('response_time', device_ping(@snmp_params[:host]), @device_tags, Time.now)
+
     # Post data to InfluxDB:
     @metric_data.each do |measurement|
       point = { values: { value: measurement.value },
@@ -72,6 +82,16 @@ class SnmpWorkerJob < ActiveJob::Base
               }
       @influx.write_point(measurement.name, point)
     end
+  end
+
+  def device_ping(host)
+    require 'net/ping/external'
+
+    # Spawn ping object:
+    ping = Net::Ping::External.new(host)
+
+    # Perform an actual ping and return RTT (in millis)
+    ping.duration * 1000 if ping.ping?
   end
 
   def read_metric_data
@@ -119,11 +139,11 @@ class SnmpWorkerJob < ActiveJob::Base
     # The only way we could get >1024 records in SNMP table
     # is by walking something in ifTable, so if we do,
     # we set maxrows equal to ifTable size.
-    maxrows = get_table_size(object)
+    #maxrows = get_table_size(object)
     last, oid, results = false, root.dup, {}
     root = root.split('.').map(&:to_i)
     while !last
-      snmp.get_bulk(0, maxrows, oid).each_varbind do |vb|
+      snmp.get_bulk(0, 18, oid).each_varbind do |vb|
         oid = vb.oid
         (last = true; break) unless oid[0..root.size - 1] == root
         results[vb.oid.last] = vb.value.asn1_type =~ /STRING/ ? vb.value.to_s : vb.value.to_i
@@ -154,18 +174,18 @@ class SnmpWorkerJob < ActiveJob::Base
   # This one could be rewritten in the future,
   # for now it's awfully simple.
   # +1 is here just in case, I'll remove it if it's unneeded.
-  def get_table_size(object)
-    devmodel = @snmp.get_value('SNMPv2-MIB::sysDescr.0')
-    # Quick fix for Huawei NE40E, which ignores bulk queries if bulkrows value is too high.
-    # Possibly affects other Huawei devices as well.
-   #case devmodel
-   #when /HUAWEI/
-   #  100
-   #when /DGS-3620/
-   #  20
-   #else
-   #  object =~ /IF-MIB::if/ ? @snmp.get_value('IF-MIB::ifNumber.0').to_i + 1 : 1024
-   #end
-    20
-  end
+# def get_table_size(object)
+#   devmodel = @snmp.get_value('SNMPv2-MIB::sysDescr.0')
+#   # Quick fix for Huawei NE40E, which ignores bulk queries if bulkrows value is too high.
+#   # Possibly affects other Huawei devices as well.
+#  #case devmodel
+#  #when /HUAWEI/
+#  #  100
+#  #when /DGS-3620/
+#  #  20
+#  #else
+#  #  object =~ /IF-MIB::if/ ? @snmp.get_value('IF-MIB::ifNumber.0').to_i + 1 : 1024
+#  #end
+#   20
+# end
 end
