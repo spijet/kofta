@@ -19,9 +19,8 @@ Also, now table walks are run in parallel as threads (with separate instances of
 ## TODO
 * ~~Make Rufus behave and to run only one scheduling thread per app instance~~ Done in c34e097;
 * **Make SNMP Querier tasks multithreaded (to make it faster for bigger tables and/or remote nodes)** -- partially implemented in 9e00b5d, moved from "one thread per table" model to a thread pool (4 threads for now) in 6e854fe;
-* Add some more metrics to `seeds.rb`;
-* Add non-SNMP performance metrics: device response time (ping) and device query time (query job duration)
-   These will probably be unconfigurable and unconditionally added to all devices in Kofta;
+* Add some more metrics to `seeds.rb`: SNMP errors added in ffa0792;
+* ~~Add non-SNMP performance metrics: device response time (ping) and device query time (query job duration)~~ Done in f51bca8, reports time as milliseconds;
 * Finish Web UI;
 * Write some docs and provide an example visualizing setup (Grafana Dashboard JSON);
 * Add JRuby support for some multithreaded GC'ed quality time.
