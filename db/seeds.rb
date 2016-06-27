@@ -103,5 +103,21 @@ datatypes = Datatype.create(
       index_oid: 'IF-MIB::ifName',
       metric_type: 'snmp_if_bcast_tx'
     },
+    {
+      name: 'Interface RX Errors',
+      oid: 'IF-MIB::ifInErrors',
+      excludes: '^(802|VI|Vl|Vi|Se|Lo|Nu|Tu|Vo|Vt|Aux|Console|NULL|System|MTun|InLoop|BV1|mcast|test|pim|TEST)',
+      table: true,
+      index_oid: 'IF-MIB::ifName',
+      metric_type: 'snmp_if_err_rx'
+    },
+    {
+      name: 'Interface TX Errors',
+      oid: 'IF-MIB::ifOutErrors',
+      excludes: '^(802|VI|Vl|Vi|Se|Lo|Nu|Tu|Vo|Vt|Aux|Console|NULL|System|MTun|InLoop|BV1|mcast|test|pim|TEST)',
+      table: true,
+      index_oid: 'IF-MIB::ifName',
+      metric_type: 'snmp_if_err_tx'
+    },
   ]
 )
