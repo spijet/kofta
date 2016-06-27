@@ -106,11 +106,13 @@ class SnmpWorkerJob < ActiveJob::Base
     table_threads = []
     raw_tables = []
     # Gather all table metrics for future processing:
-    @table_metrics.each do |metric|
+    @table_metrics.in_groups(4, false).each do |group|
       table_threads << Thread.new do
         thread_snmp = SNMP::Manager.new(@snmp_params)
-        raw_tables.push MetricTable.new(metric.metric_type, bulkwalk(thread_snmp, metric.oid),
-                                        metric.index_oid, metric.excludes)
+        group.each do |metric|
+          raw_tables.push MetricTable.new(metric.metric_type, bulkwalk(thread_snmp, metric.oid),
+                                          metric.index_oid, metric.excludes)
+        end
       end
     end
 
@@ -143,7 +145,7 @@ class SnmpWorkerJob < ActiveJob::Base
     last, oid, results = false, root.dup, {}
     root = root.split('.').map(&:to_i)
     while !last
-      snmp.get_bulk(0, 18, oid).each_varbind do |vb|
+      snmp.get_bulk(0, 25, oid).each_varbind do |vb|
         oid = vb.oid
         (last = true; break) unless oid[0..root.size - 1] == root
         results[vb.oid.last] = vb.value.asn1_type =~ /STRING/ ? vb.value.to_s : vb.value.to_i
