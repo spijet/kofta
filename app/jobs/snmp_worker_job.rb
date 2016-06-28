@@ -123,8 +123,15 @@ class SnmpWorkerJob < ActiveJob::Base
     raw_tables.each do |metric_table|
       metric_table.data.each do |oid, data|
         instance = @indexes[metric_table.index][oid]
+        if instance =~ /^[a-zA-Z0-9\/]+\..*$/
+          parts = instance.split('.')
+          instance = parts.shift
+          subinstance = parts.join('.')
+        else
+          subinstance = 'none'
+        end
         metric_data.push Measurement.new(
-          metric_table.type, data, @device_tags.merge(instance: instance),
+          metric_table.type, data, @device_tags.merge(instance: instance, subinstance: subinstance),
           Time.now
         ) unless instance =~ /#{metric_table.excludes}/
       end
