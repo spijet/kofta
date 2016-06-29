@@ -21,8 +21,5 @@ test:
   database: db/test.sqlite3
 
 production:
-  adapter: mysql
-  host: localhost
-  database: kofta
-  username:
-  password:
+  <<: *default
+  database: db/production.sqlite3
