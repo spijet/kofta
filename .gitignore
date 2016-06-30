@@ -18,3 +18,6 @@
 
 # Also ignore precompiled assets, use `rake assets:precompile` instead
 /public/assets/*
+
+# Ignore user-edited InfluxDB config.
+/config/influx.yml
