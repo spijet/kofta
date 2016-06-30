@@ -166,13 +166,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord-jdbc-adapter
+  activerecord-jdbcsqlite3-adapter
   bulma-rails (~> 0.0.28)
   byebug
   coffee-rails (~> 4.1.0)
   influxdb
   jbuilder (~> 2.0)
-  jdbc-sqlite3
   jquery-rails
   jquery-turbolinks
   net-ping

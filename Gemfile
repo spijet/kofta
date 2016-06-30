@@ -6,9 +6,8 @@ gem 'rails', '4.2.6'
 
 # Use sqlite3 as the database for Active Record
 # (Use it with JDBC adapter if using JRuby)
-gem 'sqlite3', platforms: :ruby
-gem 'activerecord-jdbc-adapter', platforms: :jruby
-gem 'jdbc-sqlite3', platforms: :jruby
+gem 'sqlite3', platforms: :mri
+gem 'activerecord-jdbcsqlite3-adapter', platforms: :jruby
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
