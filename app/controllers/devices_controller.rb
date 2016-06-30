@@ -58,14 +58,14 @@ class DevicesController < ApplicationController
     respond_to do |format|
       if @device.update(device_params)
         $query_scheduler.jobs(tag: @device.id).each do |job|
-          Rails.logger.info "Updated device with ID: #{@device.id}."
-          Rails.logger.info "Killing query job with ID: #{job.id}."
+          Rails.logger.info "Updated device with ID: #{@device.id}, killing query job #{job.id}..."
+          Rails.logger.flush
           job.unschedule
           Rails.logger.info "Job killed, now off to rescheduling~"
+          Rails.logger.flush
         end
         $query_scheduler.every( "#{@device.query_interval}s", tag: @device.id ) do
-          Rails.logger.info "Hello, it's #{Time.now}"
-          Rails.logger.info "I'm gonna go and query #{@device.address}, if you don't mind."
+          Rails.logger.info "#{Time.now}: Querying #{@device.address}..."
           Rails.logger.flush
           SnmpWorkerJob.perform_later(@device)
         end
