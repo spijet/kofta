@@ -1,10 +1,10 @@
-<header class="header">
+<header class="nav">
     <div class="container">
         <!-- Left side -->
-        <div class="header-left">
-            <%= link_to 'KOFTA', '/', class: "header-item" %>
-            <%= link_to 'Devices', devices_path, class: "header-tab" %>
-            <%= link_to 'Data Sources', datatypes_path, class: "header-tab" %>
+        <div class="nav-left">
+            <%= link_to 'KOFTA', '/', class: "nav-item" %>
+            <%= link_to 'Devices', devices_path, class: params[:controller] === "devices" ? "nav-item is-tab is-active" : "nav-item is-tab" %>
+            <%= link_to 'Data Sources', datatypes_path, class: params[:controller] === "datatypes" ? "nav-item is-tab is-active" : "nav-item is-tab" %>
         </div>
     </div>
 </header>

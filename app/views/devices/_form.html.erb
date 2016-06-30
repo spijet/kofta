@@ -28,7 +28,7 @@
           </p>
           <%= f.label :snmp_community, class: "label" %>
           <p class="control">
-              <%= f.text_field :snmp_community, value: @device.new_record? ? 'public' : @device.snmp_community, class: "input", value: 'public' %>
+              <%= f.text_field :snmp_community, value: @device.new_record? ? 'public' : @device.snmp_community, class: "input" %>
           </p>
           <%= f.label :query_interval, class: "label" %>
           <p class="control">

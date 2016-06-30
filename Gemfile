@@ -45,10 +45,7 @@ gem 'rufus-scheduler'
 
 # We will use Bulma for SCSS styling.
 #  That may change in the future.
-gem "bulma-rails", "~> 0.0.24"
-
-# Use Unicorn as the app server
-# gem 'unicorn'
+gem "bulma-rails", "~> 0.0.28"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -61,8 +58,4 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
-end
-
-group :production do
-  gem 'passenger'
 end
