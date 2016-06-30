@@ -91,6 +91,7 @@ class SnmpWorkerJob < ActiveJob::Base
               }
       @influx.write_point(measurement.name, point)
     end
+    GC.start
   end
 
   def device_ping(host)
@@ -162,6 +163,7 @@ class SnmpWorkerJob < ActiveJob::Base
         end
       end
     end
+    GC.start
     metric_data
   end
 
