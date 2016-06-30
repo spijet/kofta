@@ -2,12 +2,9 @@ require 'rufus-scheduler'
 
 # Let's use the rufus-scheduler singleton
 #
-$query_scheduler = Rufus::Scheduler.new
+$query_scheduler = Rufus::Scheduler.new(lockfile: ".rufus-scheduler.lock")
 
-
-if defined?(Rails::Server)
-  # Stupid recurrent task...
-  #
+def queue_fillup
   Device.all.each do |device|
     $query_scheduler.every("#{device.query_interval}s", tag: device.id ) do
 
@@ -17,4 +14,8 @@ if defined?(Rails::Server)
       SnmpWorkerJob.perform_later(device)
     end
   end
+end
+
+if defined?(Rails::Server)
+  queue_fillup
 end
