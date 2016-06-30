@@ -7,6 +7,7 @@
       <th>OID</th>
       <th>SNMP Metric Type</th>
       <th>Is table?</th>
+      <th>Derive?</th>
       <th colspan="3">Actions</th>
     </tr>
   </thead>
@@ -18,6 +19,7 @@
         <td><%= datatype.oid %></td>
         <td><%= datatype.metric_type %></td>
         <td><%= datatype.table %></td>
+        <td><%= datatype.derive %></td>
         <td><%= link_to 'Show', datatype, class: "button show-item", item: datatype.id %></td>
         <td><%= link_to 'Edit', edit_datatype_path(datatype), class: "button is-warning" %></td>
         <td><%= link_to 'Destroy', datatype, method: :delete, data: { confirm: 'Are you sure?' }, class: "button is-danger" %></td>

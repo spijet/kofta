@@ -20,11 +20,12 @@ class SnmpWorkerJob < ActiveJob::Base
   end
 
   class MetricTable
-    attr_reader :type, :data, :index, :excludes
-    def initialize(type, data, index, excludes)
+    attr_reader :type, :data, :index, :derive, :excludes
+    def initialize(type, data, index, derive, excludes)
       @type = type
       @data = data
       @index = index
+      @derive = derive
       @excludes = excludes
     end
   end
@@ -42,6 +43,10 @@ class SnmpWorkerJob < ActiveJob::Base
       group: device.group
     }
 
+    # Store device query interval
+    # for derive processing.
+    @derive_interval = device.query_interval
+
     # Create SNMP params hash
     @snmp_params = {
       host: device.address,
@@ -49,6 +54,7 @@ class SnmpWorkerJob < ActiveJob::Base
     }
     # Open SNMP Manager
     @snmp = SNMP::Manager.new(@snmp_params)
+    @redis = Redis.new
 
     # Record starting time, for query_time metric:
     start_time = Time.now
@@ -68,10 +74,13 @@ class SnmpWorkerJob < ActiveJob::Base
 
     # Count querying time and push it as a metric point
     query_time = Time.now.to_f - start_time.to_f
-    @metric_data.push Measurement.new('query_duration', query_time * 1000, @device_tags, Time.now)
+    @metric_data.push Measurement.new('query_duration', query_time * 1000,
+                                      @device_tags, Time.now)
 
     # Same goes for response time (ping).
-    @metric_data.push Measurement.new('response_time', device_ping(@snmp_params[:host]), @device_tags, Time.now)
+    @metric_data.push Measurement.new('response_time',
+                                      device_ping(@snmp_params[:host]),
+                                      @device_tags, Time.now)
 
     # Post data to InfluxDB:
     @metric_data.each do |measurement|
@@ -111,7 +120,7 @@ class SnmpWorkerJob < ActiveJob::Base
         thread_snmp = SNMP::Manager.new(@snmp_params)
         group.each do |metric|
           raw_tables.push MetricTable.new(metric.metric_type, bulkwalk(thread_snmp, metric.oid),
-                                          metric.index_oid, metric.excludes)
+                                          metric.index_oid, metric.derive, metric.excludes)
         end
       end
     end
@@ -123,6 +132,7 @@ class SnmpWorkerJob < ActiveJob::Base
     raw_tables.each do |metric_table|
       metric_table.data.each do |oid, data|
         instance = @indexes[metric_table.index][oid]
+        next if instance =~ /#{metric_table.excludes}/
         if instance =~ /^[a-zA-Z0-9\/]+\..*$/
           parts = instance.split('.')
           instance = parts.shift
@@ -130,10 +140,26 @@ class SnmpWorkerJob < ActiveJob::Base
         else
           subinstance = 'none'
         end
-        metric_data.push Measurement.new(
-          metric_table.type, data, @device_tags.merge(instance: instance, subinstance: subinstance),
-          Time.now
-        ) unless instance =~ /#{metric_table.excludes}/
+        if metric_table.derive
+          keyname = "kofta:#{@device_tags[:hostname]}:#{metric_table.type}:#{instance}:#{subinstance}"
+          if @redis.exists(keyname)
+            old_data = @redis.get(keyname)
+            @redis.del(keyname)
+            @redis.setex keyname, @derive_interval * 2, data
+            data = (data.to_i - old_data.to_i) / @derive_interval
+            metric_data.push Measurement.new(
+                               metric_table.type, data,
+                               @device_tags.merge(instance: instance, subinstance: subinstance),
+                               Time.now)
+          else
+            @redis.setex keyname, @derive_interval * 2, data
+          end
+        else
+          metric_data.push Measurement.new(
+            metric_table.type, data,
+            @device_tags.merge(instance: instance, subinstance: subinstance),
+            Time.now)
+        end
       end
     end
     metric_data
