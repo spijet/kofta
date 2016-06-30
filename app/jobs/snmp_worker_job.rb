@@ -55,8 +55,8 @@ class SnmpWorkerJob < ActiveJob::Base
 
     # Open InfluxDB connection:
     @influx = InfluxDB::Client.new udp: {
-      host: ENV['INFLUXDB_HOST'],
-      port: ENV['INFLUXDB_PORT']
+      host: INFLUX_CONFIG['host'],
+      port: INFLUX_CONFIG['port']
     }
 
     # Fill indexes first:

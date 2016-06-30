@@ -1,0 +1,18 @@
+# Example InfluxDB configuration file
+#
+# Fill it so it would point to your preferred
+# InfluxDB host and database.
+
+defaults: &defaults
+  host: 127.0.0.1
+  port: 8945
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults
+  host: metrics-hub.baikal-ttk.ru
