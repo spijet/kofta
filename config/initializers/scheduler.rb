@@ -13,9 +13,10 @@ def queue_fillup
       Rails.logger.flush
       SnmpWorkerJob.perform_later(device)
     end
-  end
+  end unless $query_bootstrapped
+  $query_bootstrapped = true
 end
 
-if defined?(Rails::Server)
+if defined?(Rails::Server) || File.split($0).last == 'puma'
   queue_fillup
 end
