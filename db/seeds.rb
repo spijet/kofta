@@ -12,6 +12,7 @@ datatypes = Datatype.create(
       oid: 'SNMPv2-MIB::sysUpTime.0',
       excludes: '',
       table: false,
+      derive: false,
       index_oid: '',
       metric_type: 'snmp_uptime'
     },
@@ -20,6 +21,7 @@ datatypes = Datatype.create(
       oid: 'IF-MIB::ifHighSpeed',
       excludes: '^(802|VI|Vl|Vi|Se|Lo|Nu|Tu|Vo|Vt|Aux|Console|NULL|System|MTun|InLoop|BV1|mcast|test|pim|TEST)',
       table: true,
+      derive: false,
       index_oid: 'IF-MIB::ifName',
       metric_type: 'snmp_if_linkspeed'
     },
@@ -28,6 +30,7 @@ datatypes = Datatype.create(
       oid: 'IF-MIB::ifHCInOctets',
       excludes: '^(802|VI|Vl|Vi|Se|Lo|Nu|Tu|Vo|Vt|Aux|Console|NULL|System|MTun|InLoop|BV1|mcast|test|pim|TEST)',
       table: true,
+      derive: true,
       index_oid: 'IF-MIB::ifName',
       metric_type: 'snmp_if_traffic_rx'
     },
@@ -36,6 +39,7 @@ datatypes = Datatype.create(
       oid: 'IF-MIB::ifHCOutOctets',
       excludes: '^(802|VI|Vl|Vi|Se|Lo|Nu|Tu|Vo|Vt|Aux|Console|NULL|System|MTun|InLoop|BV1|mcast|test|pim|TEST)',
       table: true,
+      derive: true,
       index_oid: 'IF-MIB::ifName',
       metric_type: 'snmp_if_traffic_tx'
     },
@@ -44,6 +48,7 @@ datatypes = Datatype.create(
       oid: 'IF-MIB::ifInOctets',
       excludes: '^(802|VI|Vl|Vi|Se|Lo|Nu|Tu|Vo|Vt|Aux|Console|NULL|System|MTun|InLoop|BV1|mcast|test|pim|TEST)',
       table: true,
+      derive: true,
       index_oid: 'IF-MIB::ifName',
       metric_type: 'snmp_if_traffic_rx'
     },
@@ -52,6 +57,7 @@ datatypes = Datatype.create(
       oid: 'IF-MIB::ifOutOctets',
       excludes: '^(802|VI|Vl|Vi|Se|Lo|Nu|Tu|Vo|Vt|Aux|Console|NULL|System|MTun|InLoop|BV1|mcast|test|pim|TEST)',
       table: true,
+      derive: true,
       index_oid: 'IF-MIB::ifName',
       metric_type: 'snmp_if_traffic_tx'
     },
@@ -60,6 +66,7 @@ datatypes = Datatype.create(
       oid: 'IF-MIB::ifHCInUcastPkts',
       excludes: '^(802|VI|Vl|Vi|Se|Lo|Nu|Tu|Vo|Vt|Aux|Console|NULL|System|MTun|InLoop|BV1|mcast|test|pim|TEST)',
       table: true,
+      derive: true,
       index_oid: 'IF-MIB::ifName',
       metric_type: 'snmp_if_ucast_rx'
     },
@@ -68,6 +75,7 @@ datatypes = Datatype.create(
       oid: 'IF-MIB::ifHCOutUcastPkts',
       excludes: '^(802|VI|Vl|Vi|Se|Lo|Nu|Tu|Vo|Vt|Aux|Console|NULL|System|MTun|InLoop|BV1|mcast|test|pim|TEST)',
       table: true,
+      derive: true,
       index_oid: 'IF-MIB::ifName',
       metric_type: 'snmp_if_ucast_tx'
     },
@@ -76,6 +84,7 @@ datatypes = Datatype.create(
       oid: 'IF-MIB::ifHCInMulticastPkts',
       excludes: '^(802|VI|Vl|Vi|Se|Lo|Nu|Tu|Vo|Vt|Aux|Console|NULL|System|MTun|InLoop|BV1|mcast|test|pim|TEST)',
       table: true,
+      derive: true,
       index_oid: 'IF-MIB::ifName',
       metric_type: 'snmp_if_mcast_rx'
     },
@@ -84,6 +93,7 @@ datatypes = Datatype.create(
       oid: 'IF-MIB::ifHCOutMulticastPkts',
       excludes: '^(802|VI|Vl|Vi|Se|Lo|Nu|Tu|Vo|Vt|Aux|Console|NULL|System|MTun|InLoop|BV1|mcast|test|pim|TEST)',
       table: true,
+      derive: true,
       index_oid: 'IF-MIB::ifName',
       metric_type: 'snmp_if_mcast_tx'
     },
@@ -92,6 +102,7 @@ datatypes = Datatype.create(
       oid: 'IF-MIB::ifHCInBroadcastPkts',
       excludes: '^(802|VI|Vl|Vi|Se|Lo|Nu|Tu|Vo|Vt|Aux|Console|NULL|System|MTun|InLoop|BV1|mcast|test|pim|TEST)',
       table: true,
+      derive: true,
       index_oid: 'IF-MIB::ifName',
       metric_type: 'snmp_if_bcast_rx'
     },
@@ -100,6 +111,7 @@ datatypes = Datatype.create(
       oid: 'IF-MIB::ifHCOutBroadcastPkts',
       excludes: '^(802|VI|Vl|Vi|Se|Lo|Nu|Tu|Vo|Vt|Aux|Console|NULL|System|MTun|InLoop|BV1|mcast|test|pim|TEST)',
       table: true,
+      derive: true,
       index_oid: 'IF-MIB::ifName',
       metric_type: 'snmp_if_bcast_tx'
     },
@@ -108,6 +120,7 @@ datatypes = Datatype.create(
       oid: 'IF-MIB::ifInErrors',
       excludes: '^(802|VI|Vl|Vi|Se|Lo|Nu|Tu|Vo|Vt|Aux|Console|NULL|System|MTun|InLoop|BV1|mcast|test|pim|TEST)',
       table: true,
+      derive: true,
       index_oid: 'IF-MIB::ifName',
       metric_type: 'snmp_if_err_rx'
     },
@@ -116,6 +129,7 @@ datatypes = Datatype.create(
       oid: 'IF-MIB::ifOutErrors',
       excludes: '^(802|VI|Vl|Vi|Se|Lo|Nu|Tu|Vo|Vt|Aux|Console|NULL|System|MTun|InLoop|BV1|mcast|test|pim|TEST)',
       table: true,
+      derive: true,
       index_oid: 'IF-MIB::ifName',
       metric_type: 'snmp_if_err_tx'
     },
