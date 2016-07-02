@@ -133,5 +133,59 @@ datatypes = Datatype.create(
       index_oid: 'IF-MIB::ifName',
       metric_type: 'snmp_if_err_tx'
     },
+    {
+      name: 'Cisco: PPPoE Sessions',
+      oid: 'SNMPv2-SMI::enterprises.9.9.194.1.1.1.0',
+      excludes: '',
+      table: false,
+      derive: false,
+      index_oid: '',
+      metric_type: 'snmp_pppoe_sess'
+    },
+    {
+      name: 'Cisco: Highwater PPPoE Sessions',
+      oid: 'SNMPv2-SMI::enterprises.9.9.194.1.1.2.0',
+      excludes: '',
+      table: false,
+      derive: false,
+      index_oid: '',
+      metric_type: 'snmp_pppoe_highwater'
+    },
+    {
+      name: 'Cisco: Per-slot CPU Usage (1 min)',
+      oid: 'SNMPv2-SMI::enterprises.9.9.109.1.1.1.1.7',
+      excludes: '',
+      table: true,
+      derive: false,
+      index_oid: 'SNMPv2-SMI::enterprises.9.9.109.1.1.1.1.2',
+      metric_type: 'snmp_cpu'
+    },
+    {
+      name: 'Cisco: IP Pool Used Addresses',
+      oid: 'SNMPv2-SMI::enterprises.9.9.326.1.2.2.1.2.0',
+      excludes: '',
+      table: false,
+      derive: false,
+      index_oid: '',
+      metric_type: 'snmp_ip_pool_used'
+    },
+    {
+      name: 'Cisco: IP Pool Free Addresses',
+      oid: 'SNMPv2-SMI::enterprises.9.9.326.1.2.2.1.1.0',
+      excludes: '',
+      table: false,
+      derive: false,
+      index_oid: '',
+      metric_type: 'snmp_ip_pool_free'
+    },
+    {
+      name: 'D-Link: CPU Usage',
+      oid: 'SNMPv2-SMI::enterprises.171.12.1.1.6.2.0',
+      excludes: '',
+      table: false,
+      derive: false,
+      index_oid: '',
+      metric_type: 'snmp_cpu'
+    },
   ]
 )
