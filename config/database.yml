@@ -5,7 +5,7 @@
 #   gem 'sqlite3'
 #
 default: &default
-  adapter: <%= RUBY_ENGINE=="jruby" ? "jdbcsqlite3" : "sqlite3" %>
+  adapter: sqlite3
   pool: 45
   timeout: 5000
 
