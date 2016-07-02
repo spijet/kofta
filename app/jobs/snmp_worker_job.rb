@@ -20,13 +20,14 @@ class SnmpWorkerJob < ActiveJob::Base
   end
 
   class MetricTable
-    attr_reader :type, :data, :index, :derive, :excludes
-    def initialize(type, data, index, derive, excludes)
+    attr_reader :type, :data, :index, :derive, :excludes, :timestamp
+    def initialize(type, data, index, derive, excludes, timestamp)
       @type = type
       @data = data
       @index = index
       @derive = derive
       @excludes = excludes
+      @timestamp = timestamp
     end
   end
 
@@ -107,10 +108,14 @@ class SnmpWorkerJob < ActiveJob::Base
   def read_metric_data
     metric_data = []
 
+    # Let's not ask for current time 9000 times,
+    # and use one time per query instead.
+    single_query_time = Time.now
+
     # Get all non-table metrics:
     # (TODO: Try to get_bulk all non-table metrics in one query instead)
     @single_metrics.each do |metric|
-      metric_data.push Measurement.new(metric.metric_type, @snmp.get_value(metric.oid).to_i, @device_tags, Time.now)
+      metric_data.push Measurement.new(metric.metric_type, @snmp.get_value(metric.oid).to_i, @device_tags, single_query_time)
     end
 
     table_threads = []
@@ -121,7 +126,7 @@ class SnmpWorkerJob < ActiveJob::Base
         thread_snmp = SNMP::Manager.new(@snmp_params)
         group.each do |metric|
           raw_tables.push MetricTable.new(metric.metric_type, bulkwalk(thread_snmp, metric.oid),
-                                          metric.index_oid, metric.derive, metric.excludes)
+                                          metric.index_oid, metric.derive, metric.excludes, Time.now)
         end
       end
     end
@@ -151,7 +156,7 @@ class SnmpWorkerJob < ActiveJob::Base
             metric_data.push Measurement.new(
                                metric_table.type, data,
                                @device_tags.merge(instance: instance, subinstance: subinstance),
-                               Time.now)
+                               metric_table.timestamp)
           else
             @redis.setex keyname, @derive_interval * 2, data
           end
@@ -159,7 +164,7 @@ class SnmpWorkerJob < ActiveJob::Base
           metric_data.push Measurement.new(
             metric_table.type, data,
             @device_tags.merge(instance: instance, subinstance: subinstance),
-            Time.now)
+            metric_table.timestamp)
         end
       end
     end
