@@ -148,17 +148,20 @@ class SnmpWorkerJob < ActiveJob::Base
         end
         if metric_table.derive
           keyname = "kofta:#{@device_tags[:hostname]}:#{metric_table.type}:#{instance}:#{subinstance}"
+          time_key = "kofta:#{@device_tags[:hostname]}:#{metric_table.type}:timestamp"
           if @redis.exists(keyname)
             old_data = @redis.get(keyname)
-            @redis.del(keyname)
-            @redis.setex keyname, @derive_interval * 2, data
-            data = (data.to_i - old_data.to_i) / @derive_interval
+            old_time = Time.parse(@redis.get(time_key))
+            @redis.setex keyname, @derive_interval * 3, data
+            @redis.setex time_key, @derive_interval * 3, metric_table.timestamp.to_s
+            data = (data.to_i - old_data.to_i) / (metric_table.timestamp - old_time)
             metric_data.push Measurement.new(
                                metric_table.type, data,
                                @device_tags.merge(instance: instance, subinstance: subinstance),
                                metric_table.timestamp)
           else
-            @redis.setex keyname, @derive_interval * 2, data
+            @redis.setex keyname, @derive_interval * 3, data
+            @redis.setex time_key, @derive_interval * 3, metric_table.timestamp.to_s
           end
         else
           metric_data.push Measurement.new(
