@@ -32,8 +32,8 @@ class SnmpWorkerJob < ActiveJob::Base
   end
 
   def perform(device)
-    # Get datasources to query from this device
     datasources = device.datatypes.to_a
+    # Split datasources into 2 groups:
     @single_metrics = datasources.select { |metric| metric unless metric.table }
     @table_metrics = datasources.select { |metric| metric if metric.table }
     # Fill in device-wide tags
@@ -48,6 +48,10 @@ class SnmpWorkerJob < ActiveJob::Base
     # for derive processing.
     @derive_interval = device.query_interval
 
+    # Get access to job-local variables:
+    @redis = Redis.new
+    @job_data = @redis.exists("#{@device_tags[:hostname]}.derives") ? JSON.parse(@redis.get("#{@device_tags[:hostname]}.derives")) : {}
+
     # Create SNMP params hash
     @snmp_params = {
       host: device.address,
@@ -55,7 +59,6 @@ class SnmpWorkerJob < ActiveJob::Base
     }
     # Open SNMP Manager
     @snmp = SNMP::Manager.new(@snmp_params)
-    @redis = Redis.new
 
     # Record starting time, for query_time metric:
     start_time = Time.now
@@ -97,6 +100,7 @@ class SnmpWorkerJob < ActiveJob::Base
       @influx.write_points(batch_part)
     end
     GC.start
+    @redis.setex "#{@device_tags[:hostname]}.derives", @derive_interval * 3, @job_data.to_json
   end
 
   def device_ping(host)
@@ -140,6 +144,8 @@ class SnmpWorkerJob < ActiveJob::Base
 
     # Create metrics for freshly harvested tables:
     raw_tables.each do |metric_table|
+      # Set timestamp key for job-local vars (in case if this table is a Derive
+      time_key = "kofta:#{@device_tags[:hostname]}:#{metric_table.type}:timestamp"
       metric_table.data.each do |oid, data|
         instance = @indexes[metric_table.index][oid]
         next if instance =~ /#{metric_table.excludes}/
@@ -151,20 +157,17 @@ class SnmpWorkerJob < ActiveJob::Base
 
         if metric_table.derive
           keyname = "kofta:#{@device_tags[:hostname]}:#{metric_table.type}:#{instance}:#{subinstance}"
-          time_key = "kofta:#{@device_tags[:hostname]}:#{metric_table.type}:timestamp"
-          if @redis.exists(keyname)
-            old_data = @redis.get(keyname)
-            old_time = Time.parse(@redis.get(time_key))
-            @redis.setex keyname, @derive_interval * 3, data
-            @redis.setex time_key, @derive_interval * 3, metric_table.timestamp.to_s
+          if @job_data.has_key?(keyname)
+            old_data = @job_data[keyname]
+            old_time = Time.at(@job_data[time_key].to_i)
+            @job_data[keyname] = data
             data = (data.to_i - old_data.to_i) / (metric_table.timestamp - old_time)
             metric_data.push Measurement.new(
-                               metric_table.type, data,
+                               metric_table.type, data.to_i,
                                @device_tags.merge(instance: instance, subinstance: subinstance),
                                metric_table.timestamp)
           else
-            @redis.setex keyname, @derive_interval * 3, data
-            @redis.setex time_key, @derive_interval * 3, metric_table.timestamp.to_s
+            @job_data[keyname] = data
           end
         else
           metric_data.push Measurement.new(
@@ -173,6 +176,7 @@ class SnmpWorkerJob < ActiveJob::Base
             metric_table.timestamp)
         end
       end
+      @job_data[time_key] = metric_table.timestamp.to_i
     end
     GC.start
     metric_data
