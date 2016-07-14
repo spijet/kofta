@@ -84,13 +84,17 @@ class SnmpWorkerJob < ActiveJob::Base
                                       @device_tags, Time.now)
 
     # Post data to InfluxDB:
+    influx_batch = []
     @metric_data.each do |measurement|
-      point = { values: { value: measurement.value },
-                tags: measurement.tags,
-                # InfluxDB demands time in nanoseconds, so we have to do this:
-                timestamp: (measurement.timestamp.to_f * 1_000_000_000).to_i
-              }
-      @influx.write_point(measurement.name, point)
+      influx_batch << { series: measurement.name,
+                        values: { value: measurement.value },
+                        tags: measurement.tags,
+                        # InfluxDB demands time in nanoseconds, so we have to do this:
+                        timestamp: (measurement.timestamp.to_f * 1_000_000_000).to_i
+                      }
+    end
+    influx_batch.in_groups(500, false) do |batch_part|
+      @influx.write_points(batch_part)
     end
     GC.start
   end
