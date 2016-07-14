@@ -143,13 +143,12 @@ class SnmpWorkerJob < ActiveJob::Base
       metric_table.data.each do |oid, data|
         instance = @indexes[metric_table.index][oid]
         next if instance =~ /#{metric_table.excludes}/
-        if instance =~ /^[a-zA-Z0-9\/]+\..*$/
-          parts = instance.split('.')
-          instance = parts.shift
-          subinstance = parts.join('.')
+        if instance.to_s.include?('.')
+          instance, subinstance = instance.split('.',2)
         else
           subinstance = 'none'
         end
+
         if metric_table.derive
           keyname = "kofta:#{@device_tags[:hostname]}:#{metric_table.type}:#{instance}:#{subinstance}"
           time_key = "kofta:#{@device_tags[:hostname]}:#{metric_table.type}:timestamp"
