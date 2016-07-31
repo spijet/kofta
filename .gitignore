@@ -21,6 +21,7 @@
 
 # Ignore user-edited InfluxDB config.
 /config/influx.yml
+/config/redis.yml
 
 # Ignore Rufus-Scheduler's lockfile.
 .rufus-scheduler.lock
