@@ -49,7 +49,11 @@ class SnmpWorkerJob < ActiveJob::Base
     @derive_interval = device.query_interval
 
     # Get access to job-local variables:
-    @redis = Redis.new
+    @redis = Redis.new(
+      host: REDIS_CONFIG['host'],
+      port: REDIS_CONFIG['port'],
+      db:   REDIS_CONFIG['worker_db']
+    )
     @job_data = @redis.exists("#{@device_tags[:hostname]}.derives") ? JSON.parse(@redis.get("#{@device_tags[:hostname]}.derives")) : {}
 
     # Create SNMP params hash

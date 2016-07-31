@@ -1,0 +1,20 @@
+# Example Redis configuration file
+#
+# Fill it so it would point to your preferred
+# Redis host.
+
+defaults: &defaults
+  host: 127.0.0.1
+  port: 6379
+  sidekiq_db: 12
+  worker_db:  10
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults
+  host: <%= ENV["REDIS_HOST"] %>
