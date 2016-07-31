@@ -16,6 +16,14 @@
                     </span>
                 </a>
             </span>
+            <span class="nav-item">
+                <a class="button <%= 'is-primary' if controller.controller_name == 'stats' && controller.action_name == 'sidekiq' %>" href="/stats/sidekiq">
+                    <span>Redis/Sidekiq</span>
+                    <span class="tag is-small <%= @redis_stats[:alive] ? 'is-info' : 'is-danger' %>" style="">
+                        <span style="width: 4px;"></span>
+                    </span>
+                </a>
+            </span>
         </div>
     </div>
 </header>
