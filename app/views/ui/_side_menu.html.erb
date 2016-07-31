@@ -3,14 +3,15 @@
     Devices
   </p>
   <ul class="menu-list">
-    <li><%= link_to 'List Devices', devices_path  %></li>
-    <li><%= link_to 'Add New Device', new_device_path  %></li>
+    <li><%= link_to 'List Devices', devices_path, class: controller.controller_name == 'devices' && controller.action_name == 'index' ? "is-active" : "" %></li>
+    <li><%= link_to 'Add New Device', new_device_path, class: controller.controller_name == 'devices' && controller.action_name == 'new' ? "is-active" : "" %></li>
   </ul>
   <p class="menu-label">
     Data Sources
   </p>
   <ul class="menu-list">
-    <li><%= link_to 'List Datasources', datatypes_path %></li>
-    <li><%= link_to 'Add New Datasource', new_datatype_path %></li>
+    <li><%= link_to 'List Datasources', datatypes_path, class: controller.controller_name == 'datatypes' && controller.action_name == 'index' ? "is-active" : "" %></li>
+    <li><%= link_to 'Add New Datasource', new_datatype_path, class: controller.controller_name == 'datatypes' && controller.action_name == 'new' ? "is-active" : "" %></li>
+  </ul>
   </ul>
 </aside>

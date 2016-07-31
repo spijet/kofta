@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Kofta: <%= params[:controller] %></title>
+  <title>Kofta: <%= params[:controller].capitalize %></title>
   <%= stylesheet_link_tag    'application', params[:controller], media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', params[:controller], 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
@@ -10,10 +10,22 @@
   <!-- KOFTA header goes here -->
   <%= render 'ui/header' %>
 
-  <!-- Page content goes here -->
-  <%= yield %>
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-one-quarter">
+                    <%= render 'ui/side_menu' %>
+                </div>
+                <div class="column">
+                    <!-- Page content goes here -->
+                    <%= yield %>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- Information footer goes here -->
-  <%= render 'ui/footer' %>
+    <hr class="is-marginless"/>
+    <!-- Information footer goes here -->
+    <%= render 'ui/footer' %>
 </body>
 </html>
