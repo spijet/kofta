@@ -13,5 +13,12 @@
     <li><%= link_to 'List Datasources', datatypes_path, class: controller.controller_name == 'datatypes' && controller.action_name == 'index' ? "is-active" : "" %></li>
     <li><%= link_to 'Add New Datasource', new_datatype_path, class: controller.controller_name == 'datatypes' && controller.action_name == 'new' ? "is-active" : "" %></li>
   </ul>
+  <p class="menu-label">
+    Kofta Stats
+  </p>
+  <ul class="menu-list">
+      <li><%= link_to 'GC Statistics', '/stats/gc' %></li>
+      <li><%= link_to 'Rufus Queue', '/stats/rufus' %></li>
+      <li><%= link_to 'Sidekiq Stats', '/stats/sidekiq' %></li>
   </ul>
 </aside>

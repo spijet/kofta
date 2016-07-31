@@ -1,4 +1,18 @@
 Rails.application.routes.draw do
+  get 'stats/gc'
+
+  get 'stats/rufus'
+
+  get 'stats/sidekiq'
+
+  get 'stats', to: 'stats#index'
+
+  get 'stats/gc'
+
+  get 'stats/rufus'
+
+  get 'stats/sidekiq'
+
   resources :datatypes
   resources :devices
   post 'snmpquerier/getinfo'

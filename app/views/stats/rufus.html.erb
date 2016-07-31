@@ -1,0 +1,17 @@
+<p>As for now, take a look at the query queue (powered by rufus):</p>
+<table class="table is-striped is-narrow">
+    <thead>
+        <tr>
+            <th>Device Address</th>
+            <th>Query Interval</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% $query_scheduler.jobs.each do |job| %>
+            <tr>
+                <td><%= Device.find(job.tags.first).address %></td>
+                <td><%= job.frequency %></td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>

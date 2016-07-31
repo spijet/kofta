@@ -7,5 +7,15 @@
             <%= link_to 'Data Sources', datatypes_path, class: params[:controller] === "datatypes" ? "nav-item is-tab is-active" : "nav-item is-tab" %>
             <%= link_to 'Statistics', stats_path, class: params[:controller] === "stats" ? "nav-item is-tab is-active" : "nav-item is-tab" %>
         </div>
+        <div class="nav-right">
+            <span class="nav-item">
+                <a class="button <%= 'is-primary' if controller.controller_name == 'stats' && controller.action_name == 'gc' %>" href="/stats/gc">
+                    <span>GC Stats</span>
+                    <span class="tag is-info is-small" style="">
+                        <span style="width: 4px;"></span>
+                    </span>
+                </a>
+            </span>
+        </div>
     </div>
 </header>
