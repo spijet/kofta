@@ -10,6 +10,9 @@ gem 'sqlite3', platforms: :ruby
 # Either I'm missing something, or JRuby doesn't work with SQLite3. As for now, this is commented out.
 # gem 'activerecord-jdbcsqlite3-adapter', platforms: :jruby
 
+# Add support for DB dumps.
+gem 'seed_dump'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
