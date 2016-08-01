@@ -6,6 +6,7 @@ class StatsController < ApplicationController
   end
 
   def sidekiq
+    @sk_stats = Sidekiq::Stats.new
   end
 
   def index

@@ -3,8 +3,12 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  before_filter :redis
-  def redis
+  before_action do
+    # Only output verbose info if it's Redis/Sidekiq stats page.
+    verbose = action_name == 'sidekiq' ? true : false
+    redis(verbose)
+  end
+  def redis(verbose)
     @redis_stats = {}
     redis = Redis.new(
       host: REDIS_CONFIG['host'],
@@ -14,11 +18,11 @@ class ApplicationController < ActionController::Base
     reping = redis.ping
   rescue Exception => e
       @redis_stats[:alive] = false
-      @redis_stats[:message] = e.message
+      @redis_stats[:message] = e.message if verbose
   else
     if reping == "PONG"
       @redis_stats[:alive] = true
-      @redis_stats[:info] = redis.info
+      @redis_info = redis.info if verbose
     end
   end
 
