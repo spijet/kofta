@@ -10,6 +10,9 @@
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
+# Also make no panic about existent DB backups.
+/db/backups/*
+!/db/backups/.keep
 
 # Ignore all logfiles and tempfiles.
 /log/*
