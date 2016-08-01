@@ -1,2 +1,79 @@
-<h1>Stats#sidekiq</h1>
-<p>Find me in app/views/stats/sidekiq.html.erb</p>
+<div class="content">
+    <% if @redis_stats[:alive] %>
+        <h2 style="color: green;">Redis connection is OK!</h2>
+        <table class="table is-striped is-narrow">
+            <thead>
+                <th colspan="2">Redis Server Stats</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Redis DB version</td>
+                    <td><%= @redis_info['redis_version'] %></td>
+                </tr>
+                <tr>
+                    <td>Host OS/Bits</td>
+                    <td><%= @redis_info['os'] + "/" + @redis_info['arch_bits'] %></td>
+                </tr>
+                <tr>
+                    <td>Uptime</td>
+                    <td><%= Time.at(@redis_info['uptime_in_seconds'].to_i).utc.strftime("%H:%M:%S") %>
+                </tr>
+                <tr>
+                    <td>Connected Clients</td>
+                    <td><%= @redis_info['connected_clients'] %></td>
+                </tr>
+                <tr>
+                    <td>Used Memory (now)</td>
+                    <td><%= @redis_info['used_memory_human'] %></td>
+                </tr>
+                <tr>
+                    <td>RSS Memory</td>
+                    <td><%= @redis_info['used_memory_rss'].to_i / 1024 %> KiB</td>
+                </tr>
+                <tr>
+                    <td>Used Memory (peak)</td>
+                    <td><%= @redis_info['used_memory_peak_human'] %></td>
+                </tr>
+            </tbody>
+            <thead>
+                <th colspan="2">Redis DB Stats</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Kofta keyspace (DB #<%= REDIS_CONFIG['worker_db'] %>)</td>
+                    <td><%= @redis_info["db#{REDIS_CONFIG['worker_db']}"] %></td>
+                </tr>
+                <tr>
+                    <td>Sidekiq keyspace (DB #<%= REDIS_CONFIG['sidekiq_db'] %>)</td>
+                    <td><%= @redis_info["db#{REDIS_CONFIG['sidekiq_db']}"] %></td>
+                </tr>
+            </tbody>
+            <thead>
+                <th colspan="2">Sidekiq Stats</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Processed jobs</td>
+                    <td><%= @sk_stats.processed %></td>
+                </tr>
+                <tr>
+                    <td>Failed jobs (includes Dead jobs too)</td>
+                    <td><%= @sk_stats.failed + @sk_stats.dead_size %></td>
+                </tr>
+                <tr>
+                    <td>Queued jobs</td>
+                    <td><%= @sk_stats.enqueued %></td>
+                </tr>
+                <tr>
+                    <td>Queue latency</td>
+                    <td><%= @sk_stats.default_queue_latency %> seconds</td>
+                </tr>
+            </tbody>
+        </table>
+    <% else %>
+        <h2 style="color: red;">Redis is unavailable.</h2>
+        <p>Don't expect Sidekiq (and Kofta) to work unless you sort it out.</p>
+        <p><strong>Redis-rb</strong> tells me:</p>
+        <blockquote><%= @redis_stats[:message] %></blockquote>
+    <% end %>
+</div>
