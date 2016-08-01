@@ -103,8 +103,16 @@ class SnmpWorkerJob < ActiveJob::Base
     influx_batch.in_groups(500, false) do |batch_part|
       @influx.write_points(batch_part)
     end
-    GC.start
     @redis.setex "#{@device_tags[:hostname]}.derives", @derive_interval * 3, @job_data.to_json
+
+    # Unset stuff to free more memory:
+    index_list   = nil
+    @indexes     = nil
+    @metric_data = nil
+    influx_batch = nil
+    @job_data    = nil
+    # And now tell runtime to collect the garbage.
+    GC.start
   end
 
   def device_ping(host)
