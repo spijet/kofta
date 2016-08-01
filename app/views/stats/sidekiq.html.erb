@@ -57,6 +57,11 @@
                     <td><%= @sk_stats.processed %></td>
                 </tr>
                 <tr>
+                    <td>Busy jobs/Total threads</td>
+
+                    <td><%= @sk_busy %>/<%= @sk_threads %></td>
+                </tr>
+                <tr>
                     <td>Failed jobs (includes Dead jobs too)</td>
                     <td><%= @sk_stats.failed + @sk_stats.dead_size %></td>
                 </tr>
