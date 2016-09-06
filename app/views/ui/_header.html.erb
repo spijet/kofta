@@ -3,9 +3,9 @@
         <!-- Left side -->
         <div class="nav-left">
             <a href="/" class="nav-item"><strong>KOFTA</strong></a>
-            <%= link_to 'Devices', devices_path, class: params[:controller] === "devices" ? "nav-item is-tab is-active" : "nav-item is-tab" %>
-            <%= link_to 'Data Sources', datatypes_path, class: params[:controller] === "datatypes" ? "nav-item is-tab is-active" : "nav-item is-tab" %>
-            <%= link_to 'Statistics', stats_path, class: params[:controller] === "stats" ? "nav-item is-tab is-active" : "nav-item is-tab" %>
+            <%= link_to 'Devices', devices_path, class: params[:controller] === 'devices' ? 'nav-item is-tab is-active' : 'nav-item is-tab' %>
+            <%= link_to 'Data Sources', datatypes_path, class: params[:controller] === 'datatypes' ? 'nav-item is-tab is-active' : 'nav-item is-tab' %>
+            <%= link_to 'Statistics', stats_path, class: params[:controller] === 'stats' ? 'nav-item is-tab is-active' : 'nav-item is-tab' %>
         </div>
         <div class="nav-right">
             <span class="nav-item">

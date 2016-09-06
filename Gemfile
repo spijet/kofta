@@ -53,7 +53,7 @@ gem 'rufus-scheduler'
 
 # We will use Bulma for SCSS styling.
 #  That may change in the future.
-gem "bulma-rails", "~> 0.0.28"
+gem 'bulma-rails', '~> 0.0.28'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

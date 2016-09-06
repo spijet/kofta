@@ -4,7 +4,7 @@
         <% if @device.errors.any? %>
             <article class="message is-danger">
                 <div class="message-header">
-                    <%= pluralize(@device.errors.count, "error") %> prohibited this device from being saved:
+                    <%= pluralize(@device.errors.count, 'error') %> prohibited this device from being saved:
                 </div>
                 <div class="message-body">
                     <ul>
@@ -18,41 +18,41 @@
 
   <div class="columns">
       <div class="column notification">
-          <%= f.label :devname, class: "label" %>
+          <%= f.label :devname, class: 'label' %>
           <p class="control">
-              <%= f.text_field :devname, class: "input" %>
+              <%= f.text_field :devname, class: 'input' %>
           </p>
-          <%= f.label :address, class: "label" %>
+          <%= f.label :address, class: 'label' %>
           <p class="control">
-              <%= f.text_field :address, class: "input" %>
+              <%= f.text_field :address, class: 'input' %>
           </p>
-          <%= f.label :snmp_community, class: "label" %>
+          <%= f.label :snmp_community, class: 'label' %>
           <p class="control">
-              <%= f.text_field :snmp_community, value: @device.new_record? ? 'public' : @device.snmp_community, class: "input" %>
+              <%= f.text_field :snmp_community, value: @device.new_record? ? 'public' : @device.snmp_community, class: 'input' %>
           </p>
-          <%= f.label :query_interval, class: "label" %>
+          <%= f.label :query_interval, class: 'label' %>
           <p class="control">
-              <%= f.number_field :query_interval, value: @device.new_record? ? 30 : @device.query_interval, in: 30..120, class: "input" %>
+              <%= f.number_field :query_interval, value: @device.new_record? ? 30 : @device.query_interval, in: 30..120, class: 'input' %>
           </p>
-          <%= f.label :city, class: "label" %>
+          <%= f.label :city, class: 'label' %>
           <p class="control">
-              <%= f.text_field :city, class: "input" %>
+              <%= f.text_field :city, class: 'input' %>
           </p>
-          <%= f.label :group, class: "label" %>
+          <%= f.label :group, class: 'label' %>
           <p class="control">
-              <%= f.text_field :group, class: "input" %>
+              <%= f.text_field :group, class: 'input' %>
           </p>
-          <%= f.label :contact, class: "label" %>
+          <%= f.label :contact, class: 'label' %>
           <p class="control">
-              <%= f.text_field :contact, class: "input" %>
+              <%= f.text_field :contact, class: 'input' %>
           </p>
           <div class="actions">
-              <%= f.submit class: "button" %>
-              <%= link_to "Get Device info", "#", class: "button is-warning", id: "getinfo" %>
+              <%= f.submit class: 'button' %>
+              <%= link_to 'Get Device info', '#', class: 'button is-warning', id: 'getinfo' %>
           </div>
       </div>
       <div class="column notification">
-          <%= f.label "Used data sources", class: "label" %>
+          <%= f.label 'Used data sources', class: 'label' %>
           <% @datatypes.each do |datatype| %>
               <p class="control">
                   <label class="checkbox">

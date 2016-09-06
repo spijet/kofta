@@ -5,18 +5,18 @@ class DatatypesControllerTest < ActionController::TestCase
     @datatype = datatypes(:one)
   end
 
-  test "should get index" do
+  test 'should get index' do
     get :index
     assert_response :success
     assert_not_nil assigns(:datatypes)
   end
 
-  test "should get new" do
+  test 'should get new' do
     get :new
     assert_response :success
   end
 
-  test "should create datatype" do
+  test 'should create datatype' do
     assert_difference('Datatype.count') do
       post :create, datatype: { excludes: @datatype.excludes, index_oid: @datatype.index_oid, name: @datatype.name, oid: @datatype.oid, table: @datatype.table }
     end
@@ -24,22 +24,22 @@ class DatatypesControllerTest < ActionController::TestCase
     assert_redirected_to datatype_path(assigns(:datatype))
   end
 
-  test "should show datatype" do
+  test 'should show datatype' do
     get :show, id: @datatype
     assert_response :success
   end
 
-  test "should get edit" do
+  test 'should get edit' do
     get :edit, id: @datatype
     assert_response :success
   end
 
-  test "should update datatype" do
+  test 'should update datatype' do
     patch :update, id: @datatype, datatype: { excludes: @datatype.excludes, index_oid: @datatype.index_oid, name: @datatype.name, oid: @datatype.oid, table: @datatype.table }
     assert_redirected_to datatype_path(assigns(:datatype))
   end
 
-  test "should destroy datatype" do
+  test 'should destroy datatype' do
     assert_difference('Datatype.count', -1) do
       delete :destroy, id: @datatype
     end

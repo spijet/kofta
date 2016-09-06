@@ -1,4 +1,4 @@
-desc "Import all seed files."
+desc 'Import all seed files.'
 
 namespace :db do
   task import_seeds: :environment do

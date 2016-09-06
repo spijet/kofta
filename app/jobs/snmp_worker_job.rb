@@ -54,7 +54,9 @@ class SnmpWorkerJob < ActiveJob::Base
       port: REDIS_CONFIG['port'],
       db:   REDIS_CONFIG['worker_db']
     )
-    @job_data = @redis.exists("#{@device_tags[:hostname]}.derives") ? JSON.parse(@redis.get("#{@device_tags[:hostname]}.derives")) : {}
+
+    redis_derives = "#{@device_tags[:hostname]}.derives"
+    @job_data = @redis.exists(redis_derives) ? JSON.parse(@redis.get(redis_derives)) : {}
 
     # Create SNMP params hash
     @snmp_params = {
@@ -100,16 +102,12 @@ class SnmpWorkerJob < ActiveJob::Base
                         timestamp: (measurement.timestamp.to_f * 1_000_000_000).to_i
                       }
     end
-    influx_batch.in_groups(500, false) do |batch_part|
-      @influx.write_points(batch_part)
-    end
-    @redis.setex "#{@device_tags[:hostname]}.derives", @derive_interval * 3, @job_data.to_json
+    influx_batch.in_groups(500, false) { |batch_part| @influx.write_points(batch_part) }
+    @redis.setex redis_derives, @derive_interval * 3, @job_data.to_json
 
     # Unset stuff to free more memory:
-    index_list   = nil
     @indexes     = nil
     @metric_data = nil
-    influx_batch = nil
     @job_data    = nil
     # And now tell runtime to collect the garbage.
     GC.start
@@ -206,12 +204,12 @@ class SnmpWorkerJob < ActiveJob::Base
     #maxrows = get_table_size(object)
     last, oid, results = false, root.dup, {}
     root = root.split('.').map(&:to_i)
-    while !last
-      snmp.get_bulk(0, 25, oid).each_varbind do |vb|
+    until last
+      snmp.get_bulk(0, 25, oid).each_varbind { |vb|
         oid = vb.oid
         (last = true; break) unless oid[0..root.size - 1] == root
         results[vb.oid.last] = vb.value.asn1_type =~ /STRING/ ? vb.value.to_s : vb.value.to_i
-      end
+      }
     end
     results
   end

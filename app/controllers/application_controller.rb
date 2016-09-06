@@ -15,12 +15,12 @@ class ApplicationController < ActionController::Base
       port: REDIS_CONFIG['port'],
       db:   REDIS_CONFIG['worker_db']
     )
-    reping = redis.ping
+    redis_ping = redis.ping
   rescue Exception => e
       @redis_stats[:alive] = false
       @redis_stats[:message] = e.message if verbose
   else
-    if reping == "PONG"
+    if redis_ping == 'PONG'
       @redis_stats[:alive] = true
       @redis_info = redis.info if verbose
     end

@@ -20,9 +20,9 @@
         <td><%= device.devname %></td>
         <td><%= device.address %></td>
         <td><%= device.contact %></td>
-        <td><%= link_to 'Show', device, class: "button show-item", item: device.id %></td>
-        <td><%= link_to 'Edit', edit_device_path(device), class: "button is-warning" %></td>
-        <td><%= link_to 'Destroy', device, method: :delete, data: { confirm: 'Are you sure?' }, class: "button is-danger" %></td>
+        <td><%= link_to 'Show', device, class: 'button show-item', item: device.id %></td>
+        <td><%= link_to 'Edit', edit_device_path(device), class: 'button is-warning' %></td>
+        <td><%= link_to 'Destroy', device, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger' %></td>
       </tr>
     <% end %>
   </tbody>
@@ -30,7 +30,7 @@
 
 <br>
 
-<%= link_to 'New Device', new_device_path, class: "button is-primary" %>
+<%= link_to 'New Device', new_device_path, class: 'button is-primary' %>
 
 <div class="modal">
   <div class="modal-background"></div>

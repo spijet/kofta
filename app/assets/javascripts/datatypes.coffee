@@ -13,7 +13,7 @@ jQuery ->
     $.ajax "/datatypes/#{modal_item}",
       type: 'GET'
       dataType: 'html'
-      error: (jqXHR, textStatus, errorThrown) ->
+      error: (jqXHR, errorThrown) ->
         alert(jqXHR.responseText)
       success: (data, textStatus, jqXHR) ->
         $('.modal-content').html(data)

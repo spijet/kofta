@@ -2,7 +2,7 @@ require 'rufus-scheduler'
 
 # Let's use the rufus-scheduler singleton
 #
-$query_scheduler = Rufus::Scheduler.new(lockfile: ".rufus-scheduler.lock")
+$query_scheduler = Rufus::Scheduler.new(lockfile: '.rufus-scheduler.lock')
 
 def queue_fillup
   Device.eager_load(:datatypes).each do |device|

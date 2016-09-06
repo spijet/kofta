@@ -61,7 +61,7 @@ class DevicesController < ApplicationController
           Rails.logger.info "Updated device with ID: #{@device.id}, killing query job #{job.id}..."
           Rails.logger.flush
           job.unschedule
-          Rails.logger.info "Job killed, now off to rescheduling~"
+          Rails.logger.info 'Job killed, now off to rescheduling~'
           Rails.logger.flush
         end
         $query_scheduler.every( "#{@device.query_interval}s", tag: @device.id ) do
@@ -86,7 +86,7 @@ class DevicesController < ApplicationController
       Rails.logger.info "Destroyed device with ID: #{@device.id}."
       Rails.logger.info "Killing query job with ID: #{job.id}."
       job.unschedule
-      Rails.logger.info "Job killed, RIP~"
+      Rails.logger.info 'Job killed, RIP~'
     end
     @device.destroy
     respond_to do |format|

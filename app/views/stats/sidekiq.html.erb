@@ -12,11 +12,11 @@
                 </tr>
                 <tr>
                     <td>Host OS/Bits</td>
-                    <td><%= @redis_info['os'] + "/" + @redis_info['arch_bits'] %></td>
+                    <td><%= @redis_info['os'] + '/' + @redis_info['arch_bits'] %></td>
                 </tr>
                 <tr>
                     <td>Uptime</td>
-                    <td><%= Time.at(@redis_info['uptime_in_seconds'].to_i).utc.strftime("%H:%M:%S") %>
+                    <td><%= Time.at(@redis_info['uptime_in_seconds'].to_i).utc.strftime('%H:%M:%S') %>
                 </tr>
                 <tr>
                     <td>Connected Clients</td>

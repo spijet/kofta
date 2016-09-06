@@ -73,6 +73,6 @@ class DatatypesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def datatype_params
       params.require(:datatype).permit(:name, :oid, :metric_type, :excludes,
-                                       :table, :derive, :index_oid)
+                                       :table, :derive, :index_oid, :default)
     end
 end
