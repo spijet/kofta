@@ -8,6 +8,7 @@
     <div class="content">
       <table>
         <tr><td><strong>OID:</strong></td><td><%= @datatype.oid %></td></tr>
+        <tr><td><strong>Is default?</strong></td><td><%= @datatype.default %></td></tr>
         <tr><td><strong>SNMP Metric Type:</strong></td><td><%= @datatype.metric_type %></td></tr>
         <tr><td><strong>Is table?</strong></td><td><%= @datatype.table %></td></tr>
         <% if @datatype.table %>

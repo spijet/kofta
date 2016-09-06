@@ -3,11 +3,16 @@ class Device < ActiveRecord::Base
   validates :devname, :address, :snmp_community, :query_interval, :city, :group, presence: true
   validates :devname, :address, uniqueness: true
   validates :query_interval, numericality: true
-  before_save do
-    backup_devices
-  end
-  before_destroy do
-    backup_devices
+
+  after_initialize { default_values }
+
+  before_save { backup_devices }
+  before_destroy { backup_devices }
+
+  def default_values
+    if new_record?
+      self.datatypes = Datatype.where(default: true)
+    end
   end
 
   def backup_devices
