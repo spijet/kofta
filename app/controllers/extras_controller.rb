@@ -19,6 +19,16 @@ class ExtrasController < ApplicationController
   end
 
   def export_devices
+    devices_hashes = Device.all.to_a.map {
+      |a| a.attributes.except("created_at", "updated_at", "id")
+    }
+    csv_data = CSV.generate do |row|
+      row << devices_hashes.first.keys
+      devices_hashes.each do |hash|
+        row << hash.values
+      end
+    end
+    send_data csv_data, filename: "exported_devices.csv"
   end
 
   def export_metrics
