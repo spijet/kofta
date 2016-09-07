@@ -9,6 +9,6 @@ Rails.application.config.assets.version = '1.0'
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 Rails.application.config.assets.precompile += %w( application.scss )
-%w( devices datatypes ui stats ).each do |controller|
+%w( devices datatypes ui stats extras ).each do |controller|
   Rails.application.config.assets.precompile += %W(#{controller}.js.coffee #{controller}.scss)
 end

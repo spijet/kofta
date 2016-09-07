@@ -1,16 +1,13 @@
 Rails.application.routes.draw do
-  get 'stats/gc'
-
-  get 'stats/rufus'
-
-  get 'stats/sidekiq'
+  get 'extras', to: 'extras#index'
+  post 'extras/import_devices'
+  post 'extras/import_metrics'
+  get 'extras/export_devices'
+  get 'extras/export_metrics'
 
   get 'stats', to: 'stats#index'
-
   get 'stats/gc'
-
   get 'stats/rufus'
-
   get 'stats/sidekiq'
 
   resources :datatypes

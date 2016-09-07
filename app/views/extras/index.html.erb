@@ -1,0 +1,10 @@
+<h1>Extras#index</h1>
+<p>Find me in app/views/extras/index.html.erb</p>
+
+<h1>Extras</h1>
+<h2>Import devices:</h2>
+<%= form_tag({action: :import_devices}, multipart: true) do %>
+    <%= label_tag(:file, 'Select file:') %>
+    <%= file_field_tag 'file' %>
+    <%= submit_tag("Upload") %>
+<% end %>

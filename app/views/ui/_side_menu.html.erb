@@ -5,6 +5,7 @@
   <ul class="menu-list">
     <li><%= link_to 'List Devices', devices_path, class: controller.controller_name == 'devices' && controller.action_name == 'index' ? 'is-active' : "" %></li>
     <li><%= link_to 'Add New Device', new_device_path, class: controller.controller_name == 'devices' && controller.action_name == 'new' ? "is-active" : "" %></li>
+    <li><%= link_to 'Mass-import devices', '/extras/', class: controller.controller_name == 'devices' && controller.action_name == 'new' ? "is-active" : "" %></li>
   </ul>
   <p class="menu-label">
     Data Sources
@@ -14,9 +15,10 @@
     <li><%= link_to 'Add New Datasource', new_datatype_path, class: controller.controller_name == 'datatypes' && controller.action_name == 'new' ? "is-active" : "" %></li>
   </ul>
   <p class="menu-label">
-    Kofta Stats
+    Kofta Extras
   </p>
   <ul class="menu-list">
+      <li><%= link_to 'Import/Export', '/extras' %></li>
       <li><%= link_to 'GC Statistics', '/stats/gc' %></li>
       <li><%= link_to 'Rufus Queue', '/stats/rufus' %></li>
       <li><%= link_to 'Sidekiq Stats', '/stats/sidekiq' %></li>
