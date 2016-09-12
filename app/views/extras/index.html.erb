@@ -3,8 +3,8 @@
     <h2>Import devices:</h2>
     <%= form_tag({action: :import_devices}, multipart: true) do %>
         <%= label_tag(:file, 'Select file:') %>
-        <%= file_field_tag 'file' %>
-        <%= submit_tag("Upload") %>
+        <%= file_field_tag 'file', class: "button" %>
+        <%= submit_tag "Upload", class: "button is-primary" %>
     <% end %>
     
     <h2>Export devices:</h2>

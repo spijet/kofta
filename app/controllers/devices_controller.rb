@@ -23,6 +23,7 @@ class DevicesController < ApplicationController
 
   # GET /devices/1/edit
   def edit
+    @device = Device.preload(:datatypes).find(params[:id])
     @datatypes = Datatype.all
   end
 
