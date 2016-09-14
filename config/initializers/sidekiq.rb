@@ -32,6 +32,11 @@ module Sidekiq
               if self.class.counter % JOBS == 0
                 Sidekiq.logger.info "#{Time.now}: #{JOBS} jobs passed, time to GC."
                 GC.start
+                gc_stats = "#{Time.now}: GC Stats:\n"
+                GC.stat.each do |key, value|
+                  gc_stats << "%42s:\t%12d\n" % [key.capitalize, value]
+                end
+                Sidekiq.logger.info gc_stats
               end
             end
           end
