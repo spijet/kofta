@@ -44,6 +44,8 @@ class SnmpWorkerJob < ActiveJob::Base
       city: device.city,
       group: device.group
     }
+    @json_packer   = Yajl::Encoder.new
+    @json_unpacker = Yajl::Parser.new(symbolize_keys: false)
 
     # Store device query interval
     # for derive processing.
@@ -57,7 +59,7 @@ class SnmpWorkerJob < ActiveJob::Base
     )
 
     redis_derives = "#{@device_tags[:hostname]}.derives"
-    @job_data = @redis.exists(redis_derives) ? JSON.parse(@redis.get(redis_derives)) : {}
+    @job_data = @redis.exists(redis_derives) ? @json_unpacker.parse(@redis.get(redis_derives)) : {}
 
     # Create SNMP params hash
     @snmp_params = {
@@ -104,7 +106,7 @@ class SnmpWorkerJob < ActiveJob::Base
                       }
     end
     influx_batch.in_groups(500, false) { |batch_part| @influx.write_points(batch_part) }
-    @redis.setex redis_derives, @derive_interval * 3, @job_data.to_json
+    @redis.setex redis_derives, @derive_interval * 3, @json_packer.encode(@job_data)
 
 ## Temporarily disabled, testing new GC method.
 #     # Unset stuff to free more memory:
