@@ -6,6 +6,7 @@ class SnmpWorkerJob < ActiveJob::Base
   queue_as :default
   require 'snmp'
   require 'influxdb'
+  require 'yajl/json_gem'
 
   # This is a definition of metric class.
   # Will use it to store processed metric data before sending it to InfluxDB.
@@ -161,22 +162,22 @@ class SnmpWorkerJob < ActiveJob::Base
         instance = @indexes[metric_table.index][oid]
         next if instance =~ /#{metric_table.excludes}/
         if instance.to_s.include?('.')
-          instance, subinstance = instance.split('.',2)
+          instance, subinstance = instance.split('.', 2)
         else
           subinstance = 'none'
         end
 
         if metric_table.derive
           keyname = "kofta:#{@device_tags[:hostname]}:#{metric_table.type}:#{instance}:#{subinstance}"
-          if @job_data.has_key?(keyname)
-            old_data = @job_data[keyname]
+          if @job_data.key?(keyname)
+            old_data = @job_data[keyname].to_i
             old_time = Time.at(@job_data[time_key].to_i)
-            @job_data[keyname] = data
+            @job_data[keyname] = data.to_i
             data = (data.to_i - old_data.to_i) / (metric_table.timestamp - old_time)
             metric_data.push Measurement.new(
-                               metric_table.type, data.to_i,
-                               @device_tags.merge(instance: instance, subinstance: subinstance),
-                               metric_table.timestamp)
+              metric_table.type, data.to_i,
+              @device_tags.merge(instance: instance, subinstance: subinstance),
+              metric_table.timestamp)
           else
             @job_data[keyname] = data
           end
@@ -197,12 +198,12 @@ class SnmpWorkerJob < ActiveJob::Base
   # Much faster than simple SNMP Walk, so here it is.
   # Returns a hash of {oid_last_number: value}, which then gets merged
   #  with indexer OID hash (which is also generated here).
-  def bulkwalk(snmp,object)
-    root = extract_oid(snmp,object)
+  def bulkwalk(snmp, object)
+    root = extract_oid(snmp, object)
     # The only way we could get >1024 records in SNMP table
     # is by walking something in ifTable, so if we do,
     # we set maxrows equal to ifTable size.
-    #maxrows = get_table_size(object)
+    # maxrows = get_table_size(object)
     last, oid, results = false, root.dup, {}
     root = root.split('.').map(&:to_i)
     until last
@@ -216,7 +217,7 @@ class SnmpWorkerJob < ActiveJob::Base
   end
 
   # Returns numeric OID (as string) if symbolic is given.
-  def extract_oid(snmp,object)
+  def extract_oid(snmp, object)
     snmp.mib.oid(object).to_s
   end
 
@@ -229,7 +230,7 @@ class SnmpWorkerJob < ActiveJob::Base
     # Extract list of indexes to work on,
     # and fill the hash:
     index_list.each do |index|
-      indexes[index] = bulkwalk(@snmp,index)
+      indexes[index] = bulkwalk(@snmp, index)
     end
     indexes
   end
