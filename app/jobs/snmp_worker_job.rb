@@ -114,13 +114,6 @@ class SnmpWorkerJob < ActiveJob::Base
     influx_batch.in_groups(500, false) { |batch_part| @influx.write_points(batch_part) }
     @redis.setex redis_derives, @derive_interval * 3, @json_packer.encode(@job_data)
 
-## Temporarily disabled, testing new GC method.
-#     # Unset stuff to free more memory:
-#     @indexes     = nil
-#     @metric_data = nil
-#     @job_data    = nil
-#     # And now tell runtime to collect the garbage.
-#     GC.start
   end
 
   def device_ping(host)
