@@ -59,7 +59,12 @@ class SnmpWorkerJob < ActiveJob::Base
     )
 
     redis_derives = "#{@device_tags[:hostname]}.derives"
-    @job_data = @redis.exists(redis_derives) ? @json_unpacker.parse(@redis.get(redis_derives)) : {}
+    @job_data =
+      if @redis.exists(redis_derives)
+        @json_unpacker.parse(@redis.get(redis_derives))
+      else
+        {}
+      end
 
     # Create SNMP params hash
     @snmp_params = {
@@ -101,7 +106,8 @@ class SnmpWorkerJob < ActiveJob::Base
       influx_batch << { series: measurement.name,
                         values: { value: measurement.value },
                         tags: measurement.tags,
-                        # InfluxDB demands time in nanoseconds, so we have to do this:
+                        # InfluxDB demands time in nanoseconds,
+                        # so we have to do this:
                         timestamp: (measurement.timestamp.to_f * 1_000_000_000).to_i
                       }
     end
