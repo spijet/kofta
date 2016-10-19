@@ -207,10 +207,6 @@ class SnmpWorkerJob < ActiveJob::Base
   #  with indexer OID hash (which is also generated here).
   def bulkwalk(snmp, object)
     root = extract_oid(snmp, object)
-    # The only way we could get >1024 records in SNMP table
-    # is by walking something in ifTable, so if we do,
-    # we set maxrows equal to ifTable size.
-    # maxrows = get_table_size(object)
     last, oid, results = false, root.dup, {}
     root = root.split('.').map(&:to_i)
     until last
