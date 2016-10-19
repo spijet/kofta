@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This module is a part of KOFTA SNMP Collector.
 # Gets called as a recurring task by Sidekiq or any other ActiveJob queue
 # engine. The only input argument needed is the Device object.
