@@ -17,6 +17,4 @@ def queue_fillup
   $query_bootstrapped = true
 end
 
-if defined?(Rails::Server) || File.split($0).last == 'puma'
-  queue_fillup
-end
+queue_fillup if defined?(Rails::Server) || File.split($PROGRAM_NAME).last == 'puma'

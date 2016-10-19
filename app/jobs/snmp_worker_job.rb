@@ -111,8 +111,12 @@ class SnmpWorkerJob < ActiveJob::Base
                         timestamp: (measurement.timestamp.to_f * 1_000_000_000).to_i
                       }
     end
-    influx_batch.in_groups(500, false) { |batch_part| @influx.write_points(batch_part) }
-    @redis.setex redis_derives, @derive_interval * 3, @json_packer.encode(@job_data)
+    influx_batch.in_groups(500, false) { |batch_part|
+      @influx.write_points(batch_part)
+    }
+    @redis.setex redis_derives,
+                 @derive_interval * 3,
+                 @json_packer.encode(@job_data)
 
   end
 
@@ -236,21 +240,4 @@ class SnmpWorkerJob < ActiveJob::Base
     indexes
   end
 
-  # This one could be rewritten in the future,
-  # for now it's awfully simple.
-  # +1 is here just in case, I'll remove it if it's unneeded.
-# def get_table_size(object)
-#   devmodel = @snmp.get_value('SNMPv2-MIB::sysDescr.0')
-#   # Quick fix for Huawei NE40E, which ignores bulk queries if bulkrows value is too high.
-#   # Possibly affects other Huawei devices as well.
-#  #case devmodel
-#  #when /HUAWEI/
-#  #  100
-#  #when /DGS-3620/
-#  #  20
-#  #else
-#  #  object =~ /IF-MIB::if/ ? @snmp.get_value('IF-MIB::ifNumber.0').to_i + 1 : 1024
-#  #end
-#   20
-# end
 end

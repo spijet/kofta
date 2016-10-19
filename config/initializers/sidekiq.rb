@@ -1,7 +1,9 @@
 require 'sidekiq'
 
 REDIS_CONFIG = YAML.load_file(Rails.root.join('config', 'redis.yml'))[Rails.env]
-redis_url = "redis://#{REDIS_CONFIG['host']}:#{REDIS_CONFIG['port']}/#{REDIS_CONFIG['sidekiq_db']}"
+redis_url = "redis://#{REDIS_CONFIG['host']}" \
+            ":#{REDIS_CONFIG['port']}/" \
+            "#{REDIS_CONFIG['sidekiq_db']}"
 
 module Sidekiq
   module Middleware
@@ -22,22 +24,13 @@ module Sidekiq
           end
         end
 
-        def call(worker_instance, item, queue)
+        def call(_worker_instance, _item, _queue)
           begin
             yield
           ensure
             self.class.synchronize do
               self.class.counter += 1
-
-              if self.class.counter % JOBS == 0
-                Sidekiq.logger.info "#{Time.now}: #{JOBS} jobs passed, time to GC."
-                GC.start
-                gc_stats = "#{Time.now}: GC Stats:\n"
-                GC.stat.each do |key, value|
-                  gc_stats << "%42s:\t%12d\n" % [key.capitalize, value]
-                end
-                Sidekiq.logger.info gc_stats
-              end
+              GC.start if self.class.counter % JOBS == 0
             end
           end
         end
@@ -49,7 +42,7 @@ end
 Sidekiq.configure_server do |config|
   config.redis = { url: redis_url }
   config.server_middleware do |chain|
-    chain.add Sidekiq::Middleware::Server::RetryJobs, :max_retries => 0
+    chain.add Sidekiq::Middleware::Server::RetryJobs, max_retries: 0
     chain.add Sidekiq::Middleware::Server::Profiler
   end
 end
