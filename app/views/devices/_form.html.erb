@@ -47,8 +47,9 @@
               <%= f.text_field :contact, class: 'input' %>
           </p>
           <div class="actions">
-              <%= f.submit class: 'button' %>
+              <%= link_to 'Back', devices_path, class: 'button' %>
               <%= link_to 'Get Device info', '#', class: 'button is-warning', id: 'getinfo' %>
+              <%= f.submit class: 'button is-danger' %>
           </div>
       </div>
       <div class="column notification">
