@@ -12,6 +12,8 @@ class Device < ActiveRecord::Base
   def default_values
     if new_record?
       self.datatypes = Datatype.where(default: true)
+      self.snmp_community = 'public'
+      self.query_interval = 30
     end
   end
 
