@@ -5,7 +5,7 @@ require 'rufus-scheduler'
 $query_scheduler = Rufus::Scheduler.new(lockfile: '.rufus-scheduler.lock')
 
 def queue_fillup
-  Device.select("id, address").each do |device|
+  Device.select("id, address, query_interval").each do |device|
     $query_scheduler.every("#{device.query_interval}s", tag: device.id) do
       Rails.logger.info "Hello, it's #{Time.now}"
       Rails.logger.info "I'm gonna go and query #{device.address}."
