@@ -116,6 +116,7 @@ class SnmpWorkerJob < ActiveJob::Base
     end
     influx_batch.in_groups_of(200, false) { |batch_part|
       @influx.write_points(batch_part)
+      puts "Random prepared metric for #{device.address}: #{batch_part.first.inspect}."
     }
     @redis.setex redis_derives,
                  @derive_interval * 3,
