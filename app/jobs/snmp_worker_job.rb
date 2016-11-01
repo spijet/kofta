@@ -114,7 +114,7 @@ class SnmpWorkerJob < ActiveJob::Base
                         timestamp: (measurement.timestamp.to_f * 1_000_000_000).to_i
                       }
     end
-    influx_batch.in_groups(500, false) { |batch_part|
+    influx_batch.in_groups_of(200, false) { |batch_part|
       @influx.write_points(batch_part)
     }
     @redis.setex redis_derives,
