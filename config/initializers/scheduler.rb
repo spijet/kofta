@@ -8,7 +8,7 @@ def queue_fillup
   Device.all.each do |device|
     $query_scheduler.every("#{device.query_interval}s", tag: device.id) do
       Rails.logger.info "Hello, it's #{Time.now}"
-      Rails.logger.info "I'm gonna go and query #{device.address}."
+      Rails.logger.info "I'm gonna go and query #{device.address} from #{device.city}."
       Rails.logger.flush
       SnmpWorkerJob.perform_later(device)
     end
