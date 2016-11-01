@@ -46,6 +46,7 @@ class SnmpWorkerJob < ActiveJob::Base
       city: device.city,
       group: device.group
     }
+    puts "Here are the device tags for #{device.address}: #{@device_tags.inspect}."
     @json_packer   = Yajl::Encoder.new
     @json_unpacker = Yajl::Parser.new(symbolize_keys: false)
 
