@@ -41,7 +41,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'snmp', '~> 1.2'
 
 # This gem provides InfluxDB connection and functions:
-gem 'influxdb'
+gem 'influxdb', '0.3.10'
 
 # Include Ping functions:
 gem 'net-ping'
