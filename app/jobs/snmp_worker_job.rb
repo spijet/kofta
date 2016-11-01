@@ -46,7 +46,6 @@ class SnmpWorkerJob < ActiveJob::Base
       city: device.city,
       group: device.group
     }
-    puts "Here are the device tags for #{device.address}: #{@device_tags.inspect}."
     @json_packer   = Yajl::Encoder.new
     @json_unpacker = Yajl::Parser.new(symbolize_keys: false)
 
@@ -116,7 +115,6 @@ class SnmpWorkerJob < ActiveJob::Base
     end
     influx_batch.in_groups_of(200, false) { |batch_part|
       @influx.write_points(batch_part)
-      puts "Random prepared metric for #{device.address}: #{batch_part.first.inspect}."
     }
     @redis.setex redis_derives,
                  @derive_interval * 3,
