@@ -8,7 +8,8 @@ class SnmpWorkerJob < ActiveJob::Base
   queue_as :default
   require 'snmp'
   require 'influxdb'
-  require 'yajl/json_gem'
+  # require 'yajl/json_gem'
+  require 'msgpack'
 
   # This is a definition of metric class.
   # Will use it to store processed metric data before sending it to InfluxDB.
@@ -46,8 +47,8 @@ class SnmpWorkerJob < ActiveJob::Base
       city: device.city,
       group: device.group
     }
-    @json_packer   = Yajl::Encoder.new
-    @json_unpacker = Yajl::Parser.new(symbolize_keys: false)
+    # @json_packer   = Yajl::Encoder.new
+    # @json_unpacker = Yajl::Parser.new(symbolize_keys: false)
 
     # Store device query interval
     # for derive processing.
@@ -63,7 +64,8 @@ class SnmpWorkerJob < ActiveJob::Base
     redis_derives = "#{@device_tags[:hostname]}.derives"
     @job_data =
       if @redis.exists(redis_derives)
-        @json_unpacker.parse(@redis.get(redis_derives))
+        # @json_unpacker.parse(@redis.get(redis_derives))
+        MessagePack.unpack(@redis.get(redis_derives).force_encoding('ASCII-8BIT'))
       else
         {}
       end
@@ -116,9 +118,22 @@ class SnmpWorkerJob < ActiveJob::Base
     influx_batch.in_groups_of(200, false) { |batch_part|
       @influx.write_points(batch_part)
     }
+
+    # puts "Testing data packing..."
+    # profiletimes = Hash.new
+    # profiletimes[:before_json] = Time.now
+    # test_json = @json_packer.encode(@job_data)
+    # profiletimes[:after_json] = Time.now
+    # puts "JSON packer took %.2f ms to complete and produced %d-char long string." % [ (profiletimes[:after_json] - profiletimes[:before_json]) * 1000, test_json.size ]
+    # profiletimes[:before_msg] = Time.now
+    # test_msg = MessagePack.pack(@job_data)
+    # profiletimes[:after_msg] = Time.now
+    # puts "MSG packer took %.2f ms to complete and produced %d-char long string." % [ (profiletimes[:after_msg] - profiletimes[:before_msg]) * 1000, test_msg.size ]
+
     @redis.setex redis_derives,
                  @derive_interval * 3,
-                 @json_packer.encode(@job_data)
+                 # @json_packer.encode(@job_data)
+                 MessagePack.pack(@job_data)
 
   end
 

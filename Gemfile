@@ -27,6 +27,8 @@ gem 'puma'
 
 # Let's try YAJL for fater (and lighter) JSON works
 gem 'yajl-ruby'
+# Let's try MessagePack instead.
+gem 'msgpack-rails'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
