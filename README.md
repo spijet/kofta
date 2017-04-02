@@ -12,10 +12,12 @@ Enter **KOFTA** — the piece of Rails code that was born with a single purpose:
 replace Collectd and to feed InfluxDB with data, with style.
 
 ## State
-As of 2016-Aug-01, the app is almost fully functional. InfluxDB connection and data sending works well, Web UI is almost done, repeating parts are moved to layout and shared partials.
-Dynamic query schedule is implemented using `rufus-scheduler`. Also, now it doesn't trigger jobs when Rails console is started, jobs start only when Rails App Server (or Puma) is up.
-SNMP queries (in per-device workers) are parallelized using a thread pool. Derive metrics are handled internally, with Redis as intermediate data storage.
-Current repo also includes SMF manifests for Solaris/Illumos hosts.
+* I was thinking about saying something about discontinuing KOFTA (considering that I got a new job so I don't work with networks that much now), but I suddenly remembered that I wanted to do *stuff* here. So here I am, making KOFTA better again, step by step.
+* As of March 2017, the app is being used succesfully for quite some time in 24/7 mode without any major hiccups (expect some occasional slowdowns when a huge network storm happens, or when my favourite Huawei router gets shy). Because of the great amount of my stupidity and laziness involved in the app code, Sidekiq processes tend to get fatter and fatter over time until they go swapping and anoter bad slowdown happens as a result. As a 'temporary hack' (haha, temporary!) I used Monit with a custom config that restarts Sidekiq workers when they exceed 900MiB RSS -- on my current environment and device/metrics set that results in restarting workers every 2 days or so. But because this setup uses 3 separate Sidekiq workers, there is no 'holes' in operating time.
+* As of 2016-Aug-01, the app is almost fully functional. InfluxDB connection and data sending works well, Web UI is almost done, repeating parts are moved to layout and shared partials.
+* Dynamic query schedule is implemented using `rufus-scheduler`. Also, now it doesn't trigger jobs when Rails console is started, jobs start only when Rails App Server (or Puma) is up.
+* SNMP queries (in per-device workers) are parallelized using a thread pool. Derive metrics are handled internally, with Redis as intermediate data storage.
+* Current repo also includes SMF manifests for Solaris/Illumos hosts.
 
 ## TODO
 * ~~Make Rufus behave and to run only one scheduling thread per app instance~~ Done in c34e097;
@@ -25,7 +27,8 @@ Current repo also includes SMF manifests for Solaris/Illumos hosts.
 * Finish Web UI;
 * Write some docs and provide an example visualizing setup (Grafana Dashboard JSON);
 * Add JRuby support for some multithreaded GC'ed quality time;
-* Minimize memory consumption: since Sidekiq uses threads for workers, MRI sometimes fails to free memory previously used by now-destroyed worker. Some of my tries include: 0a1d147 393777e f3b7808 ae85036 dac178b 197714c 895f542 c418649. All suggestions are welcome!
+* **New grand goal**: Switch over from Sidekiq to Resque so I won't need to battle MRI's allocation problems;
+* Minimize memory consumption: since Sidekiq uses threads for workers, MRI sometimes fails to free memory previously used by now-destroyed worker. Some of my tries include: 0a1d147 393777e f3b7808 ae85036 dac178b 197714c 895f542 c418649 0dfd042. All suggestions are welcome!
 
 ## License
 This software is released under the [MIT license](https://opensource.org/licenses/MIT).
