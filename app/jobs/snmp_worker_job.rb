@@ -8,7 +8,6 @@ class SnmpWorkerJob < ActiveJob::Base
   queue_as :default
   require 'snmp'
   require 'influxdb'
-  # require 'yajl/json_gem'
   require 'msgpack'
 
   # This is a definition of metric class.
@@ -47,8 +46,6 @@ class SnmpWorkerJob < ActiveJob::Base
       city: device.city,
       group: device.group
     }
-    # @json_packer   = Yajl::Encoder.new
-    # @json_unpacker = Yajl::Parser.new(symbolize_keys: false)
 
     # Store device query interval
     # for derive processing.
@@ -117,24 +114,11 @@ class SnmpWorkerJob < ActiveJob::Base
     end
     influx_batch.in_groups_of(200, false) do |batch_part|
       @influx.write_points(batch_part)
-
-    # puts "Testing data packing..."
-    # profiletimes = Hash.new
-    # profiletimes[:before_json] = Time.now
-    # test_json = @json_packer.encode(@job_data)
-    # profiletimes[:after_json] = Time.now
-    # puts "JSON packer took %.2f ms to complete and produced %d-char long string." % [ (profiletimes[:after_json] - profiletimes[:before_json]) * 1000, test_json.size ]
-    # profiletimes[:before_msg] = Time.now
-    # test_msg = MessagePack.pack(@job_data)
-    # profiletimes[:after_msg] = Time.now
-    # puts "MSG packer took %.2f ms to complete and produced %d-char long string." % [ (profiletimes[:after_msg] - profiletimes[:before_msg]) * 1000, test_msg.size ]
     end
 
     @redis.setex redis_derives,
                  @derive_interval * 3,
-                 # @json_packer.encode(@job_data)
                  MessagePack.pack(@job_data)
-
   end
 
   def device_ping(host)
