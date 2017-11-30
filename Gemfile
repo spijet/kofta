@@ -1,13 +1,13 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.7.1'
 
 # Use sqlite3 as the database for Active Record
 # (Use it with JDBC adapter if using JRuby)
 gem 'sqlite3', platforms: :ruby
-# Either I'm missing something, or JRuby doesn't work with SQLite3. As for now, this is commented out.
+# Either I'm missing something, or JRuby doesn't work with SQLite3.
+# As for now, this is commented out.
 # gem 'activerecord-jdbcsqlite3-adapter', platforms: :jruby
 
 # Add support for DB dumps.
@@ -25,9 +25,7 @@ gem 'coffee-rails', '~> 4.1.0'
 # Use Puma app server
 gem 'puma'
 
-# Let's try YAJL for fater (and lighter) JSON works
-gem 'yajl-ruby'
-# Let's try MessagePack instead.
+# Use MessagePack to pack data into strings (for Redis).
 gem 'msgpack-rails'
 
 # Use jquery as the JavaScript library
