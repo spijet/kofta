@@ -64,8 +64,9 @@ class SnmpWorkerJob < ActiveJob::Base
     redis_derives = "#{@device_tags[:hostname]}.derives"
     @job_data =
       if @redis.exists(redis_derives)
-        # @json_unpacker.parse(@redis.get(redis_derives))
-        MessagePack.unpack(@redis.get(redis_derives).force_encoding('ASCII-8BIT'))
+        MessagePack.unpack(
+          @redis.get(redis_derives).force_encoding('ASCII-8BIT')
+        )
       else
         {}
       end
@@ -112,12 +113,10 @@ class SnmpWorkerJob < ActiveJob::Base
                         tags: measurement.tags,
                         # InfluxDB demands time in nanoseconds,
                         # so we have to do this:
-                        timestamp: (measurement.timestamp.to_f * 1_000_000_000).to_i
-                      }
+                        timestamp: (measurement.timestamp.to_f * 10**9).to_i }
     end
-    influx_batch.in_groups_of(200, false) { |batch_part|
+    influx_batch.in_groups_of(200, false) do |batch_part|
       @influx.write_points(batch_part)
-    }
 
     # puts "Testing data packing..."
     # profiletimes = Hash.new
@@ -129,6 +128,7 @@ class SnmpWorkerJob < ActiveJob::Base
     # test_msg = MessagePack.pack(@job_data)
     # profiletimes[:after_msg] = Time.now
     # puts "MSG packer took %.2f ms to complete and produced %d-char long string." % [ (profiletimes[:after_msg] - profiletimes[:before_msg]) * 1000, test_msg.size ]
+    end
 
     @redis.setex redis_derives,
                  @derive_interval * 3,
@@ -167,8 +167,10 @@ class SnmpWorkerJob < ActiveJob::Base
       table_threads << Thread.new do
         thread_snmp = SNMP::Manager.new(@snmp_params)
         group.each do |metric|
-          raw_tables.push MetricTable.new(metric.metric_type, bulkwalk(thread_snmp, metric.oid),
-                                          metric.index_oid, metric.derive, metric.excludes, Time.now)
+          raw_tables.push MetricTable.new(
+            metric.metric_type, bulkwalk(thread_snmp, metric.oid),
+            metric.index_oid, metric.derive, metric.excludes, Time.now
+          )
         end
       end
     end
@@ -178,7 +180,7 @@ class SnmpWorkerJob < ActiveJob::Base
 
     # Create metrics for freshly harvested tables:
     raw_tables.each do |metric_table|
-      # Set timestamp key for job-local vars (in case if this table is a Derive
+      # Set timestamp key for job-local vars (in case if this table is a Derive)
       time_key = "kofta:#{@device_tags[:hostname]}:#{metric_table.type}:timestamp"
       metric_table.data.each do |oid, data|
         instance = @indexes[metric_table.index][oid]
@@ -207,7 +209,8 @@ class SnmpWorkerJob < ActiveJob::Base
           metric_data.push Measurement.new(
             metric_table.type, data,
             @device_tags.merge(instance: instance, subinstance: subinstance),
-            metric_table.timestamp)
+            metric_table.timestamp
+          )
         end
       end
       @job_data[time_key] = metric_table.timestamp.to_i
@@ -225,11 +228,11 @@ class SnmpWorkerJob < ActiveJob::Base
     last, oid, results = false, root.dup, {}
     root = root.split('.').map(&:to_i)
     until last
-      snmp.get_bulk(0, 25, oid).each_varbind { |vb|
+      snmp.get_bulk(0, 25, oid).each_varbind do |vb|
         oid = vb.oid
         (last = true; break) unless oid[0..root.size - 1] == root
         results[vb.oid.last] = vb.value.asn1_type =~ /STRING/ ? vb.value.to_s : vb.value.to_i
-      }
+      end
     end
     results
   end
@@ -252,5 +255,4 @@ class SnmpWorkerJob < ActiveJob::Base
     end
     indexes
   end
-
 end

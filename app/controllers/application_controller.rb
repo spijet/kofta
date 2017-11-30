@@ -17,13 +17,12 @@ class ApplicationController < ActionController::Base
     )
     redis_ping = redis.ping
   rescue Exception => e
-      @redis_stats[:alive] = false
-      @redis_stats[:message] = e.message if verbose
+    @redis_stats[:alive] = false
+    @redis_stats[:message] = e.message if verbose
   else
     if redis_ping == 'PONG'
       @redis_stats[:alive] = true
       @redis_info = redis.info if verbose
     end
   end
-
 end
