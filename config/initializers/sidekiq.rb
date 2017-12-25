@@ -2,10 +2,9 @@
 
 require 'sidekiq'
 
-REDIS_CONFIG = YAML.load_file(Rails.root.join('config', 'redis.yml'))[Rails.env]
-redis_url = "redis://#{REDIS_CONFIG['host']}" \
-            ":#{REDIS_CONFIG['port']}/" \
-            "#{REDIS_CONFIG['sidekiq_db']}"
+REDIS_CONFIG = YAML.load(ERB.new(File.read(Rails.root.join('config', 'redis.yml'))).result)[Rails.env]
+redis_url = format 'redis://%<host>s:%<port>d/%<sidekiq_db>s',
+                   REDIS_CONFIG.symbolize_keys
 
 module Sidekiq
   module Middleware

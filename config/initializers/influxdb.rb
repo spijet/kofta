@@ -1,3 +1,3 @@
 require 'influxdb'
 
-INFLUX_CONFIG = YAML.load_file(Rails.root.join('config', 'influx.yml'))[Rails.env]
+INFLUX_CONFIG = YAML.load(ERB.new(File.read(Rails.root.join('config', 'influx.yml'))).result)[Rails.env]
