@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-jQuery ->
+ready= ->
   host =          $('#device_address')
   community =     $('#device_snmp_community')
   name =          $('#device_devname')
@@ -13,11 +13,12 @@ jQuery ->
   modal_close =   $('.modal-close, .modal-background')
   modal_back =    $('#modal_back')
 
-  getinfo.click ->
+  getinfo.click (event)->
     getinfo.removeClass('is-loading is-warning is-danger is-success')
     getinfo.addClass('is-warning is-loading')
     host.addClass('is-warning')
     $('#snmp_error').remove()
+    event.preventDefault()
     $.ajax '/snmpquerier/getinfo',
       type: 'POST'
       dataType: 'json'
@@ -55,3 +56,5 @@ jQuery ->
   modal_back.click (event) ->
     event.preventDefault()
     modal_window.removeClass('is-active')
+
+$(document).on('turbolinks:load', ready)
