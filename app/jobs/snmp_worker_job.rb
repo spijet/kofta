@@ -34,6 +34,34 @@ class SnmpWorkerJob < ActiveJob::Base
     end
   end
 
+  def fetch_redis_derives(device)
+    derive_key = device.address + '.derives'
+    if @redis.exists(derive_key)
+      MessagePack.unpack(
+        @redis.get(derive_key).force_encoding('ASCII-8BIT')
+      )
+    else
+      {}
+    end
+  end
+
+  def push_redis_derives(device, data)
+    @redis.setex device.address + '.derives',
+                 device.query_interval,
+                 MessagePack.pack(data)
+  end
+
+  def make_influx_batch(data)
+    data.map do |measurement|
+      { series: measurement.name,
+        values: { value: measurement.value },
+        tags: measurement.tags,
+        # InfluxDB demands time in nanoseconds,
+        # so we have to do this:
+        timestamp: (measurement.timestamp.to_f * 10**9).to_i }
+    end
+  end
+
   def perform(device)
     datasources = device.datatypes.to_a
     # Split datasources into 2 groups:
@@ -57,15 +85,7 @@ class SnmpWorkerJob < ActiveJob::Base
       db:   REDIS_CONFIG['worker_db']
     )
 
-    redis_derives = "#{@device_tags[:hostname]}.derives"
-    @job_data =
-      if @redis.exists(redis_derives)
-        MessagePack.unpack(
-          @redis.get(redis_derives).force_encoding('ASCII-8BIT')
-        )
-      else
-        {}
-      end
+    @job_data = fetch_redis_derives(device)
 
     # Create SNMP params hash
     @snmp_params = {
@@ -102,22 +122,12 @@ class SnmpWorkerJob < ActiveJob::Base
                                       @device_tags, Time.now)
 
     # Post data to InfluxDB:
-    influx_batch = []
-    @metric_data.each do |measurement|
-      influx_batch << { series: measurement.name,
-                        values: { value: measurement.value },
-                        tags: measurement.tags,
-                        # InfluxDB demands time in nanoseconds,
-                        # so we have to do this:
-                        timestamp: (measurement.timestamp.to_f * 10**9).to_i }
-    end
+    influx_batch = make_influx_batch(@metric_data)
     influx_batch.in_groups_of(200, false) do |batch_part|
       @influx.write_points(batch_part)
     end
 
-    @redis.setex redis_derives,
-                 @derive_interval * 3,
-                 MessagePack.pack(@job_data)
+    push_redis_derives(device, @job_data)
   end
 
   def device_ping(host)
