@@ -2,11 +2,22 @@
     <h1>Extras</h1>
     <h2>Import devices:</h2>
     <%= form_tag({action: :import_devices}, multipart: true) do %>
-        <%= label_tag(:file, 'Select file:') %>
-        <%= file_field_tag 'file', class: "button" %>
-        <%= submit_tag "Upload", class: "button is-primary" %>
+        <div class="file">
+            <label class="file-label" for="file">
+                <%= file_field_tag 'file', class: "file-input" %>
+                <span class="file-cta">
+                    <span class="file-icon">
+                        <%= icon('upload') %>
+                    </span>
+                    <span class="file-label">
+                        Select file…
+                    </span>
+                </span>
+            </label>
+            <%= submit_tag "Upload", class: "button is-primary" %>
+        </div>
     <% end %>
-    
+
     <h2>Export devices:</h2>
-    <%= link_to 'export', '/extras/export_devices' %>
+    <%= link_to 'Export', '/extras/export_devices', class: 'button'%>
 </div>

@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Kofta: <%= params[:controller].capitalize %></title>
+  <title>Kofta<%= ': ' + params[:controller].capitalize unless params[:controller] == 'ui' %></title>
   <%= stylesheet_link_tag    'application', params[:controller], media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', params[:controller], 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-  <!-- KOFTA header goes here -->
-  <%= render 'ui/header' %>
-
+    <header>
+        <!-- KOFTA header goes here -->
+        <%= render 'ui/header' %>
+    </header>
     <section class="section">
         <div class="container">
             <div class="columns">
-                <div class="column is-one-quarter">
+                <div class="column is-one-quarter is-hidden-touch">
                     <%= render 'ui/side_menu' %>
                 </div>
                 <div class="column">
@@ -23,9 +25,10 @@
             </div>
         </div>
     </section>
-
-    <hr class="is-marginless"/>
-    <!-- Information footer goes here -->
-    <%= render 'ui/footer' %>
+    <footer>
+        <!-- Information footer goes here -->
+        <hr class="is-marginless"/>
+        <%= render 'ui/footer' %>
+    </footer>
 </body>
 </html>

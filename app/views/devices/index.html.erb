@@ -1,4 +1,11 @@
-<p id="notice"><%= notice %></p>
+<h1 class="title">Devices</h1>
+
+<% unless notice.nil? %>
+    <div class="notification">
+        <button class="delete" id="delete_notification"></button>
+        <p id="notice"><%= notice %></p>
+    </div>
+<% end %>
 
 <table class="table is-striped is-narrow">
   <thead>
@@ -20,9 +27,9 @@
         <td><%= device.devname %></td>
         <td><%= device.address %></td>
         <td><%= device.contact %></td>
-        <td><%= link_to 'Show', device, class: 'button show-item', item: device.id %></td>
-        <td><%= link_to 'Edit', edit_device_path(device), class: 'button is-warning' %></td>
-        <td><%= link_to 'Destroy', device, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger' %></td>
+        <td><%= link_to 'Show', device, class: 'button is-small show-item', item: device.id %></td>
+        <td><%= link_to 'Edit', edit_device_path(device), class: 'button is-small is-warning' %></td>
+        <td><%= link_to 'Destroy', device, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-small is-danger' %></td>
       </tr>
     <% end %>
   </tbody>

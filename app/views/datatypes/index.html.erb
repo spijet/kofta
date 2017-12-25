@@ -1,15 +1,21 @@
-<p id="notice"><%= notice %></p>
+<h1 class="title">Datasources</h1>
 
-<table class="table is-striped is-narrow">
+<% unless notice.nil? %>
+    <div class="notification">
+        <button class="delete" id="delete_notification"></button>
+        <p id="notice"><%= notice %></p>
+    </div>
+<% end %>
+
+<table class="table is-striped is-narrow is-small">
   <thead>
     <tr>
       <th>Name</th>
-      <th>OID</th>
       <th>SNMP Metric Type</th>
-      <th>Is table?</th>
-      <th>Is derive?</th>
-      <th>Is default?</th>
-      <th colspan="3">Actions</th>
+      <th>Table</th>
+      <th>Derive</th>
+      <th>Default</th>
+      <th>Actions</th>
     </tr>
   </thead>
 
@@ -17,14 +23,47 @@
     <% @datatypes.each do |datatype| %>
       <tr>
         <td><%= datatype.name %></td>
-        <td><%= datatype.oid %></td>
-        <td><%= datatype.metric_type %></td>
-        <td><%= datatype.table %></td>
-        <td><%= datatype.derive %></td>
-        <td><%= datatype.default %></td>
-        <td><%= link_to 'Show', datatype, class: 'button show-item', item: datatype.id %></td>
-        <td><%= link_to 'Edit', edit_datatype_path(datatype), class: 'button is-warning' %></td>
-        <td><%= link_to 'Destroy', datatype, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger' %></td>
+        <td><code><%= datatype.metric_type %></code></td>
+        <td>
+            <span class="icon is-small">
+                <% if datatype.table %>
+                    <%= icon('check', class: 'has-text-success') %>
+                <% else %>
+                    <%= icon('remove') %>
+                <% end %>
+            </span>
+        </td>
+        <td>
+            <span class="icon is-small">
+                <% if datatype.derive %>
+                    <%= icon('check', class: 'has-text-success') %>
+                <% else %>
+                    <%= icon('remove') %>
+                <% end %>
+            </span>
+        </td>
+        <td>
+            <span class="icon is-small">
+                <% if datatype.default %>
+                    <%= icon('check', class: 'has-text-success') %>
+                <% else %>
+                    <%= icon('remove') %>
+                <% end %>
+            </span>
+        </td>
+        <td>
+            <div class="field has-addons">
+                <p class="control">
+                    <%= link_to 'Show', datatype, class: 'button is-small show-item', item: datatype.id %>
+                </p>
+                <p class="control">
+                    <%= link_to 'Edit', edit_datatype_path(datatype), class: 'button is-small is-warning' %>
+                </p>
+                <p class="control">
+                    <%= link_to 'Destroy', datatype, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-small is-danger' %>
+                </p>
+            </div>
+        </td>
       </tr>
     <% end %>
   </tbody>

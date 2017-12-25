@@ -1,30 +1,58 @@
-<header class="nav has-shadow">
+<nav class="navbar has-shadow">
     <div class="container">
         <!-- Left side -->
-        <div class="nav-left">
-            <a href="/" class="nav-item"><strong>KOFTA<%= ": " + Rails.env.capitalize %></strong></a>
-            <%= link_to 'Devices', devices_path, class: params[:controller] === 'devices' ? 'nav-item is-tab is-active' : 'nav-item is-tab' %>
-            <%= link_to 'Data Sources', datatypes_path, class: params[:controller] === 'datatypes' ? 'nav-item is-tab is-active' : 'nav-item is-tab' %>
-            <%= link_to 'Statistics', stats_path, class: params[:controller] === 'stats' ? 'nav-item is-tab is-active' : 'nav-item is-tab' %>
-            <%= link_to 'Extras', '/extras', class: params[:controller] === 'extras' ? 'nav-item is-tab is-active' : 'nav-item is-tab' %>
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                <strong class="is-size-4">KOFTA</strong>
+                <% if ['development', 'test'].include? Rails.env  %>
+                    <span style="width: 0.5em;"></span>
+                    <span class="is-size-7">/<%= Rails.env.capitalize %>/</span>
+                <% end %>
+            </a>
+
+            <div class="burger navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-        <div class="nav-right">
-            <span class="nav-item">
-                <a class="button <%= 'is-primary' if controller.controller_name == 'stats' && controller.action_name == 'gc' %>" href="/stats/gc">
-                    <span>GC Stats</span>
-                    <span class="tag is-info is-small" style="">
-                        <span style="width: 4px;"></span>
-                    </span>
-                </a>
-            </span>
-            <span class="nav-item">
-                <a class="button <%= 'is-primary' if controller.controller_name == 'stats' && controller.action_name == 'sidekiq' %>" href="/stats/sidekiq">
-                    <span>Redis/Sidekiq</span>
-                    <span class="tag is-small <%= @redis_stats[:alive] ? 'is-info' : 'is-danger' %>" style="">
-                        <span style="width: 4px;"></span>
-                    </span>
-                </a>
-            </span>
+        <div class="navbar-menu">
+            <div class="navbar-start">
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <%= link_to 'Devices', devices_path, class: params[:controller] === 'devices' ? 'navbar-link is-tab is-active' : 'navbar-link is-tab' %>
+                    <div class="navbar-dropdown is-boxed">
+                        <%= link_to 'List Devices', devices_path, class: controller.controller_name == 'devices' && controller.action_name == 'index' ? 'navbar-item is-active' : 'navbar-item ' %>
+                        <%= link_to 'Add New Device', new_device_path, class: controller.controller_name == 'devices' && controller.action_name == 'new' ? 'navbar-item is-active' : 'navbar-item ' %>
+                    </div>
+                </div>
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <%= link_to 'Data Sources', datatypes_path, class: params[:controller] === 'datatypes' ? 'navbar-link is-tab is-active' : 'navbar-link is-tab' %>
+                    <div class="navbar-dropdown is-boxed">
+                        <%= link_to 'List Datasources', datatypes_path, class: controller.controller_name == 'datatypes' && controller.action_name == 'index' ? 'navbar-item is-active' : 'navbar-item ' %>
+                        <%= link_to 'Add New Datasource', new_datatype_path, class: controller.controller_name == 'datatypes' && controller.action_name == 'new' ? 'navbar-item is-active' : 'navbar-item ' %>
+                    </div>
+                </div>
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <%= link_to 'Extras', '/extras', class: params[:controller] === 'extras' ? 'navbar-link is-tab is-active' : 'navbar-link is-tab' %>
+                    <div class="navbar-dropdown is-boxed">
+                        <%= link_to 'Import/Export', '/extras', class: 'navbar-item' %>
+                        <%= link_to 'GC Statistics', '/stats/gc', class: 'navbar-item' %>
+                        <%= link_to 'Rufus Queue', '/stats/rufus', class: 'navbar-item' %>
+                        <%= link_to 'Sidekiq Stats', '/stats/sidekiq', class: 'navbar-item' %>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-end">
+                <span class="navbar-item">
+                    <a class="button <%= 'is-primary' if controller.controller_name == 'stats' && controller.action_name == 'sidekiq' %>" href="/stats/sidekiq">
+                        <span>Redis/Sidekiq</span>
+                        <span style="width: 0.5em;"></span>
+                        <span class="tag is-small <%= @redis_stats[:alive] ? 'is-info' : 'is-danger' %>" style="">
+                            <span style="width: 0.5em;"></span>
+                        </span>
+                    </a>
+                </span>
+            </div>
         </div>
     </div>
-</header>
+</nav>

@@ -1,27 +1,51 @@
 <div class="card is-fullwidth">
-  <header class="card-header">
-    <p class="card-header-title">
-      <%= @datatype.name %>
-    </p>
-  </header>
-  <div class="card-content">
-    <div class="content">
-      <table>
-        <tr><td><strong>OID:</strong></td><td><%= @datatype.oid %></td></tr>
-        <tr><td><strong>Is default?</strong></td><td><%= @datatype.default %></td></tr>
-        <tr><td><strong>SNMP Metric Type:</strong></td><td><%= @datatype.metric_type %></td></tr>
-        <tr><td><strong>Is table?</strong></td><td><%= @datatype.table %></td></tr>
-        <% if @datatype.table %>
-            <tr><td><strong>Indexer OID:</strong></td><td><%= @datatype.index_oid %></td></tr>
-            <tr><td><strong>Exclude regex:</strong></td><td><%= @datatype.excludes %></td></tr>
-        <% end %>
-        <tr><td><strong>Derive?</strong></td><td><%= @datatype.derive %></td></tr>
-      </table>
+    <header class="card-header">
+        <p class="card-header-title">
+            <%= @datatype.name %>
+        </p>
+    </header>
+    <div class="card-content">
+        <div class="content">
+            <table>
+                <tr><td><strong>OID:</strong></td><td><code><%= @datatype.oid %></code></td></tr>
+                <tr><td><strong>Is default?</strong></td><td>
+                    <span class="icon is-size-6">
+                        <% if @datatype.default %>
+                            <%= icon('check', class: 'has-text-success') %>
+                        <% else %>
+                            <%= icon('remove') %>
+                        <% end %>
+                    </span>
+                </td></tr>
+                <tr><td><strong>SNMP Metric Type:</strong></td><td><code class="is-size-6"><%= @datatype.metric_type %></code></td></tr>
+                <tr><td><strong>Is table?</strong></td><td>
+                    <span class="icon is-size-6">
+                        <% if @datatype.table %>
+                            <%= icon('check', class: 'has-text-success') %>
+                        <% else %>
+                            <%= icon('remove') %>
+                        <% end %>
+                    </span>
+                </td></tr>
+                <% if @datatype.table %>
+                    <tr><td><strong>Index OID:</strong></td><td><code class="is-size-6"><%= @datatype.index_oid %></code></td></tr>
+                    <tr><td><strong>Exclude regex:</strong></td><td><code class="is-size-7"><%= @datatype.excludes %></code></td></tr>
+                <% end %>
+                <tr><td><strong>Processed as Derive?</strong></td><td>
+                    <span class="icon is-size-6">
+                        <% if @datatype.derive %>
+                            <%= icon('check', class: 'has-text-success') %>
+                        <% else %>
+                            <%= icon('remove') %>
+                        <% end %>
+                    </span>
+                </td></tr>
+            </table>
+        </div>
     </div>
-  </div>
-  <footer class="card-footer">
-    <%= link_to 'Back', datatypes_path, class: 'card-footer-item', id: 'modal_back' %>
-    <%= link_to 'Edit', edit_datatype_path(@datatype), class: 'card-footer-item' %>
-    <%= link_to 'Delete', @datatype, method: :delete, data: { confirm: 'Are you sure?' }, class: 'card-footer-item is-danger' %>
-  </footer>
+    <footer class="card-footer">
+        <%= link_to 'Back', datatypes_path, class: 'card-footer-item', id: 'modal_back' %>
+        <%= link_to 'Edit', edit_datatype_path(@datatype), class: 'card-footer-item' %>
+        <%= link_to 'Delete', @datatype, method: :delete, data: { confirm: 'Are you sure?' }, class: 'card-footer-item is-danger' %>
+    </footer>
 </div>

@@ -18,38 +18,65 @@
 
   <div class="columns">
       <div class="column notification">
-          <%= f.label :devname, class: 'label' %>
-          <p class="control">
-              <%= f.text_field :devname, class: 'input' %>
-          </p>
-          <%= f.label :address, class: 'label' %>
-          <p class="control">
-              <%= f.text_field :address, class: 'input' %>
-          </p>
-          <%= f.label :snmp_community, class: 'label' %>
-          <p class="control">
-              <%= f.text_field :snmp_community, class: 'input' %>
-          </p>
-          <%= f.label :query_interval, class: 'label' %>
-          <p class="control">
-              <%= f.number_field :query_interval, class: 'input' %>
-          </p>
-          <%= f.label :city, class: 'label' %>
-          <p class="control">
-              <%= f.text_field :city, class: 'input' %>
-          </p>
-          <%= f.label :group, class: 'label' %>
-          <p class="control">
-              <%= f.text_field :group, class: 'input' %>
-          </p>
-          <%= f.label :contact, class: 'label' %>
-          <p class="control">
-              <%= f.text_field :contact, class: 'input' %>
-          </p>
-          <div class="actions">
-              <%= link_to 'Back', devices_path, class: 'button' %>
-              <%= link_to 'Get Device info', '#', class: 'button is-warning', id: 'getinfo' %>
-              <%= f.submit class: 'button is-danger' %>
+          <div class="field">
+              <%= f.label :devname, class: 'label' %>
+              <div class="control has-icons-left">
+                  <%= f.text_field :devname, class: 'input' %>
+                  <span class="icon is-small is-left"><%= icon('server') %></span>
+              </div>
+          </div>
+          <div class="field">
+              <%= f.label :address, class: 'label' %>
+              <div class="control has-icons-left">
+                  <%= f.text_field :address, class: 'input' %>
+                  <span class="icon is-small is-left"><%= icon('globe') %></span>
+              </div>
+          </div>
+          <div class="field">
+              <%= f.label :snmp_community, class: 'label' %>
+              <div class="control has-icons-left">
+                  <%= f.text_field :snmp_community, class: 'input' %>
+                  <span class="icon is-small is-left"><%= icon('key') %></span>
+              </div>
+          </div>
+          <div class="field">
+              <%= f.label :query_interval, class: 'label' %>
+              <div class="control has-icons-left">
+                  <%= f.number_field :query_interval, class: 'input' %>
+                  <span class="icon is-small is-left"><%= icon('clock-o') %></span>
+              </div>
+          </div>
+          <div class="field">
+              <%= f.label :city, class: 'label' %>
+              <div class="control has-icons-left">
+                  <%= f.text_field :city, class: 'input' %>
+                  <span class="icon is-small is-left"><%= icon('map-marker') %></span>
+              </div>
+          </div>
+          <div class="field">
+              <%= f.label :group, class: 'label' %>
+              <div class="control has-icons-left">
+                  <%= f.text_field :group, class: 'input' %>
+                  <span class="icon is-small is-left"><%= icon('object-group') %></span>
+              </div>
+          </div>
+          <div class="field">
+              <%= f.label :contact, class: 'label' %>
+              <div class="control has-icons-left">
+                  <%= f.text_field :contact, class: 'input' %>
+                  <span class="icon is-small is-left"><%= icon('address-card') %></span>
+              </div>
+          </div>
+          <div class="field is-grouped">
+              <div class="control">
+                  <%= link_to 'Back', devices_path, class: 'button' %>
+              </div>
+              <div class="control">
+                  <%= link_to 'Get Device info', '#', class: 'button is-warning', id: 'getinfo' %>
+              </div>
+              <div class="control">
+                  <%= f.submit class: 'button is-danger' %>
+              </div>
           </div>
       </div>
       <div class="column notification">
