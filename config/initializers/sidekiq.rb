@@ -12,7 +12,7 @@ module Sidekiq
       # This class lets us do GC every N jobs in worker process instead of doing
       # it on every job.
       class Profiler
-        # Number of jobs to process before reporting
+        # Number of jobs to process before doing a GC
         JOBS = 100
 
         class << self
@@ -31,7 +31,10 @@ module Sidekiq
           ensure
             self.class.synchronize do
               self.class.counter += 1
-              GC.start if self.class.counter % JOBS == 0
+              if (self.class.counter % JOBS).zero?
+                GC.start
+                self.class.counter = 0
+              end
             end
           end
         end
