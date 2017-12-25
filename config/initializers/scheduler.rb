@@ -5,14 +5,16 @@ require 'rufus-scheduler'
 $query_scheduler = Rufus::Scheduler.new(lockfile: '.rufus-scheduler.lock')
 
 def queue_fillup
+  return false if $query_bootstrapped
   Device.all.each do |device|
     $query_scheduler.every("#{device.query_interval}s", tag: device.id) do
-      Rails.logger.info "Hello, it's #{Time.now}"
-      Rails.logger.info "I'm gonna go and query #{device.address} from #{device.city}."
+      Rails.logger.info format('Hello, it´s %s.', Time.now.to_s)
+      Rails.logger.info format('I´m gonna go and query %s from %s.',
+                               device.address, device.city)
       Rails.logger.flush
       SnmpWorkerJob.perform_later(device)
     end
-  end unless $query_bootstrapped
+  end
   $query_bootstrapped = true
 end
 

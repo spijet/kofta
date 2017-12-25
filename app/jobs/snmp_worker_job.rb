@@ -37,8 +37,7 @@ class SnmpWorkerJob < ActiveJob::Base
   def perform(device)
     datasources = device.datatypes.to_a
     # Split datasources into 2 groups:
-    @single_metrics = datasources.select { |metric| metric unless metric.table }
-    @table_metrics = datasources.select { |metric| metric if metric.table }
+    @table_metrics, @single_metrics = datasources.partition(&:table)
     # Fill in device-wide tags
     @device_tags = {
       hostname: device.address,
@@ -176,7 +175,13 @@ class SnmpWorkerJob < ActiveJob::Base
         end
 
         if metric_table.derive
-          keyname = "kofta:#{@device_tags[:hostname]}:#{metric_table.type}:#{instance}:#{subinstance}"
+          keyname = format(
+            'kofta:%s:%s:%s:%s',
+            @device_tags[:hostname],
+            metric_table.type,
+            instance,
+            subinstance
+          )
           if @job_data.key?(keyname)
             old_data = @job_data[keyname].to_i
             old_time = Time.at(@job_data[time_key].to_i)

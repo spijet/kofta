@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   before_action do
     # Only output verbose info if it's Redis/Sidekiq stats page.
-    verbose = action_name == 'sidekiq' ? true : false
+    verbose = action_name == 'sidekiq'
     redis(verbose)
   end
   def redis(verbose)
