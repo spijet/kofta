@@ -47,7 +47,7 @@ gem 'influxdb', '0.3.10'
 gem 'net-ping'
 
 # Sidekiq for queue management
-gem 'sidekiq', '>= 4.0.0'
+gem 'sidekiq', '~> 4'
 # if you require 'sinatra' you get the DSL extended to Object
 gem 'sinatra', :require => nil
 
