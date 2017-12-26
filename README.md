@@ -20,15 +20,12 @@ replace Collectd and to feed InfluxDB with data, with style.
 * Current repo also includes SMF manifests for Solaris/Illumos hosts.
 
 ## TODO
-* ~~Make Rufus behave and to run only one scheduling thread per app instance~~ Done in c34e097;
 * **Make SNMP Querier tasks multithreaded (to make it faster for bigger tables and/or remote nodes)** -- partially implemented in 9e00b5d, moved from "one thread per table" model to a thread pool (4 threads for now) in 6e854fe;
-* ~~Add some more metrics to `seeds.rb`~~: SNMP errors added in ffa0792; even more metrics in 6494fe3;
-* ~~Add non-SNMP performance metrics: device response time (ping) and device query time (query job duration)~~ Done in f51bca8, reports time as milliseconds;
-* Finish Web UI;
+* Finish Web UI: almost done (in 54b50e9 bbc6f60 8104c80 cda1789 7b11b6a);
 * Write some docs and provide an example visualizing setup (Grafana Dashboard JSON);
-* Add JRuby support for some multithreaded GC'ed quality time;
+* ~~Add JRuby support for some multithreaded GC'ed quality time~~ Suspended for now;
 * **New grand goal**: Switch over from Sidekiq to Resque so I won't need to battle MRI's allocation problems;
-* Minimize memory consumption: since Sidekiq uses threads for workers, MRI sometimes fails to free memory previously used by now-destroyed worker. Some of my tries include: 0a1d147 393777e f3b7808 ae85036 dac178b 197714c 895f542 c418649 0dfd042. All suggestions are welcome!
+* Minimize memory consumption: since Sidekiq uses threads for workers, MRI sometimes fails to free memory previously used by now-destroyed worker. Some of my tries include: 0a1d147 393777e f3b7808 ae85036 dac178b 197714c 895f542 c418649 0dfd042 dfeef2e. All suggestions are welcome!
 
 ## License
 This software is released under the [MIT license](https://opensource.org/licenses/MIT).
