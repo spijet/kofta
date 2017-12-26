@@ -16,81 +16,84 @@
             </article>
         <% end %>
 
-  <div class="columns">
-      <div class="column notification">
-          <div class="field">
-              <%= f.label :devname, class: 'label' %>
-              <div class="control has-icons-left">
-                  <%= f.text_field :devname, class: 'input' %>
-                  <span class="icon is-small is-left"><%= icon('server') %></span>
-              </div>
-          </div>
-          <div class="field">
-              <%= f.label :address, class: 'label' %>
-              <div class="control has-icons-left">
-                  <%= f.text_field :address, class: 'input' %>
-                  <span class="icon is-small is-left"><%= icon('globe') %></span>
-              </div>
-          </div>
-          <div class="field">
-              <%= f.label :snmp_community, class: 'label' %>
-              <div class="control has-icons-left">
-                  <%= f.text_field :snmp_community, class: 'input' %>
-                  <span class="icon is-small is-left"><%= icon('key') %></span>
-              </div>
-          </div>
-          <div class="field">
-              <%= f.label :query_interval, class: 'label' %>
-              <div class="control has-icons-left">
-                  <%= f.number_field :query_interval, class: 'input' %>
-                  <span class="icon is-small is-left"><%= icon('clock-o') %></span>
-              </div>
-          </div>
-          <div class="field">
-              <%= f.label :city, class: 'label' %>
-              <div class="control has-icons-left">
-                  <%= f.text_field :city, class: 'input' %>
-                  <span class="icon is-small is-left"><%= icon('map-marker') %></span>
-              </div>
-          </div>
-          <div class="field">
-              <%= f.label :group, class: 'label' %>
-              <div class="control has-icons-left">
-                  <%= f.text_field :group, class: 'input' %>
-                  <span class="icon is-small is-left"><%= icon('object-group') %></span>
-              </div>
-          </div>
-          <div class="field">
-              <%= f.label :contact, class: 'label' %>
-              <div class="control has-icons-left">
-                  <%= f.text_field :contact, class: 'input' %>
-                  <span class="icon is-small is-left"><%= icon('address-card') %></span>
-              </div>
-          </div>
-          <div class="field is-grouped">
-              <div class="control">
-                  <%= link_to 'Back', devices_path, class: 'button' %>
-              </div>
-              <div class="control">
-                  <%= link_to 'Get Device info', '#', class: 'button is-warning', id: 'getinfo' %>
-              </div>
-              <div class="control">
-                  <%= f.submit class: 'button is-danger' %>
-              </div>
-          </div>
-      </div>
-      <div class="column notification">
-          <%= f.label 'Used data sources', class: 'label' %>
-          <% @datatypes.each do |datatype| %>
-              <p class="control">
-                  <label class="checkbox">
-                      <%= check_box_tag 'datatype_ids[]', datatype.id, @device.datatypes.include?(@datatypes[datatype.id-1]) -%>
-                      <%= h datatype.name -%>
-                      <p>
-                  </label>
-                      </p>
-          <% end %>
-      </div>
-  </div>
-<% end %>
+        <div class="columns">
+            <div class="column notification">
+                <div class="field">
+                    <%= f.label :devname, class: 'label' %>
+                    <div class="control has-icons-left">
+                        <%= f.text_field :devname, class: 'input' %>
+                        <span class="icon is-small is-left"><%= icon('server') %></span>
+                    </div>
+                </div>
+                <div class="field">
+                    <%= f.label :address, class: 'label' %>
+                </div>
+                <div class="field has-addons">
+                    <div class="control has-icons-left is-expanded">
+                        <%= f.text_field :address, class: 'input' %>
+                        <span class="icon is-small is-left"><%= icon('globe') %></span>
+                    </div>
+                    <div class="control">
+                        <a class="button is-warning" id="getinfo">
+                            <span class="icon is-small"><%= icon('arrow-circle-down') %></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="field">
+                    <%= f.label :snmp_community, class: 'label' %>
+                    <div class="control has-icons-left">
+                        <%= f.text_field :snmp_community, class: 'input' %>
+                        <span class="icon is-small is-left"><%= icon('key') %></span>
+                    </div>
+                </div>
+                <div class="field">
+                    <%= f.label :query_interval, class: 'label' %>
+                    <div class="control has-icons-left">
+                        <%= f.number_field :query_interval, class: 'input' %>
+                        <span class="icon is-small is-left"><%= icon('clock-o') %></span>
+                    </div>
+                </div>
+                <div class="field">
+                    <%= f.label :city, class: 'label' %>
+                    <div class="control has-icons-left">
+                        <%= f.text_field :city, class: 'input' %>
+                        <span class="icon is-small is-left"><%= icon('map-marker') %></span>
+                    </div>
+                </div>
+                <div class="field">
+                    <%= f.label :group, class: 'label' %>
+                    <div class="control has-icons-left">
+                        <%= f.text_field :group, class: 'input' %>
+                        <span class="icon is-small is-left"><%= icon('object-group') %></span>
+                    </div>
+                </div>
+                <div class="field">
+                    <%= f.label :contact, class: 'label' %>
+                    <div class="control has-icons-left">
+                        <%= f.text_field :contact, class: 'input' %>
+                        <span class="icon is-small is-left"><%= icon('address-card') %></span>
+                    </div>
+                </div>
+            </div>
+            <div class="column notification">
+                <%= f.label 'Used data sources', class: 'label' %>
+                <% @datatypes.each do |datatype| %>
+                    <div class="control">
+                        <label class="checkbox">
+                            <%= check_box_tag 'datatype_ids[]', datatype.id, @device.datatypes.include?(@datatypes[datatype.id-1]) -%>
+                            <%= h datatype.name -%>
+                        </label>
+                    </div>
+                <% end %>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <%= link_to 'Back', devices_path, class: 'button' %>
+                    </div>
+                    <div class="control">
+                        <%= f.submit class: 'button is-danger' %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% end %>
 </div>
