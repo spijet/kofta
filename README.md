@@ -36,9 +36,10 @@ This software is released under the [MIT license](https://opensource.org/license
 ## Magic used
 * Ruby 2.2 is required (2.3.x is recommended, JRuby would be ideal, but isn't tested yet);
 * Rails 4.2.6 or newer;
-* [Sidekiq](https://github.com/mperham/sidekiq) 4+ as ActiveJob queue manager, made by [Mike Perham](https://github.com/mperham);
+* [Sidekiq](https://github.com/mperham/sidekiq) 4.x as ActiveJob queue manager, made by [Mike Perham](https://github.com/mperham);
 * Redis (required for Sidekiq, 3.0.3 or newer is best);
 * Sqlite (for internal DB);
+* Docker (if you want to use it);
 * [Ruby-SNMP](https://github.com/hallidave/ruby-snmp) gem for stat collection, made by [Dave Halliday](https://github.com/hallidave);
 * [InfluxDB::Client](https://github.com/influxdata/influxdb-ruby) for DB connections, made and maintained by [Todd Persen](https://github.com/toddboom) and [Dominik Menke](https://github.com/dmke);
 * [Bulma CSS](http://bulma.io/) for Web UI, made by [Jeremy Thomas](https://github.com/jgthms).
