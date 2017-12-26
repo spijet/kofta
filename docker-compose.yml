@@ -31,8 +31,9 @@ services:
       INFLUXDB_PORT: 8089
     command: rails server -p 3000 -b '0.0.0.0'
     volumes:
-      - kofta-data:/tmp
       - .:/srv/kofta
+      - kofta-data:/tmp
+      - kofta-data:/srv/kofta/tmp
     ports:
       - "3000:3000"
     depends_on:
@@ -42,8 +43,9 @@ services:
   worker:
     image: kofta
     volumes:
-      - kofta-data:/tmp
       - .:/srv/kofta
+      - kofta-data:/tmp
+      - kofta-data:/srv/kofta/tmp
     environment:
       RAILS_ENV: development
       # Uncomment this if you think that Kofta is misbehaving:
