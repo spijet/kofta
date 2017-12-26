@@ -1,3 +1,5 @@
+<div class="container">
+
     <%= form_for(@datatype) do |f| %>
         <% if @datatype.errors.any? %>
             <article class="message is-danger">
@@ -14,39 +16,73 @@
             </article>
         <% end %>
 
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :default %><br>
-    <%= f.check_box :default %>
-  </div>
-  <div class="field">
-    <%= f.label :oid %><br>
-    <%= f.text_field :oid %>
-  </div>
-  <div class="field">
-    <%= f.label :metric_type %><br>
-    <%= f.text_field :metric_type %>
-  </div>
-  <div class="field">
-    <%= f.label :excludes %><br>
-    <%= f.text_field :excludes %>
-  </div>
-  <div class="field">
-    <%= f.label :table %><br>
-    <%= f.check_box :table %>
-  </div>
-  <div class="field">
-    <%= f.label :derive %><br>
-    <%= f.check_box :derive %>
-  </div>
-  <div class="field">
-    <%= f.label :index_oid %><br>
-    <%= f.text_field :index_oid %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+        <div class="columns">
+            <div class="column notification is-half">
+                <div class="field">
+                    <%= f.label :name, class: 'label' %>
+                    <div class="control has-icons-left">
+                        <%= f.text_field :name, class: 'input' %>
+                        <span class="icon is-small is-left"><%= icon('tag') %></span>
+                    </div>
+                </div>
+                <div class="field">
+                    <%= f.label :default, class: 'label' %>
+                    <label class="checkbox">
+                        <%= f.check_box :default %>
+                        Auto-add this datatype to all new Devices
+                    </label>
+                </div>
+                <div class="field">
+                    <%= f.label :oid, 'OID', class: 'label' %>
+                    <div class="control has-icons-left">
+                        <%= f.text_field :oid, class: 'input' %>
+                        <span class="icon is-small is-left"><%= icon('file-code-o') %></span>
+                    </div>
+                </div>
+                <div class="field">
+                    <%= f.label :metric_type, class: 'label' %>
+                    <div class="control has-icons-left">
+                        <%= f.text_field :metric_type, class: 'input' %>
+                        <span class="icon is-small is-left"><%= icon('cubes') %></span>
+                    </div>
+                </div>
+                <div class="field">
+                    <%= f.label :table, class: 'label' %>
+                    <label class="checkbox">
+                        <%= f.check_box :table %>
+                        Find and query all child objects
+                    </label>
+                </div>
+                <div class="field">
+                    <%= f.label :index_oid, 'Table index OID', class: 'label' %>
+                    <div class="control has-icons-left">
+                        <%= f.text_field :index_oid, class: 'input' %>
+                        <span class="icon is-small is-left"><%= icon('file-code-o') %></span>
+                    </div>
+                </div>
+                <div class="field">
+                    <%= f.label :excludes, class: 'label' %>
+                    <div class="control has-icons-left">
+                        <%= f.text_field :excludes, class: 'input' %>
+                        <span class="icon is-small is-left"><%= icon('exclamation') %></span>
+                    </div>
+                </div>
+                <div class="field">
+                    <%= f.label :derive, class: 'label' %>
+                    <label class="checkbox">
+                        <%= f.check_box :derive %>
+                        Process metric counters inside Kofta
+                    </label>
+                </div>
+                <div class="field is-grouped actions">
+                    <div class="control">
+                        <%= link_to 'Back', datatypes_path, class: 'button' %>
+                    </div>
+                    <div class="control">
+                        <%= f.submit class: 'button is-danger' %>
+                    </div>
+                </div>
+    <% end %>
+            </div>
+        </div>
+</div>
