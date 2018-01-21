@@ -1,4 +1,4 @@
-FROM ruby:2.3.5
+FROM ruby:2.3.6
 MAINTAINER Serge Tkatchouk <sp1j3t@gmail.com>
 
 # Prepare the userland:
