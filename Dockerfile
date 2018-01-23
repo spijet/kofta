@@ -16,5 +16,8 @@ RUN bundle install
 # Pull the rest of the app:
 COPY . /srv/kofta
 
+# Prepare all resources:
+RUN rake assets:precompile
+
 # Expose the Web UI port:
 EXPOSE 3000/TCP
