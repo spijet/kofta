@@ -77,12 +77,9 @@
             </div>
             <div class="column notification">
                 <%= f.label 'Used data sources', class: 'label' %>
-                <% @datatypes.each do |datatype| %>
+                <%= f.collection_check_boxes(:datatype_ids, Datatype.all, :id, :name, include_hidden: false) do |b| %>
                     <div class="control">
-                        <label class="checkbox">
-                            <%= check_box_tag 'datatype_ids[]', datatype.id, @device.datatypes.include?(@datatypes[datatype.id-1]) -%>
-                            <%= h datatype.name -%>
-                        </label>
+                        <%= b.label(class: 'checkbox') { b.check_box + b.text } %>
                     </div>
                 <% end %>
                 <div class="field is-grouped">

@@ -1,7 +1,7 @@
 <div class="card is-fullwidth">
     <header class="card-header">
         <p class="card-header-title">
-            <%= @device.city + '/' + @device.group + '/' + @device.devname %>
+            <%= [@device.city, @device.group, @device.devname].join(' / ') %>
         </p>
     </header>
     <div class="card-content">
