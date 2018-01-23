@@ -24,14 +24,12 @@ class DevicesController < ApplicationController
   # GET /devices/1/edit
   def edit
     @device = Device.preload(:datatypes).find(params[:id])
-    @datatypes = Datatype.all
   end
 
   # POST /devices
   # POST /devices.json
   def create
     @device = Device.new(device_params)
-    @device.datatypes = Datatype.find(params[:datatype_ids])
 
     respond_to do |format|
       if @device.save
@@ -55,7 +53,6 @@ class DevicesController < ApplicationController
   # PATCH/PUT /devices/1
   # PATCH/PUT /devices/1.json
   def update
-    @device.datatypes = Datatype.find(params[:datatype_ids])
     respond_to do |format|
       if @device.update(device_params)
         $query_scheduler.jobs(tag: @device.id).each do |job|
@@ -104,6 +101,6 @@ class DevicesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def device_params
-      params.require(:device).permit(:devname, :city, :contact, :group, :address, :snmp_community, :query_interval)
+      params.require(:device).permit(:devname, :city, :contact, :group, :address, :snmp_community, :query_interval, :datatype_ids)
     end
 end
