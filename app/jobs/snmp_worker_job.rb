@@ -2,7 +2,7 @@
 
 # This module is a part of KOFTA SNMP Collector.
 # Gets called as a recurring task by Sidekiq or any other ActiveJob queue
-# engine. The only input argument needed is the Device object.
+# engine. The only input argument needed is the Device ID.
 # Device must have at least 1 metric assigned to it.
 class SnmpWorkerJob < ActiveJob::Base
   queue_as :default
@@ -62,8 +62,9 @@ class SnmpWorkerJob < ActiveJob::Base
     end
   end
 
-  def perform(device)
-    datasources = device.datatypes.to_a
+  def perform(device_id)
+    # Get Device data from DB:
+    device = Device.find(device_id)
     # Split datasources into 2 groups:
     @table_metrics, @single_metrics = datasources.partition(&:table)
     # Fill in device-wide tags

@@ -32,12 +32,8 @@ class DevicesController < ApplicationController
 
     respond_to do |format|
       if @device.save
-        $query_scheduler.every( "#{@device.query_interval}s", tag: @device.id ) do
-          Rails.logger.info "Hello, it's #{Time.now}"
-          Rails.logger.info "I'm gonna go and query #{@device.address}, if you don't mind."
-          Rails.logger.flush
-          SnmpWorkerJob.perform_later(@device)
-        end
+        # Add new device to query schedule:
+        Schedule.add(@device)
 
         format.html { redirect_to @device, notice: 'Device was successfully created.' }
         format.json { render :show, status: :created, location: @device }
@@ -53,18 +49,8 @@ class DevicesController < ApplicationController
   def update
     respond_to do |format|
       if @device.update(device_params)
-        $query_scheduler.jobs(tag: @device.id).each do |job|
-          Rails.logger.info "Updated device with ID: #{@device.id}, killing query job #{job.id}..."
-          Rails.logger.flush
-          job.unschedule
-          Rails.logger.info 'Job killed, now off to rescheduling~'
-          Rails.logger.flush
-        end
-        $query_scheduler.every( "#{@device.query_interval}s", tag: @device.id ) do
-          Rails.logger.info "#{Time.now}: Querying #{@device.address}..."
-          Rails.logger.flush
-          SnmpWorkerJob.perform_later(@device)
-        end
+        # Re-add updated device to query schedule:
+        Schedule.readd(@device)
 
         format.html { redirect_to @device, notice: 'Device was successfully updated.' }
         format.json { render :show, status: :ok, location: @device }
@@ -78,12 +64,10 @@ class DevicesController < ApplicationController
   # DELETE /devices/1
   # DELETE /devices/1.json
   def destroy
-    $query_scheduler.jobs(tag: @device.id).each do |job|
-      Rails.logger.info "Destroyed device with ID: #{@device.id}."
-      Rails.logger.info "Killing query job with ID: #{job.id}."
-      job.unschedule
-      Rails.logger.info 'Job killed, RIP~'
-    end
+    # Remove the device from query schedule:
+    Schedule.del(@device)
+
+    # Remove device record:
     @device.destroy
     respond_to do |format|
       format.html { redirect_to devices_url, notice: 'Device was successfully destroyed.' }
