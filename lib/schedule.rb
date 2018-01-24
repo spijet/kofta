@@ -10,15 +10,19 @@ class Schedule
     !@s.jobs(tag: device.id).empty?
   end
 
+  def self.jobs(*args)
+    @s.jobs(*args)
+  end
+
   # Pre-format a message for Rails logger.
-  def log(device, event)
+  def self.log(device, event)
     action = case event
              when :add then 'added to'
              when :del then 'removed_from'
              when :readd then 're-added to'
              when :exists then 'is already in the'
              end
-    format('Device "%<name>s" (IP: %<address>s) %<action> queue',
+    format('Device "%<name>s" (IP: %<address>s) %<action>s queue',
            name: device.devname,
            address: device.address,
            action: action)
@@ -26,13 +30,13 @@ class Schedule
 
   # Add Device to queue.
   def self.add(device)
-    if has?(device)
+    unless has?(device)
       @s.every("#{device.query_interval}s", tag: device.id) do
         SnmpWorkerJob.perform_later(device.id)
       end
       Rails.logger.info log(device, :add)
     else
-      Rails.logger.warning log(device, :exists)
+      Rails.logger.warn log(device, :exists)
     end
     Rails.logger.flush
   end

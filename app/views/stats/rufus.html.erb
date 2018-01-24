@@ -7,7 +7,7 @@
         </tr>
     </thead>
     <tbody>
-        <% $query_scheduler.jobs.each do |job| %>
+        <% Schedule.jobs.each do |job| %>
             <tr>
                 <td><%= Device.find(job.tags.first).address %></td>
                 <td><%= job.frequency %></td>
