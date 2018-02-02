@@ -1,0 +1,26 @@
+# Ignore bundler config.
+.bundle
+
+# Ignore the default SQLite database.
+db/*.sqlite3
+db/*.sqlite3-journal
+# Also make no panic about existent DB backups.
+db/backups/*
+
+# Ignore all logfiles and tempfiles.
+log/*
+tmp
+
+# Ignore everything in /extras, we don't need it in a container:
+extras
+
+# Also ignore precompiled assets, use `rake assets:precompile` instead
+public/assets/*
+
+# Ignore user-edited InfluxDB config.
+config/influx.yml
+config/redis.yml
+config/database.yml
+
+# Ignore Rufus-Scheduler's lockfile.
+.rufus-scheduler.lock

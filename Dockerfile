@@ -15,6 +15,9 @@ RUN bundle install
 
 # Pull the rest of the app:
 COPY . /srv/kofta
+COPY ./config/influx.yml.example /srv/kofta/config/influx.yml
+COPY ./config/redis.yml.example /srv/kofta/config/redis.yml
+COPY ./config/database.yml.example /srv/kofta/config/database.yml
 
 # Prepare all resources:
 RUN rake assets:precompile

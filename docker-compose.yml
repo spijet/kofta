@@ -23,6 +23,7 @@ services:
     build: .
     image: kofta
     environment:
+      # Change to 'test' if you want to run tests or 'production' if you're ready to deploy
       RAILS_ENV: development
       # Uncomment this if you think that Kofta is misbehaving:
       # RAILS_DEBUG: 'true'
@@ -47,6 +48,7 @@ services:
       - kofta-data:/tmp
       - kofta-data:/srv/kofta/tmp
     environment:
+      # Change to 'test' if you want to run tests or 'production' if you're ready to deploy
       RAILS_ENV: development
       # Uncomment this if you think that Kofta is misbehaving:
       # RAILS_DEBUG: 'true'
