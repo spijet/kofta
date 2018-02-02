@@ -66,7 +66,7 @@ class SnmpWorkerJob < ActiveJob::Base
     # Get Device data from DB:
     device = Device.find(device_id)
     # Split datasources into 2 groups:
-    @table_metrics, @single_metrics = datasources.partition(&:table)
+    @table_metrics, @single_metrics = device.datatypes.partition(&:table)
     # Fill in device-wide tags
     @device_tags = {
       hostname: device.address,
