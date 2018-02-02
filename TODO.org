@@ -1,0 +1,63 @@
+* Refactoring
+** TODO Rename classes
+*** TODO "Datatype" ⇒ "MetricSource"
+    Because "Datatype" sounds silly and "Metric" would be misleading.
+    "MetricSource" is OK because the model stores objects which tell us how to
+    get metrics from devices.
+** TODO Rename model fields
+*** TODO Device:
+**** TODO "devname" ⇒ "name"
+     Because WTF?
+**** TODO "address" ⇒ "hostname"
+     Because we can query the device via its DNS name too.
+**** TODO "city" ⇒ "location"
+     Not everyone has networks that span multiple cities (or even regions), so
+     "Location" would be more generic and appropriate.
+** TODO Rework SNMP worker job
+*** TODO Make magic stuff less magic
+**** TODO Test using "time_precision" with InfluxDB
+     If it works, we can throw away that nasty "(Time.to_f * 10**9).to_i" away
+     and just use ordinary UNIX timestamp (Time.to_i) as normal people would do.
+**** TODO Divide & cleanup
+     Move all magic code away to different methods to make it resuable, and then
+     clean it up and/or rework it to make it more sane (and, hopefully, make it
+     consume less resources).
+*** TODO Generalize
+**** TODO Convert SNMPWorker job into generic Worker job
+     Should move source-specific code away to new classes that should handle
+     data retrieving and processing specific to the Metric type (SNMP, Ping,
+     etc.), while keeping the generic device querying and processed data upload
+     code inside the job. This requires MetricSource reworks.
+** TODO Code quality
+*** TODO Implement DI practices in the code
+    Dependency injection should make code more sane and understandable (and,
+    probably, more Enterprise-y).
+*** TODO Get rid of global variables
+    I already reworked the Schedule code, but (IIRC) there's still some work to do.
+*** TODO Make standard Rails tests pass
+    Some model-related tests still don't work and I must figure out why.
+*** TODO Write additional tests
+    Must write additional tests that cover stuff not covered by standard Rails
+    tests (like data processing)
+**** TODO Prepare datasets to test on
+**** TODO Write data processing tests
+**** TODO Finish additional model validation tests
+*** TODO Get UI stuff together
+**** TODO Rework UI-related JS code
+**** TODO Finish all HTML parts
+** TODO Refreshing the codebase
+*** TODO Upgrade to newest Rails (5.x)
+**** TODO Apply all required code changes
+**** TODO Upgrade all necessary gems
+**** TODO Make sure it works on different versions of Ruby (2.2 ⇒ 2.5)
+***** TODO Make sure tests pass on all supported rubies
+*** TODO Try out newest InfluxDB gem
+    There was a problem with Unicode string handling after some InfluxDB gem
+    update that forced me to freeze the gem version (commit da8ed46). Need
+    to check if Unicode works properly now.
+*** TODO Move to Resque?
+    Sidekiq is cool and stuff, but it seems that it suffers from memory leaking
+    and fragmentation (as far as I understand by looking at worker processes).
+    Should evaluate stuff more thoroughly and probably dump Sidekiq in favour of
+    Resque, which runs tasks in separate processes (instead of threads) — that
+    should reduce the memory leaks and fragmentation.
