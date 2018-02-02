@@ -12,6 +12,7 @@ class DevicesController < ApplicationController
   def show
     respond_to do |format|
       format.html { render layout: !request.xhr? }
+      format.json { render :show, location: @device }
     end
   end
 
