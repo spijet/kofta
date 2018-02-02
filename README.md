@@ -20,23 +20,17 @@ replace Collectd and to feed InfluxDB with data, with style.
 * Current repo also includes SMF manifests for Solaris/Illumos hosts.
 
 ## TODO
-* **Make SNMP Querier tasks multithreaded (to make it faster for bigger tables and/or remote nodes)** -- partially implemented in 9e00b5d, moved from "one thread per table" model to a thread pool (4 threads for now) in 6e854fe;
-* Finish Web UI: almost done (in 54b50e9 bbc6f60 8104c80 cda1789 7b11b6a);
-* Write some docs and provide an example visualizing setup (Grafana Dashboard JSON);
-* ~~Add JRuby support for some multithreaded GC'ed quality time~~ Suspended for now;
-* **New grand goal**: Switch over from Sidekiq to Resque so I won't need to battle MRI's allocation problems;
-* Minimize memory consumption: since Sidekiq uses threads for workers, MRI sometimes fails to free memory previously used by now-destroyed worker. Some of my tries include: 0a1d147 393777e f3b7808 ae85036 dac178b 197714c 895f542 c418649 0dfd042 dfeef2e. All suggestions are welcome!
+TODO is moved to "TODO.org" file. Please refer to it from now on. If you want to look through what was in this section of the README, please use Git log.
 
 ## License
 This software is released under the [MIT license](https://opensource.org/licenses/MIT).
 
 ## Magic used
-* Ruby 2.2 is required (2.3.x is recommended, JRuby would be ideal, but isn't tested yet);
-* Rails 4.2.6 or newer;
+* Ruby >=2.2 is required (2.3.x is recommended, JRuby would be ideal, but isn't tested yet);
 * [Sidekiq](https://github.com/mperham/sidekiq) 4.x as ActiveJob queue manager, made by [Mike Perham](https://github.com/mperham);
 * Redis (required for Sidekiq, 3.0.3 or newer is best);
-* Sqlite (for internal DB);
-* Docker (if you want to use it);
+* Sqlite3 (internal DB);
+* Docker (Optional, use Dockerfile and Docker Compose config provided in the repo);
 * [Ruby-SNMP](https://github.com/hallidave/ruby-snmp) gem for stat collection, made by [Dave Halliday](https://github.com/hallidave);
 * [InfluxDB::Client](https://github.com/influxdata/influxdb-ruby) for DB connections, made and maintained by [Todd Persen](https://github.com/toddboom) and [Dominik Menke](https://github.com/dmke);
 * [Bulma CSS](http://bulma.io/) for Web UI, made by [Jeremy Thomas](https://github.com/jgthms).
@@ -50,10 +44,7 @@ This software is released under the [MIT license](https://opensource.org/license
 * `bundle install`;
 * To initialize database: `rake db:setup`;
    This will init the DB with basic stuff (like, basic set of metrics that can be used to query devices)
-* If you want to restore from a seed-like backup:
-   Copy needed backup files to `db/seeds`;
-   Do `rake db:import_seeds`.
-* Start Redis (use your OS/Distro's way of starting services for this);
+* Start Redis (use your OS service manager);
 * Start Sidekiq with `bundle exec sidekiq`;
 * If you want to test/develop it: `rails server`;
 * If you want to see how it'll look/behave in real-er world: `RAILS_ENV=production rails server`.
