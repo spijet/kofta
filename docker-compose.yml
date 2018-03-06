@@ -32,7 +32,6 @@ services:
       REDIS_HOST: redis
       INFLUXDB_HOST: influx
       INFLUXDB_PORT: 8089
-    command: bin/rails server -p 3000 -b '0.0.0.0'
     volumes:
       # Don't forget to copy example configs from 'config/examples' to 'config/' !!!
       - .:/srv/kofta
