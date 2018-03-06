@@ -8,30 +8,33 @@ services:
       - kofta-data:/var/lib/influxdb
       - ./extras/docker/influx/influxdb.conf:/etc/influxdb/influxdb.conf
     expose:
-      - "8083"
       - "8086"
       - "8089/udp"
     ports:
       - "8089/udp"
-      - "8083:8083"
       - "8086:8086"
 
   redis:
     image: redis:4-alpine
 
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: ./extras/docker/dockerfiles/Dockerfile.dev
     image: kofta
     environment:
       # Change to 'test' if you want to run tests or 'production' if you're ready to deploy
       RAILS_ENV: development
       # Uncomment this if you think that Kofta is misbehaving:
       # RAILS_DEBUG: 'true'
+      # Set this before running Kofta!
+      SECRET_KEY_BASE: # Use "rake secret" to generate a key
       REDIS_HOST: redis
       INFLUXDB_HOST: influx
       INFLUXDB_PORT: 8089
-    command: rails server -p 3000 -b '0.0.0.0'
+    command: bin/rails server -p 3000 -b '0.0.0.0'
     volumes:
+      # Don't forget to copy example configs from 'config/examples' to 'config/' !!!
       - .:/srv/kofta
       - kofta-data:/tmp
       - kofta-data:/srv/kofta/tmp
@@ -52,6 +55,8 @@ services:
       RAILS_ENV: development
       # Uncomment this if you think that Kofta is misbehaving:
       # RAILS_DEBUG: 'true'
+      # Set this before running Kofta!
+      SECRET_KEY_BASE: # Use "rake secret" to generate a key
       REDIS_HOST: redis
       INFLUXDB_HOST: influx
       INFLUXDB_PORT: 8089
