@@ -1,6 +1,10 @@
 # Ignore bundler config.
 .bundle
 
+# Ignore Git files
+.gitignore
+.git
+
 # Ignore the default SQLite database.
 db/*.sqlite3
 db/*.sqlite3-journal

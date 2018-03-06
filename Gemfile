@@ -49,7 +49,7 @@ gem 'net-ping'
 # Sidekiq for queue management
 gem 'sidekiq', '~> 4'
 # if you require 'sinatra' you get the DSL extended to Object
-gem 'sinatra', :require => nil
+gem 'sinatra', require: nil
 
 # Rufus scheduler for recurrent tasks.
 gem 'rufus-scheduler'
