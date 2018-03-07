@@ -75,6 +75,20 @@ class SnmpWorkerJob < ActiveJob::Base
       group: device.group
     }
 
+    if ENV['RAILS_DEBUG'] == 'true'
+      STDERR.puts "Debug mode is on.\nCurrent ENV:"
+      ENV.each do |k,v|
+        STDERR.puts "\t%s\t\t%s" % [k, v]
+      end
+      STDERR.puts "Current Redis config:"
+      REDIS_CONFIG.each do |k,v|
+        STDERR.puts "\t%s\t\t%s" % [k, v]
+      end
+      STDERR.puts "Current InfluxDB config:"
+      INFLUX_CONFIG.each do |k,v|
+        STDERR.puts "\t%s\t\t%s" % [k, v]
+      end
+    end
 
     # Get access to job-local variables:
     @redis = Redis.new(
@@ -118,6 +132,9 @@ class SnmpWorkerJob < ActiveJob::Base
     @metric_data.push Measurement.new('response_time',
                                       device_ping(@snmp_params[:host]),
                                       @device_tags, Time.now)
+
+    # Check InfluxDB datapoints array before sending:
+    STDERR.puts @metric_data.inspect if ENV['RAILS_DEBUG'] == 'true'
 
     # Post data to InfluxDB:
     influx_batch = make_influx_batch(@metric_data)
