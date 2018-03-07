@@ -27,7 +27,7 @@
         <td><%= device.devname %></td>
         <td><%= device.address %></td>
         <td><%= device.contact %></td>
-        <td><%= link_to 'Show', device, class: 'button is-small show-item', item: device.id %></td>
+        <td><%= link_to 'Show', device, class: 'button is-small show-item', item: "devices/#{device.id}" %></td>
         <td><%= link_to 'Edit', edit_device_path(device), class: 'button is-small is-warning' %></td>
         <td><%= link_to 'Destroy', device, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-small is-danger' %></td>
       </tr>

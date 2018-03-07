@@ -54,7 +54,7 @@
         <td>
             <div class="field has-addons">
                 <p class="control">
-                    <%= link_to 'Show', datatype, class: 'button is-small show-item', item: datatype.id %>
+                    <%= link_to 'Show', datatype, class: 'button is-small show-item', item: "datatypes/#{datatype.id}" %>
                 </p>
                 <p class="control">
                     <%= link_to 'Edit', edit_datatype_path(datatype), class: 'button is-small is-warning' %>

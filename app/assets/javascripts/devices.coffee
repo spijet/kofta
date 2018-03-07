@@ -9,9 +9,6 @@ ready= ->
   contact =       $('#device_contact')
   city =          $('#device_city')
   getinfo =       $('#getinfo')
-  modal_window =  $('.modal')
-  modal_close =   $('.modal-close, .modal-background')
-  modal_back =    $('#modal_back')
 
   getinfo.click (event)->
     getinfo.removeClass('is-loading is-warning is-danger is-success')
@@ -37,24 +34,5 @@ ready= ->
         name.val(response_data.name)
         contact.val(response_data.contact)
         city.val(response_data.location.split(',')[0])
-
-  $('.show-item').click (event) ->
-    event.preventDefault()
-    modal_item = $(this).attr('item')
-    $.ajax "/devices/#{modal_item}",
-      type: 'GET'
-      dataType: 'html'
-      error: (jqXHR) ->
-        alert(jqXHR.responseText)
-      success: (data) ->
-        $('.modal-content').html(data)
-        modal_window.addClass('is-active')
-
-  modal_close.click ->
-    modal_window.removeClass('is-active')
-
-  modal_back.click (event) ->
-    event.preventDefault()
-    modal_window.removeClass('is-active')
 
 $(document).on('turbolinks:load', ready)
