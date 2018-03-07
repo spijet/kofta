@@ -36,7 +36,7 @@ services:
       # Don't forget to copy example configs from 'config/examples' to 'config/' !!!
       # - .:/srv/kofta
       - ./db:/srv/kofta/db
-      - kofta-data:/srv/kofta/log
+      - ./log:/srv/kofta/log
     ports:
       - "3000:3000"
     depends_on:
@@ -48,7 +48,7 @@ services:
     volumes:
       # - .:/srv/kofta
       - ./db:/srv/kofta/db
-      - kofta-data:/srv/kofta/log
+      - ./log:/srv/kofta/log
     environment:
       # Change to 'test' if you want to run tests or 'production' if you're ready to deploy
       RAILS_ENV: development
