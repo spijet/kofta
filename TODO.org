@@ -43,7 +43,8 @@
 **** TODO Write data processing tests
 **** TODO Finish additional model validation tests
 *** TODO Get UI stuff together
-**** TODO Rework UI-related JS code
+**** DONE Rework UI-related JS code
+     CLOSED: [2018-03-07 Wed 19:06]
 **** TODO Finish all HTML parts
 ** TODO Refreshing the codebase
 *** TODO Upgrade to newest Rails (5.x)
