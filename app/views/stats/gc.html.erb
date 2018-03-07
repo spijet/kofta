@@ -10,7 +10,7 @@
         </tr>
     </thead>
     <tbody>
-        <% GC.stat.each do |stat, value| %>
+        <% @stats.each do |stat, value| %>
             <tr>
                 <td><%= stat.to_s.gsub('_',' ').capitalize %></td>
                 <td><%= value %></td>

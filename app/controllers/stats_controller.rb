@@ -1,7 +1,11 @@
 class StatsController < ApplicationController
-  def gc; end
+  def gc
+    @stats = GC.stat
+  end
 
-  def rufus; end
+  def rufus
+    @jobs = KOFTA::Schedule.jobs
+  end
 
   def sidekiq
     return false unless @redis_stats[:alive]
