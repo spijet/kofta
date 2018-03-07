@@ -88,6 +88,8 @@ class DevicesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def device_params
-      params.require(:device).permit(:devname, :city, :contact, :group, :address, :snmp_community, :query_interval, :datatype_ids)
+      params.require(:device).permit(:devname, :city, :contact, :group,
+                                     :address, :snmp_community, :query_interval,
+                                     datatype_ids: [])
     end
 end
