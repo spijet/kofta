@@ -18,7 +18,11 @@ class DevicesController < ApplicationController
 
   # GET /devices/new
   def new
-    @device = Device.new
+    @device = Device.new(
+      datatypes: Datatype.where(default: true),
+      snmp_community: 'public',
+      query_interval: 30
+    )
   end
 
   # GET /devices/1/edit
