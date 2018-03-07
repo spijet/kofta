@@ -1,5 +1,9 @@
 #!/bin/sh
 
+PIDFILE="tmp/pids/server.pid"
+
+trap 'kill -INT `cat ${PIDFILE}`' INT TERM QUIT
+
 if [ ! -f "db/${RAILS_ENV}.sqlite3" ]; then
     echo "No database found! Setting one up..."
     bundle exec rake db:setup RAILS_ENV="${RAILS_ENV}"
@@ -24,4 +28,4 @@ fi
 
 
 echo "Starting Kofta..."
-exec bundle exec rails server -b '0.0.0.0' -p '3000'
+bundle exec rails server -b '0.0.0.0' -p '3000'
