@@ -34,7 +34,11 @@ module KOFTA
         Rails.logger.warn log(device, :exists)
       else
         @s.every("#{device.query_interval}s", tag: device.id) do
-          SnmpWorkerJob.perform_later(device.id)
+          if KOFTA::Redis.status[:alive]
+            SnmpWorkerJob.perform_later(device.id)
+          else
+            Rails.logger.error "Device #{device.devname}: Redis is unavailable, job skipped."
+          end
         end
         Rails.logger.info log(device, :add)
       end
