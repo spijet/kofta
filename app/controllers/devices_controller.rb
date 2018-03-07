@@ -38,7 +38,7 @@ class DevicesController < ApplicationController
     respond_to do |format|
       if @device.save
         # Add new device to query schedule:
-        Schedule.add(@device)
+        KOFTA::Schedule.add(@device)
 
         format.html { redirect_to @device, notice: 'Device was successfully created.' }
         format.json { render :show, status: :created, location: @device }
@@ -55,7 +55,7 @@ class DevicesController < ApplicationController
     respond_to do |format|
       if @device.update(device_params)
         # Re-add updated device to query schedule:
-        Schedule.readd(@device)
+        KOFTA::Schedule.readd(@device)
 
         format.html { redirect_to @device, notice: 'Device was successfully updated.' }
         format.json { render :show, status: :ok, location: @device }
@@ -70,7 +70,7 @@ class DevicesController < ApplicationController
   # DELETE /devices/1.json
   def destroy
     # Remove the device from query schedule:
-    Schedule.del(@device)
+    KOFTA::Schedule.del(@device)
 
     # Remove device record:
     @device.destroy

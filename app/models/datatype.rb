@@ -1,20 +1,19 @@
 class Datatype < ActiveRecord::Base
-  has_and_belongs_to_many :devices
+  has_and_belongs_to_many :devices, -> { uniq }
   validates :name, :oid, :metric_type, presence: true
   validates :name, :oid, uniqueness: true
-  validates :index_oid, presence: true, if: :is_table?
-  validates :index_oid, :excludes, absence: true, unless: :is_table?
-
-  before_save { backup_datatypes }
-  before_destroy { backup_datatypes }
+  validates :index_oid, presence: true, if: :table?
+  validates :index_oid, :excludes, absence: true, unless: :table?
 
   def backup_datatypes
-    filename = 'datatypes_' + Time.now.strftime('%Y%m%d_%H%M%S') + '.rb'
-    p "Backing up datatypes data to 'db/backups/#{filename}.'"
-    SeedDump.dump(Datatype, file: "db/backups/#{filename}")
+    # Check if running as a Rake task:
+    unless ENV['RACK_ENV'].blank? || ENV['RAILS_ENV'].blank? ||
+           !(ENV.inspect.to_s =~ /worker/i).blank?
+      KOFTA::Backup.write('datatypes')
+    end
   end
 
-  def is_table?
-    table
-  end
+  before_create  { backup_datatypes }
+  before_update  { backup_datatypes }
+  before_destroy { backup_datatypes }
 end

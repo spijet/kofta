@@ -5,13 +5,15 @@ class Device < ActiveRecord::Base
   validates :devname, :address, uniqueness: true
   validates :query_interval, numericality: true
 
-  before_save { backup_devices }
-  before_destroy { backup_devices }
-
   def backup_devices
-    filename = 'devices_' + Time.now.strftime('%Y%m%d_%H%M%S') + '.rb'
-    p "Backing up devices data to 'db/backups/#{filename}.'"
-    SeedDump.dump(Device, file: "db/backups/#{filename}")
+    # Check if running as a Rake task:
+    unless ENV['RACK_ENV'].blank? || ENV['RAILS_ENV'].blank? ||
+           !(ENV.inspect.to_s =~ /worker/i).blank?
+      KOFTA::Backup.write('devices')
+    end
   end
 
+  before_create  { backup_devices }
+  before_update  { backup_devices }
+  before_destroy { backup_devices }
 end
