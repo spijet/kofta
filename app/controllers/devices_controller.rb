@@ -55,7 +55,8 @@ class DevicesController < ApplicationController
     respond_to do |format|
       if @device.update(device_params)
         # Re-add updated device to query schedule:
-        KOFTA::Schedule.readd(@device)
+        KOFTA::Schedule.del(@device)
+        KOFTA::Schedule.add(@device)
 
         format.html { redirect_to @device, notice: 'Device was successfully updated.' }
         format.json { render :show, status: :ok, location: @device }

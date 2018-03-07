@@ -19,8 +19,7 @@ module KOFTA
     def self.log(device, event)
       action = case event
                when :add then 'added to'
-               when :del then 'removed_from'
-               when :readd then 're-added to'
+               when :del then 'removed from'
                when :exists then 'is already in the'
                end
       format('Device "%<name>s" (IP: %<address>s) %<action>s queue',
@@ -49,13 +48,6 @@ module KOFTA
         Rails.logger.info log(device, :del)
         Rails.logger.flush
       end
-    end
-
-    # Re-add device to queue (i.e. to change its query interval).
-    def self.readd(device)
-      Rails.logger.info log(device, :readd)
-      del(device)
-      add(device)
     end
 
     # Bootstrap the queue.
