@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [[ ! -f "db/${RAILS_ENV}.sqlite3" ]]; then
+if [ ! -f "db/${RAILS_ENV}.sqlite3" ]; then
     echo "No database found! Setting one up..."
     bundle exec rake db:setup RAILS_ENV="${RAILS_ENV}"
 fi
