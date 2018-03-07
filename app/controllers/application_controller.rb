@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
     redis(verbose)
   end
   def redis(verbose)
-    @redis_stats = {}
+    @redis_stats = { alive: false }
     redis = Redis.new(
       host: REDIS_CONFIG['host'],
       port: REDIS_CONFIG['port'],
@@ -17,7 +17,6 @@ class ApplicationController < ActionController::Base
     )
     redis_ping = redis.ping
   rescue Exception => e
-    @redis_stats[:alive] = false
     @redis_stats[:message] = e.message if verbose
   else
     if redis_ping == 'PONG'
