@@ -4,8 +4,8 @@
 # Redis host.
 
 defaults: &defaults
-  host:       <%= ENV['REDIS_HOST'] || '127.0.0.1' %>
-  port:       <%= ENV['REDIS_PORT'] || 6379 %>
+  host:       <%= ENV["REDIS_HOST"] || "127.0.0.1" %>
+  port:       <%= ENV["REDIS_PORT"] || 6379 %>
   sidekiq_db: 12
   worker_db:  10
 

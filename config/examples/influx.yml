@@ -4,8 +4,8 @@
 # InfluxDB host and database.
 
 defaults: &defaults
-  host: <%= ENV['INFLUXDB_HOST'] || '127.0.0.1' %>
-  port: <%= ENV['INFLUXDB_PORT'] || 8089 %>
+  host: <%= ENV["INFLUXDB_HOST"] || "127.0.0.1" %>
+  port: <%= ENV["INFLUXDB_PORT"] || 8089 %>
 
 development:
   <<: *defaults
