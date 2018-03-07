@@ -75,9 +75,6 @@ class SnmpWorkerJob < ActiveJob::Base
       group: device.group
     }
 
-    # Store device query interval
-    # for derive processing.
-    @derive_interval = device.query_interval
 
     # Get access to job-local variables:
     @redis = Redis.new(
