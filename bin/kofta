@@ -12,5 +12,16 @@ if [ -z "${SECRET_KEY_BASE}" ]; then
     export SECRET_KEY_BASE
 fi
 
+if [ -f "${PIDFILE}" ]; then
+    if pgrep -F "${PIDFILE}"; then
+        echo "Another Kofta server is running!!"
+        exit 1
+    else
+        echo "Stale PIDfile found, removing."
+        rm "${PIDFILE}"
+    fi
+fi
+
+
 echo "Starting Kofta..."
 exec bundle exec rails server -b '0.0.0.0' -p '3000'
