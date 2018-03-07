@@ -5,5 +5,12 @@ if [ ! -f "db/${RAILS_ENV}.sqlite3" ]; then
     bundle exec rake db:setup RAILS_ENV="${RAILS_ENV}"
 fi
 
+if [ -z "${SECRET_KEY_BASE}" ]; then
+    echo "No SECRET_KEY_BASE found! Please specify one using the ENV!"
+    echo "Will use a temporary one for now..."
+    SECRET_KEY_BASE=`bundle exec rake secret`
+    export SECRET_KEY_BASE
+fi
+
 echo "Starting Kofta..."
 exec bundle exec rails server -b '0.0.0.0' -p '3000'
