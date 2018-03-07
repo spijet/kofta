@@ -21,12 +21,12 @@ services:
   app:
     build:
       context: .
-      dockerfile: ./extras/docker/dockerfiles/Dockerfile.dev
+      dockerfile: ./extras/docker/dockerfiles/Dockerfile.prod-alpine
     image: kofta
     restart: always
     environment:
       # Change to 'test' if you want to run tests or 'production' if you're ready to deploy
-      RAILS_ENV: development
+      # RAILS_ENV: development
       # Uncomment this if you think that Kofta is misbehaving:
       # RAILS_DEBUG: 'true'
       # Set this before running Kofta!
@@ -54,7 +54,7 @@ services:
       - ./log:/srv/kofta/log
     environment:
       # Change to 'test' if you want to run tests or 'production' if you're ready to deploy
-      RAILS_ENV: development
+      # RAILS_ENV: development
       # Uncomment this if you think that Kofta is misbehaving:
       # RAILS_DEBUG: 'true'
       # Set this before running Kofta!
