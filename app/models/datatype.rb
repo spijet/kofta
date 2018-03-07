@@ -7,8 +7,7 @@ class Datatype < ActiveRecord::Base
 
   def backup_datatypes
     # Check if running as a Rake task:
-    unless ENV['RACK_ENV'].blank? || ENV['RAILS_ENV'].blank? ||
-           !(ENV.inspect.to_s =~ /worker/i).blank?
+    unless RAKE_ENV
       KOFTA::Backup.write('datatypes')
     end
   end
