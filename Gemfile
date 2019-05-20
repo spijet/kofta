@@ -2,11 +2,11 @@ source 'https://rubygems.org'
 ruby '>= 2.2.0', '< 2.5'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.7.1'
+gem 'rails', '~>4.2'
 
 # Use sqlite3 as the database for Active Record
 # (Use it with JDBC adapter if using JRuby)
-gem 'sqlite3', platforms: :ruby
+gem 'sqlite3', '~>1.3', platforms: :ruby
 # Either I'm missing something, or JRuby doesn't work with SQLite3.
 # As for now, this is commented out.
 # gem 'activerecord-jdbcsqlite3-adapter', platforms: :jruby
