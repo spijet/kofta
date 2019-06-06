@@ -93,7 +93,7 @@ GEM
     msgpack-rails (0.0.1)
       msgpack
       rails (>= 2.3.5)
-    net-ping (2.0.5)
+    net-ping (2.0.6)
     nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
     puma (3.12.1)
