@@ -52,7 +52,7 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.5)
     connection_pool (2.2.2)
-    crass (1.0.4)
+    crass (1.0.5)
     debug_inspector (0.0.3)
     erubis (2.7.0)
     et-orbi (1.2.1)
@@ -81,7 +81,7 @@ GEM
       railties (>= 3.1.0)
       turbolinks
     json (2.2.0)
-    loofah (2.2.3)
+    loofah (2.3.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -94,7 +94,7 @@ GEM
       msgpack
       rails (>= 2.3.5)
     net-ping (2.0.6)
-    nokogiri (1.10.3)
+    nokogiri (1.10.5)
       mini_portile2 (~> 2.4.0)
     puma (3.12.1)
     raabro (1.1.6)
