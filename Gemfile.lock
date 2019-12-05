@@ -96,7 +96,7 @@ GEM
     net-ping (2.0.6)
     nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
-    puma (3.12.1)
+    puma (3.12.2)
     raabro (1.1.6)
     rack (1.6.11)
     rack-protection (1.5.5)
