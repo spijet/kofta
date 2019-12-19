@@ -5,11 +5,7 @@ ruby '>= 2.3.0', '< 2.7'
 gem 'rails', '~>4.2'
 
 # Use sqlite3 as the database for Active Record
-# (Use it with JDBC adapter if using JRuby)
 gem 'sqlite3', '~>1.3', '< 1.4'
-# Either I'm missing something, or JRuby doesn't work with SQLite3.
-# As for now, this is commented out.
-# gem 'activerecord-jdbcsqlite3-adapter', platforms: :jruby
 
 # Add support for DB dumps.
 gem 'seed_dump'
