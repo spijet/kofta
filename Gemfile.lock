@@ -50,8 +50,8 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
-    concurrent-ruby (1.1.5)
-    connection_pool (2.2.2)
+    concurrent-ruby (1.1.9)
+    connection_pool (2.2.5)
     crass (1.0.5)
     debug_inspector (0.0.3)
     erubis (2.7.0)
@@ -102,7 +102,7 @@ GEM
       nio4r (~> 2.0)
     raabro (1.1.6)
     racc (1.5.2)
-    rack (1.6.12)
+    rack (1.6.13)
     rack-protection (1.5.5)
       rack
     rack-test (0.6.3)
@@ -135,7 +135,7 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
-    redis (3.3.5)
+    redis (4.4.0)
     rufus-scheduler (3.6.0)
       fugit (~> 1.1, >= 1.1.6)
     sass (3.7.4)
@@ -152,11 +152,10 @@ GEM
     seed_dump (3.3.1)
       activerecord (>= 4)
       activesupport (>= 4)
-    sidekiq (4.2.10)
-      concurrent-ruby (~> 1.0)
-      connection_pool (~> 2.2, >= 2.2.0)
+    sidekiq (5.2.0)
+      connection_pool (~> 2.2, >= 2.2.2)
       rack-protection (>= 1.5.0)
-      redis (~> 3.2, >= 3.2.1)
+      redis (>= 3.3.5, < 5)
     sinatra (1.4.8)
       rack (~> 1.5)
       rack-protection (~> 1.4)
@@ -206,7 +205,7 @@ DEPENDENCIES
   rufus-scheduler
   sass-rails (~> 5.0)
   seed_dump
-  sidekiq (~> 4)
+  sidekiq (~> 5)
   sinatra
   snmp (~> 1.2)
   spring
